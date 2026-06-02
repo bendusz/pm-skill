@@ -26,10 +26,12 @@ you in v1 — holding this line is your responsibility.
 
 ## 3. Scaffold (only after sign-off) — observe Repository safety
 - If the project is **not** a git repo, offer to `git init` — **ask first**.
-- Generate a project `CLAUDE.md` from the template. If one **already exists**, do **not** overwrite
-  it — show a diff and ask, or append a clearly-marked section.
+- Generate a project `CLAUDE.md` from `${CLAUDE_PLUGIN_ROOT}/templates/CLAUDE.md.template`. If one
+  **already exists**, do **not** overwrite it — show a diff and ask, or append a clearly-marked section.
 - Ensure `.gitignore` includes `tmp/` (append; don't clobber an existing `.gitignore`).
 - Commit **only** the files you created/changed (no `git add -A` over the user's other work).
 - If git has no `user.name`/`user.email`, ask before committing.
+- The branch the scaffold commit lands on (default `main`) is the **integration branch** — the
+  base you cut every story branch from and merge each story back into.
 
 Log the scaffold step. Then load `decomposition.md`.

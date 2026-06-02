@@ -49,6 +49,12 @@ On a bare install everything below still works.
 - `code-integrity-reviewer` — read-only review of a story's diff for correctness and security.
 - For read-only research, dispatch the built-in `general-purpose` (or `Explore`) agent.
 
+## Bundled templates
+Project-file templates live in this plugin's `templates/` directory
+(`${CLAUDE_PLUGIN_ROOT}/templates/`): `plan.md.template`, `story.md.template`,
+`CLAUDE.md.template`, `log.md.template`. When a phase tells you to write one of these files, read
+the matching template first.
+
 ## On resume
 If `tmp/log.md` exists, read it first to recover the objective, current sprint/story, branch
 state, and next step — then continue from there.

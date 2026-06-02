@@ -16,7 +16,7 @@ needs without reading the rest of the repo**:
 - **Out of scope.**
 - **Verification:** the exact command(s) that prove the story is done.
 
-(Use the `story.md` template as the shape.)
+(Use `${CLAUDE_PLUGIN_ROOT}/templates/story.md.template` as the shape.)
 
 ## Ordering
 - Record each story's **depends-on**. Order so dependencies come first.

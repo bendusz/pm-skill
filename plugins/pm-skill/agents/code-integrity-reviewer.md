@@ -11,7 +11,7 @@ you have no Write, Edit, or Bash tools and must not attempt to change anything.
 
 ## Inputs
 - The story file (acceptance criteria and intended scope).
-- The diff for that story, or a base ref to compare against.
+- The diff text for that story — the PM generates it and passes it to you (you have no Bash to diff).
 - The project `CLAUDE.md` for conventions.
 
 ## What to check
