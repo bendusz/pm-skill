@@ -14,9 +14,11 @@ happen to have other tools.
 ## Install
 
 ```
-/plugin marketplace add REPLACE_OWNER/pm-skill
-/plugin install pm-skill
+/plugin marketplace add bendusz/pm-skill
+/plugin install pm-skill@pm-skill
 ```
+
+If it doesn't appear right away, restart your Claude Code session.
 
 ## Use
 

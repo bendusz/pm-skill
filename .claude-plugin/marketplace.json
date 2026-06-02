@@ -1,16 +1,14 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "pm-skill",
   "description": "A Project/Product Manager skill that orchestrates software delivery through subagents.",
-  "owner": { "name": "REPLACE_OWNER", "url": "https://github.com/REPLACE_OWNER" },
+  "owner": { "name": "bendusz", "url": "https://github.com/bendusz" },
   "plugins": [
     {
       "name": "pm-skill",
       "source": "./plugins/pm-skill",
       "description": "Claude acts as a PM: discover, plan, get sign-off, decompose, and orchestrate build/review/ship via agents.",
-      "version": "0.1.0",
       "category": "workflow",
-      "homepage": "https://github.com/REPLACE_OWNER/pm-skill",
+      "homepage": "https://github.com/bendusz/pm-skill",
       "tags": ["skill", "project-management", "orchestration", "agents", "workflow"]
     }
   ]

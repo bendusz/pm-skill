@@ -7,31 +7,37 @@ The **integration branch** is the project's default branch (e.g. `main`) that th
 landed on. You cut every story branch from it and merge each story back into it.
 
 ## Per-story cycle
-0. **Branch.** From the integration branch, create and check out the story branch
-   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here.
+0. **Branch.** Ensure the working tree is **clean** first — if it has unrelated changes, stop and
+   ask (see Repository safety). Then, from the integration branch, create and check out the story
+   branch `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here.
 1. **Build.** Dispatch `expert-builder` with **only the story file path** (it reads the project
    `CLAUDE.md` itself). It edits the working tree (no commits — you own git) and returns a
-   structured summary.
-2. **Review.** Produce the diff yourself and pass it to the reviewer inline — the reviewer has no
-   Bash and cannot diff. Generate it with `git add -A && git diff --cached` (or
-   `git add -N . && git diff`). Dispatch `code-integrity-reviewer` with the story file + that diff
-   text. It returns severity-graded findings (`block`/`major`/`minor`) and a
+   structured summary, including the **list of files it changed**. If it returns *blocked* or
+   fails, retry up to **2** times with clarification, then escalate to the user.
+2. **Gate.** Run the project's deterministic gates yourself (test/lint/build per
+   `review-gates.md`; skip any that are `N/A`). If a gate fails, go to Fix (step 4) before review.
+3. **Review.** Produce the diff yourself and pass it to the reviewer inline — the reviewer has no
+   Bash and cannot diff. Diff **only the story's changed paths** (from the builder's summary), e.g.
+   `git add -N -- <changed paths> && git diff -- <changed paths>` — **never `git add -A`** (that
+   would sweep in unrelated work). Dispatch `code-integrity-reviewer` with the story file + that
+   diff text. It returns severity-graded findings (`block`/`major`/`minor`) and a
    `PASS`/`CONCERNS`/`FAIL` verdict.
-3. **Fix.** Send `block`/`major` findings back to `expert-builder`. Regenerate the diff and
-   re-review after each fix, **up to 3 rounds**; if still failing, **escalate to the user**.
-4. **External review (optional).** Only if an external reviewer is **explicitly available**:
+4. **Fix.** Send `block`/`major` findings back to `expert-builder`. After each fix, **re-run the
+   gates and regenerate the diff for re-review**, **up to 3 rounds**; if still failing, **escalate
+   to the user**.
+5. **External review (optional).** Only if an external reviewer is **explicitly available**:
    secret-scan the diff first — if no scanner exists, run
    `git grep -nIE '(API|SECRET|TOKEN|PASSWORD|PRIVATE[_-]?KEY)'` over the changed files, and if it
    trips do **not** send code out. Then an independent review → feed findings back → fix. If no
    external reviewer is available, **log that it was skipped** — never silently.
-5. **Ship.** **Run the project's gates yourself first** (see `review-gates.md`). Then commit this
-   story's files to the story branch and integrate:
-   - if `gh auth status` succeeds **and** a GitHub remote exists → push the branch, open a real PR,
-     and merge it;
-   - otherwise → check out the integration branch and local `--no-ff` merge the story branch with a
-     PR-style message.
-   Stage only this story's files; never push to a remote without an explicit request.
-6. **Log.** Append the story outcome to `tmp/log.md`.
+6. **Ship.** With gates green and no open `block`/`major`, commit **only this story's files** to the
+   story branch, then integrate into the integration branch:
+   - **Local by default** → check out the integration branch and `--no-ff` merge the story branch
+     with a PR-style message.
+   - **Remote PR only if the user has explicitly asked for pushes/PRs** *and* `gh auth status`
+     succeeds *and* a GitHub remote exists → push the branch, open a PR, and merge it.
+   **Never push to a remote without an explicit request** (hard rule).
+7. **Log.** Append the story outcome to `tmp/log.md`.
 
 ## Handoff contracts (keep them tight)
 - **To the builder — down:** the story file path. **up:** status; files changed; diff summary;
