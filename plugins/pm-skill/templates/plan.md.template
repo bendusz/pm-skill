@@ -1,0 +1,43 @@
+# <Project> — Delivery Plan
+
+## Overview
+<what + why, 2–3 sentences>
+
+## Goals
+- <goal>
+
+## Target users
+- <user>
+
+## Scope
+**In:**
+- <item>
+
+**Out:**
+- <item>
+
+## Stories
+| id | title | priority | acceptance criteria | depends-on | [P] |
+|------|---------|----------|----------------------|------------|-----|
+| S1-1 | <title> | high | <testable criteria> | none | no |
+
+## Architecture
+<stack, key decisions, patterns>
+
+## Non-functional requirements
+- <performance, security, accessibility, etc.>
+
+## Commands
+- test: `<cmd or N/A>`
+- lint: `<cmd or N/A>`
+- build: `<cmd or N/A>`
+- run: `<cmd or N/A>`
+
+## Risks
+- <risk + mitigation>
+
+## Clarifications
+<!-- Must be empty before sign-off. List any [NEEDS CLARIFICATION] items here until resolved. -->
+
+## Sign-off
+Approved by __________ on ____-__-__
