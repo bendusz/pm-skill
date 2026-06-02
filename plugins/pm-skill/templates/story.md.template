@@ -1,0 +1,17 @@
+# S<sprint>-<n> — <title>
+Sprint: <n> · Priority: <high|med|low> · Depends on: <ids|none> · Parallel-safe: <yes|no>
+
+## Goal
+<one paragraph>
+
+## Context (self-contained)
+<architecture, files, interfaces, conventions the builder needs — so it need not read the whole repo>
+
+## Acceptance criteria (testable)
+- [ ] <criterion>
+
+## Out of scope
+- <item>
+
+## Verification
+- Prove done with: `<command>`
