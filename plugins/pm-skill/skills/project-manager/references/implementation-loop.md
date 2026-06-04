@@ -31,8 +31,9 @@ landed on. You cut every story branch from it and merge each story back into it.
    (`block`/`major`/`minor`) and a `PASS`/`CONCERNS`/`FAIL` verdict; aggregate them.
 4. **Fix.** First **triage** the panel's findings — dedupe across lenses and drop false positives /
    out-of-scope items, so you forward only real `block`/`major` findings. Send those back to
-   `expert-builder`. If a **gate** is failing (rather than a review finding) or a fix round doesn't
-   converge, dispatch `debugger` first to root-cause it — give it the failing command's output, the
+   `expert-builder`. If a **gate** is failing (rather than a review finding), or the builder returns
+   the same failing result on a second attempt (no meaningful progress), dispatch `debugger` first to
+   root-cause it — give it the failing command's output, the
    diff, and the implicated paths — then forward its fix plan to `expert-builder` instead of a blind
    retry (`debugger` is read-only; the builder applies the fix). After each fix, **re-run the gates
    and regenerate the diff for re-review**, **up to 3 rounds**; if still failing, **escalate to the
@@ -52,7 +53,7 @@ landed on. You cut every story branch from it and merge each story back into it.
 7. **Log.** Append the story outcome to `tmp/log.md`.
 8. **Document (optional — at the sprint/project boundary, not per story).** Once a sprint's stories
    are merged, you may dispatch `technical-writer` to refresh user-facing docs (README, usage,
-   CHANGELOG) and, at project end, produce the completion report from
+   CHANGELOG) and, at project end, produce the completion report at `docs/completion-report.md` from
    `${CLAUDE_PLUGIN_ROOT}/templates/completion-report.md.template`. It writes docs only — never
    source. Log that it ran, or that you skipped it.
 

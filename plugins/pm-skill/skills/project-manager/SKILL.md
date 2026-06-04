@@ -48,7 +48,7 @@ On a bare install everything below still works.
 - `expert-builder` — implements one story end to end (code + tests).
 - `code-integrity-reviewer` — read-only review of a story's diff for correctness and security.
 - `architecture-reviewer` — read-only, higher-altitude review (boundaries, abstractions, tech debt).
-- `security-auditor` — read-only deep security lens; risk-selected for auth/crypto/secret/untrusted-input/dependency stories.
+- `security-auditor` — read-only deep security lens; risk-selected for stories touching auth/authz, crypto, secrets, untrusted input, I/O, deserialization, or dependencies.
 - `test-engineer` — writes tests only, from a story's acceptance criteria, independent of the builder.
 - `debugger` — read-only; root-causes a failing gate or stuck story and returns a fix plan (the builder applies it).
 - `technical-writer` — writes docs only (README, usage, CHANGELOG, completion report), at a sprint/project boundary.

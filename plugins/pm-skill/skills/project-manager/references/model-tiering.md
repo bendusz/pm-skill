@@ -16,8 +16,8 @@ Map each tier to a model you have access to.
 | **light** | logging, formatting, doc boilerplate, simple summaries | high-volume, low-risk |
 
 Roughly: `codebase-analyst`, `architecture-reviewer`, `security-auditor`, `debugger` → **deep**;
-`expert-builder`, `code-integrity-reviewer`, `test-engineer` → **standard**; routine text →
-**light**. Treat this as a starting point, not a rule — tune per project.
+`expert-builder`, `code-integrity-reviewer`, `test-engineer` → **standard**; `technical-writer` and
+routine text → **light**. Treat this as a starting point, not a rule — tune per project.
 
 ## How to opt in
 - **Per agent:** set the `model:` field in an agent's frontmatter to your chosen model instead of

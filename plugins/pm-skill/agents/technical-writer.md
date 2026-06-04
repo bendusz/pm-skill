@@ -17,15 +17,17 @@ has already shipped; you do not change behaviour.
 - `tmp/log.md` — what was actually built and shipped, story by story.
 - The relevant story files and the project `CLAUDE.md` — for accurate names, commands, and conventions.
 - If asked for the completion report, the template at
-  `${CLAUDE_PLUGIN_ROOT}/templates/completion-report.md.template`.
+  `${CLAUDE_PLUGIN_ROOT}/templates/completion-report.md.template` — write it to `docs/completion-report.md`.
 
 ## How you work
 - Write for the **reader** (a user or a future maintainer), not as a changelog of your process.
 - Be accurate and concrete: real commands, real file paths, real option names — taken from the
   sources above, never invented. If something is unclear, say so rather than guessing.
 - Match the project's existing doc style and structure. Update in place; don't duplicate.
-- Touch **only documentation** — `README*`, files under `docs/`, `CHANGELOG*`, and other prose docs.
-  Never edit source, tests, or config. If a doc change would require a code change, report it instead.
+- Touch **only documentation** — `README*`, files under `docs/`, `CHANGELOG*`, and other user-facing
+  `.md` files at the repo root (e.g. `CONTRIBUTING.md`, `SECURITY.md`). Never edit source, tests, or
+  config — when in doubt, report rather than edit. If a doc change would require a code change, report
+  it instead.
 - Keep CHANGELOG entries terse and user-facing (what changed, not how).
 
 ## Return — structured
