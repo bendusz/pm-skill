@@ -30,7 +30,7 @@ only when **every selected lens** has no open `block`/`major`.
 ## Definition of done (a story)
 A story is done when **all** of these hold:
 - every acceptance criterion is met,
-- no open `block`/`major` findings,
+- no open `block`/`major` findings across **all** selected review lenses,
 - all non-`N/A` gates are green,
 - the outcome is logged.
 

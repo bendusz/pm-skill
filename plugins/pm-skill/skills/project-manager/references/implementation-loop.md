@@ -11,7 +11,8 @@ landed on. You cut every story branch from it and merge each story back into it.
    ask (see Repository safety). Then, from the integration branch, create and check out the story
    branch `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here.
 1. **Build.** *(Optional, for clear acceptance criteria: first dispatch `test-engineer` to write the
-   acceptance tests — TDD red — then have the builder make them pass.)* Dispatch `expert-builder`
+   acceptance tests — TDD red. Then tell the builder those tests already exist: it must make them
+   pass and add only *further* coverage, not rewrite them.)* Dispatch `expert-builder`
    with **only the story file path** (it reads the project `CLAUDE.md` itself). It edits the working
    tree (no commits — you own git) and returns a structured summary, including the **list of files it
    changed**. If it returns *blocked* or fails, retry up to **2** times with clarification, then
@@ -21,11 +22,11 @@ landed on. You cut every story branch from it and merge each story back into it.
 3. **Review.** Produce the diff yourself and pass it to the reviewers inline — they have no Bash and
    cannot diff. Diff **only the story's changed paths** (from the builder's summary), e.g.
    `git add -N -- <changed paths> && git diff -- <changed paths>` — **never `git add -A`** (that
-   would sweep in unrelated work). Dispatch the **review panel** for this story (see
-   `review-gates.md` for which lenses to run): always `code-integrity-reviewer`, plus
-   `architecture-reviewer` for structural changes — each gets the story file + that diff text. Each
-   returns severity-graded findings (`block`/`major`/`minor`) and a `PASS`/`CONCERNS`/`FAIL` verdict;
-   aggregate them.
+   would sweep in unrelated work). Dispatch the **review panel** per the risk triggers in
+   `review-gates.md`: always `code-integrity-reviewer`, plus any further lenses it selects (e.g.
+   `architecture-reviewer` for structural changes — also give it the plan's Architecture section).
+   Each lens gets the story file + that diff text and returns severity-graded findings
+   (`block`/`major`/`minor`) and a `PASS`/`CONCERNS`/`FAIL` verdict; aggregate them.
 4. **Fix.** Send `block`/`major` findings back to `expert-builder`. After each fix, **re-run the
    gates and regenerate the diff for re-review**, **up to 3 rounds**; if still failing, **escalate
    to the user**.
