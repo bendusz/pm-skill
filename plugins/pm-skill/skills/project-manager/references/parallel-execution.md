@@ -86,8 +86,9 @@ On resume, **from the main checkout**:
   the committed work — verify before continuing) rather than silently moving on.
 - For a `building` worktree that still has **uncommitted** changes, commit them now (story-path-
   scoped) and advance it to `built` — never prune a dirty worktree.
-- For a `blocked` story, present the blocker to the user and re-enter its fix loop before continuing
-  the remaining unmerged stories.
+- For a `blocked` story, present the blocker to the user and re-enter the **appropriate**
+  continuation per its `tmp/log.md` note — resolve the **tip-merge conflict** (step 1) or re-run the
+  **fix loop** (step 3) — before continuing the remaining unmerged stories.
 - Then `git worktree prune` true orphans and continue the integration tail.
 
 ## Fallback (always available)
