@@ -2,6 +2,11 @@
 
 Turn the agreed direction into a written plan, get explicit human sign-off, then scaffold.
 
+## 0. Analyze existing code (brownfield — optional)
+If you're working in an existing codebase, dispatch `codebase-analyst` first. Fold its context pack
+into the plan's Architecture and Commands sections, and keep it to embed into story files later.
+Skip this for a greenfield project.
+
 ## 1. Write `docs/plan.md`
 Create `docs/plan.md` with these sections:
 - **Overview** — what + why, 2–3 sentences.
