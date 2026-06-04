@@ -61,5 +61,6 @@ Project-file templates live in this plugin's `templates/` directory
 the matching template first.
 
 ## On resume
-If `tmp/log.md` exists, read it first to recover the objective, current sprint/story, branch
-state, and next step — then continue from there.
+If `tmp/pm-state.json` or `tmp/log.md` exists, read them first (or run `/pm-skill:resume`) to
+recover the objective, current sprint/story, branch state, sign-off status, and next step — then
+continue from there.

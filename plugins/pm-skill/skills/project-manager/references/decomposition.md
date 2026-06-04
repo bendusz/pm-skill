@@ -23,6 +23,13 @@ needs without reading the rest of the repo**:
 - Tag stories with no dependency on un-merged work as **`[P]`** (parallel-safe). In v1 this is
   metadata only — you still execute stories **sequentially**.
 
+## Story readiness (a story is build-ready only when…)
+A story may be handed to the builder only once it passes this check:
+- **testable acceptance criteria** are present (not vague),
+- the **self-contained context** a cold worker needs is present (no "go read the repo"),
+- a concrete **verification command** is given.
+If a story fails the check, fix the story first — never dispatch the builder on an unready story.
+
 ## Hand to the user
 Show the sprint/story map so the user can see the shape. This is visible but not a hard gate —
 sign-off already covered the plan. Log it, then load `implementation-loop.md`.

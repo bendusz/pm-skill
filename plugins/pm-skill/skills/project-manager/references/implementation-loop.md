@@ -7,9 +7,11 @@ The **integration branch** is the project's default branch (e.g. `main`) that th
 landed on. You cut every story branch from it and merge each story back into it.
 
 ## Per-story cycle
-0. **Branch.** Ensure the working tree is **clean** first — if it has unrelated changes, stop and
-   ask (see Repository safety). Then, from the integration branch, create and check out the story
-   branch `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here.
+0. **Ready & branch.** Confirm the story is **build-ready** (testable criteria + self-contained
+   context + a verification command — see `decomposition.md`); if not, fix the story first. Ensure
+   the working tree is **clean** (if it has unrelated changes, stop and ask — see Repository
+   safety). Then, from the integration branch, create and check out the story branch
+   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here.
 1. **Build.** *(Optional, for clear acceptance criteria: first dispatch `test-engineer` to write the
    acceptance tests — TDD red. Then tell the builder those tests already exist: it must make them
    pass and add only *further* coverage, not rewrite them.)* Dispatch `expert-builder`
@@ -27,9 +29,10 @@ landed on. You cut every story branch from it and merge each story back into it.
    `architecture-reviewer` for structural changes — also give it the plan's Architecture section).
    Each lens gets the story file + that diff text and returns severity-graded findings
    (`block`/`major`/`minor`) and a `PASS`/`CONCERNS`/`FAIL` verdict; aggregate them.
-4. **Fix.** Send `block`/`major` findings back to `expert-builder`. After each fix, **re-run the
-   gates and regenerate the diff for re-review**, **up to 3 rounds**; if still failing, **escalate
-   to the user**.
+4. **Fix.** First **triage** the panel's findings — dedupe across lenses and drop false positives /
+   out-of-scope items, so you forward only real `block`/`major` findings. Send those back to
+   `expert-builder`. After each fix, **re-run the gates and regenerate the diff for re-review**,
+   **up to 3 rounds**; if still failing, **escalate to the user**.
 5. **External review (optional).** Only if an external reviewer is **explicitly available**:
    secret-scan the diff first — if no scanner exists, run
    `git grep -nIE '(API|SECRET|TOKEN|PASSWORD|PRIVATE[_-]?KEY)'` over the changed files, and if it

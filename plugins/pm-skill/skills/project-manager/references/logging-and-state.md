@@ -26,11 +26,21 @@ This is both the logbook and the recovery file. Keep it in this shape:
 - `tmp/` is disposable; never rely on it for anything that must survive — that goes in committed
   artifacts.
 
+## `tmp/pm-state.json` (gitignored — machine-readable state)
+A small JSON companion to the prose log, so resume and tooling don't parse prose. The skill
+maintains it (create it from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template` when planning
+begins): `phase`, `signed_off` (bool), `approver`, `approved_date`, `integration_branch`,
+`current_sprint`/`total_sprints`, `current_story`/`current_story_status`, `branch`, `next`, `updated`.
+
+**`signed_off` is load-bearing:** the bundled sign-off hook reads it and blocks implementation writes
+while it is `false`. Set it to `true` (with `approver` + `approved_date`) only at the sign-off gate.
+Keep it in step with the prose log.
+
 ## Source of truth (committed)
 `docs/plan.md` and `docs/stories/*` are version-controlled and authoritative. `tmp/log.md` only
 tracks *where you are*, not *what was decided*.
 
 ## On resume
-When you re-enter a project (new session, or after `/compact`): **read `tmp/log.md` first.**
-Reconstruct the objective, current sprint/story, branch state, and the "Next" pointer, then
-continue from there.
+When you re-enter a project (new session, or after `/compact`): **read `tmp/pm-state.json` and
+`tmp/log.md` first** (the `/pm-skill:resume` command does exactly this). Reconstruct the objective,
+current sprint/story, branch state, sign-off status, and the `next` pointer, then continue.
