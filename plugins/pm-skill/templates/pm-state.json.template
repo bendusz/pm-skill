@@ -1,0 +1,15 @@
+{
+  "project": "<name>",
+  "phase": "discovery",
+  "signed_off": false,
+  "approver": null,
+  "approved_date": null,
+  "integration_branch": "main",
+  "current_sprint": null,
+  "total_sprints": null,
+  "current_story": null,
+  "current_story_status": null,
+  "branch": null,
+  "next": "<continuation point>",
+  "updated": "<YYYY-MM-DD HH:MM>"
+}
