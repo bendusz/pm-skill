@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented here.
 
+## 0.4.0 — 2026-06-04
+
+More delivery agents and optional model tiering. All additive — defaults unchanged.
+
+- New bundled agents: `security-auditor` (read-only deep security lens, risk-selected),
+  `technical-writer` (docs only — README, usage, CHANGELOG, completion report), and `debugger`
+  (read-only root-cause diagnosis → fix plan the builder applies).
+- `security-auditor` is now a first-class risk-triggered lens in the review panel
+  (`review-gates.md`); `debugger` joins the fix loop when a gate fails or it stalls; an optional
+  Document step adds `technical-writer` at the sprint/project boundary.
+- **Optional model tiering** (`references/model-tiering.md`) — map agents to cheaper/stronger models
+  by abstract tier (deep / standard / light). Off by default; every agent still inherits the session
+  model and no vendor model IDs are hardcoded.
+- New `completion-report.md.template`.
+
 ## 0.3.0 — 2026-06-04
 
 Hardening: enforcement, recoverable state, CI, and a worked example.

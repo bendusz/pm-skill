@@ -44,8 +44,10 @@ building anything.
 | Review gates | A separate read-only reviewer + the project's real test/lint/build gates; bounded fix loops. |
 | Logging | A `tmp/log.md` logbook so a lost session can resume. |
 
-Two bundled agents do the work: **`expert-builder`** (implements a story) and
-**`code-integrity-reviewer`** (read-only correctness + security review). The PM stays an
+Bundled specialist agents do the work — a builder (**`expert-builder`**), a risk-selected read-only
+**review panel** (**`code-integrity-reviewer`**, **`architecture-reviewer`**, **`security-auditor`**),
+a **`test-engineer`** (tests only), a **`debugger`** (read-only root-cause → fix plan), a
+**`technical-writer`** (docs only), and a **`codebase-analyst`** for brownfield work. The PM stays an
 orchestrator and protects its own context by handing each agent only what it needs.
 
 Default check-in is **sprint-level** (you review at each sprint boundary); configurable to

@@ -48,17 +48,22 @@ On a bare install everything below still works.
 - `expert-builder` — implements one story end to end (code + tests).
 - `code-integrity-reviewer` — read-only review of a story's diff for correctness and security.
 - `architecture-reviewer` — read-only, higher-altitude review (boundaries, abstractions, tech debt).
+- `security-auditor` — read-only deep security lens; risk-selected for auth/crypto/secret/untrusted-input/dependency stories.
 - `test-engineer` — writes tests only, from a story's acceptance criteria, independent of the builder.
+- `debugger` — read-only; root-causes a failing gate or stuck story and returns a fix plan (the builder applies it).
+- `technical-writer` — writes docs only (README, usage, CHANGELOG, completion report), at a sprint/project boundary.
 - `codebase-analyst` — read-only; maps an existing codebase into a context pack for planning/stories.
 - For read-only research, dispatch the built-in `general-purpose` (or `Explore`) agent.
 
 Run reviewers as a **risk-selected panel** (see `references/review-gates.md`), not always all of them.
+**Optional:** `references/model-tiering.md` maps agents to cheaper/stronger models by tier — off by
+default (every agent inherits the session model).
 
 ## Bundled templates
 Project-file templates live in this plugin's `templates/` directory
 (`${CLAUDE_PLUGIN_ROOT}/templates/`): `plan.md.template`, `story.md.template`,
-`CLAUDE.md.template`, `log.md.template`. When a phase tells you to write one of these files, read
-the matching template first.
+`CLAUDE.md.template`, `log.md.template`, `pm-state.json.template`, `completion-report.md.template`.
+When a phase tells you to write one of these files, read the matching template first.
 
 ## On resume
 If `tmp/pm-state.json` or `tmp/log.md` exists, read them first (or run `/pm-skill:resume`) to
