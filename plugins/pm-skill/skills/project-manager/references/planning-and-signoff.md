@@ -8,7 +8,8 @@ into the plan's Architecture and Commands sections, and keep it to embed into st
 Skip this for a greenfield project.
 
 ## 1. Write `docs/plan.md`
-Create `docs/plan.md` with these sections:
+Initialise `tmp/pm-state.json` from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template`
+(`signed_off: false`) if it doesn't exist yet. Then create `docs/plan.md` with these sections:
 - **Overview** — what + why, 2–3 sentences.
 - **Goals** and **Target users**.
 - **Scope** — In / Out (be explicit about what you are *not* doing).
@@ -24,10 +25,12 @@ Create `docs/plan.md` with these sections:
 
 Present it. Iterate with the user until they're happy.
 
-## 2. Sign-off gate (procedural — you enforce it by discipline)
-Get an **unambiguous human "approved"**. Record the approver and date in the plan's Sign-off line
-and in `tmp/log.md`. **Do not decompose or write any code before this.** There is no hook stopping
-you in v1 — holding this line is your responsibility.
+## 2. Sign-off gate
+Get an **unambiguous human "approved"**. Record the approver and date in the plan's Sign-off line,
+in `tmp/log.md`, and set `signed_off: true` (with `approver` + `approved_date`) in
+`tmp/pm-state.json`. **Do not decompose or write any code before this.** The bundled sign-off hook
+enforces it — blocking implementation writes while `signed_off` is `false` — but it is fail-open and
+can be disabled, so holding the line is still your responsibility.
 
 ## 3. Scaffold (only after sign-off) — observe Repository safety
 - If the project is **not** a git repo, offer to `git init` — **ask first**.

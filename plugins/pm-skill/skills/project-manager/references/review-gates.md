@@ -19,7 +19,9 @@ Reviewers are separate agents, each a distinct lens. Run only the lenses a story
 - *(Extensible: a `security-auditor` lens for auth/crypto/external-input/secret/dependency stories,
   and a performance lens for hot paths, join when those agents are available.)*
 A reviewer is never the agent that built the story. Aggregate the verdicts: the story passes review
-only when **every selected lens** has no open `block`/`major`.
+only when **every selected lens** has no open `block`/`major`. Before acting, **triage** the
+findings — dedupe across lenses and drop false positives / out-of-scope items — and fix only the
+real `block`/`major` ones.
 
 ## Deterministic gates (you run these)
 - The gates are the project's **actual** `test` / `lint` / `build` commands as recorded in the plan
