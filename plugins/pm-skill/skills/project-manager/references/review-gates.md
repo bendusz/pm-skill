@@ -16,12 +16,16 @@ Reviewers are separate agents, each a distinct lens. Run only the lenses a story
 - **Always:** `code-integrity-reviewer` (correctness + security baseline).
 - **Add `architecture-reviewer`** when the story changes structure — new modules, refactors,
   cross-cutting changes, or new abstractions/interfaces. **Skip** it for trivial, localized changes.
-- *(Extensible: a `security-auditor` lens for auth/crypto/external-input/secret/dependency stories,
-  and a performance lens for hot paths, join when those agents are available.)*
+- **Add `security-auditor`** — a deeper security lens than the baseline — when the story touches
+  auth/authz, crypto, secrets/credentials, external or untrusted input, file/network/process I/O,
+  deserialization, or dependency changes. **Skip** it for changes with no security surface.
+- *(Extensible: a performance lens for hot paths can join when such an agent is available.)*
 A reviewer is never the agent that built the story. Aggregate the verdicts: the story passes review
 only when **every selected lens** has no open `block`/`major`. Before acting, **triage** the
 findings — dedupe across lenses and drop false positives / out-of-scope items — and fix only the
 real `block`/`major` ones.
+
+`technical-writer` and `debugger` are *delivery* agents, not review lenses — they never gate a story.
 
 ## Deterministic gates (you run these)
 - The gates are the project's **actual** `test` / `lint` / `build` commands as recorded in the plan

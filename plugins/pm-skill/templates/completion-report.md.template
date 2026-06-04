@@ -1,0 +1,30 @@
+<!-- Write this file to: docs/completion-report.md -->
+# <project> — Completion Report
+
+- **Date:** <YYYY-MM-DD>
+- **Plan:** docs/plan.md
+- **Log:** tmp/log.md
+
+## Overview
+<2–4 sentences: what was delivered and the outcome against the plan's goals.>
+
+## What shipped
+Per sprint / story — what landed and where.
+
+| story | title | status | merge / PR |
+| --- | --- | --- | --- |
+| S1-1 | <title> | done | <commit / PR link> |
+
+## Acceptance criteria
+How the delivered work meets the plan's acceptance criteria. Note any criterion descoped or deferred,
+with the reason.
+
+## Gates & review
+- **Deterministic gates:** <test / lint / build results, or N/A.>
+- **Review:** lenses run and the final verdicts; any accepted `minor` findings left open.
+
+## Follow-ups & known issues
+- <Anything deferred, known limitations, or tech debt to revisit.>
+
+## Links
+- Plan, log, key merges/PRs, and any related docs.
