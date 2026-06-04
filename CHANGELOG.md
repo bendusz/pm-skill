@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented here.
 
+## 0.5.0 — 2026-06-04
+
+Parallel `[P]` story execution via git worktrees — opt-in, best-effort, with a hard fallback to the
+sequential loop.
+
+- New `references/parallel-execution.md`: build independent `[P]` stories at once in isolated git
+  worktrees, then integrate them **one at a time** (concurrent build, serialized integration — the
+  model behind merge queues / merge trains / the "Not Rocket Science Rule").
+- Safe because builders make no commits (the PM owns git): the concurrent phase does zero git writes,
+  so there's no shared-`.git` contention. Before each land, the latest integration tip is merged in
+  and the full gates re-run — catching semantic conflicts two "independent" stories can create.
+- Decomposition records each story's **Touches** (files/modules); `[P]` + non-overlapping Touches
+  selects the batch. Default fan-out 3 (configurable). `tmp/worktrees/` (gitignored); native
+  worktree isolation preferred when the host offers it.
+- Worktree safety: never `rm -rf`, never force-remove a dirty worktree, no orphans (prune on
+  resume). `pm-state.json` gains a `parallel_batch` array for resume. Same gates/review panel as
+  sequential.
+
 ## 0.4.0 — 2026-06-04
 
 More delivery agents and optional model tiering. All additive — defaults unchanged.

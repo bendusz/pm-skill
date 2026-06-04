@@ -6,6 +6,15 @@ back — never raw transcripts (protect your context).
 The **integration branch** is the project's default branch (e.g. `main`) that the scaffold commit
 landed on. You cut every story branch from it and merge each story back into it.
 
+## Sequential or parallel? (decide at the start of each sprint)
+- **Parallel fast path** — if the sprint has **≥2** build-ready `[P]` stories whose `depends-on` are
+  merged and whose **Touches** don't overlap, and `git worktree` works: build them at once in
+  isolated worktrees and integrate them serially. Load `parallel-execution.md`.
+- **Sequential (default)** — otherwise, run the per-story cycle below, one story at a time.
+
+Parallel is opt-in and best-effort; on any worktree trouble, fall back to sequential. Either way each
+story is judged by the **same** deterministic gates and review panel below.
+
 ## Per-story cycle
 0. **Ready & branch.** Confirm the story is **build-ready** (testable criteria + self-contained
    context + a verification command — see `decomposition.md`); if not, fix the story first. Ensure

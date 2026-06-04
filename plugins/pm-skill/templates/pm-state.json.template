@@ -10,6 +10,7 @@
   "current_story": null,
   "current_story_status": null,
   "branch": null,
+  "parallel_batch": [],
   "next": "<continuation point>",
   "updated": "<YYYY-MM-DD HH:MM>"
 }

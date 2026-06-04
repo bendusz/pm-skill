@@ -41,6 +41,7 @@ building anything.
 | Plan & sign-off | A written `docs/plan.md` with testable acceptance criteria; **you approve it** before any code. |
 | Decomposition | Sprints → self-contained story files under `docs/stories/`. |
 | Implementation loop | Per story: **build → review → fix → (optional external review) → ship → log**, run by subagents. |
+| Parallel stories | Independent `[P]` stories can build at once in isolated **git worktrees**, then integrate one at a time (opt-in; safe fallback to sequential). |
 | Review gates | A separate read-only reviewer + the project's real test/lint/build gates; bounded fix loops. |
 | Logging | A `tmp/log.md` logbook so a lost session can resume. |
 

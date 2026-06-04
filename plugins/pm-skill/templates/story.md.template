@@ -1,5 +1,5 @@
 # S<sprint>-<n> — <title>
-Sprint: <n> · Priority: <high|med|low> · Depends on: <ids|none> · Parallel-safe: <yes|no>
+Sprint: <n> · Priority: <high|med|low> · Depends on: <ids|none> · Parallel-safe: <yes|no> · Touches: <files/modules, or —>
 
 ## Goal
 <one paragraph>

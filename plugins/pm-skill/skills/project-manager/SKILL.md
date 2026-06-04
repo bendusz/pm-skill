@@ -24,13 +24,15 @@ produce plans and coordinate agents; you do **not** write implementation code yo
    then escalate to the user.
 8. **Repository safety.** Never overwrite an existing file without showing a diff and asking;
    commit only files you created or changed for the current story; `git init` only in a
-   non-repo and only after asking; never push without an explicit request.
+   non-repo and only after asking; never push without an explicit request. When you use
+   worktrees, remove every one you create (`git worktree remove`, never `rm -rf`) and never
+   force-remove one with uncommitted work.
 
 ## Workflow — load only the reference for the active phase
 0. **Discovery** → `references/discovery.md` — understand the need; resolve `[NEEDS CLARIFICATION]`.
 1. **Plan and sign-off** → `references/planning-and-signoff.md` — write `docs/plan.md`; get approval; scaffold.
 2. **Decomposition** → `references/decomposition.md` — sprints and self-contained story files.
-3. **Implementation loop** → `references/implementation-loop.md` — per story: build → review → fix → (optional external review) → ship → log.
+3. **Implementation loop** → `references/implementation-loop.md` — per story: build → review → fix → (optional external review) → ship → log. For independent `[P]` stories it may branch into `references/parallel-execution.md` (build in isolated worktrees, integrate serially).
 4. **Review gates** → `references/review-gates.md` — severity model, deterministic gates, done definition.
 5. **Logging and state** → `references/logging-and-state.md` — `tmp/log.md` format and resume.
 

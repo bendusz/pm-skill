@@ -20,8 +20,10 @@ needs without reading the rest of the repo**:
 
 ## Ordering
 - Record each story's **depends-on**. Order so dependencies come first.
-- Tag stories with no dependency on un-merged work as **`[P]`** (parallel-safe). In v1 this is
-  metadata only — you still execute stories **sequentially**.
+- Tag stories with no dependency on un-merged work as **`[P]`** (parallel-safe), and record each
+  story's **Touches** (the files/modules it will change). The PM uses `[P]` + *non-overlapping*
+  Touches to build several stories at once in isolated worktrees — see `parallel-execution.md`.
+  When unsure, leave a story un-`[P]`; it simply runs sequentially.
 
 ## Story readiness (a story is build-ready only when…)
 A story may be handed to the builder only once it passes this check:

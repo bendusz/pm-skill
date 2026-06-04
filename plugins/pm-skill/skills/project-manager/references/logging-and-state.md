@@ -31,6 +31,9 @@ A small JSON companion to the prose log, so resume and tooling don't parse prose
 maintains it (create it from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template` when planning
 begins): `phase`, `signed_off` (bool), `approver`, `approved_date`, `integration_branch`,
 `current_sprint`/`total_sprints`, `current_story`/`current_story_status`, `branch`, `next`, `updated`.
+On the **parallel path** (`parallel-execution.md`), also keep `parallel_batch` — an array of
+`{story, branch, worktree, status}` (`building|built|in-review|merged|blocked`); on resume, reconcile
+it against `git worktree list` and prune orphans.
 
 **`signed_off` is load-bearing:** the bundled sign-off hook reads it and blocks implementation writes
 while it is `false`. Set it to `true` (with `approver` + `approved_date`) only at the sign-off gate.
