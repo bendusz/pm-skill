@@ -5,3 +5,6 @@
 .idea/
 .vscode/
 *.swp
+
+# Runtime / working notes (disposable)
+tmp/
