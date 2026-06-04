@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## 0.2.0 — 2026-06-04
+
+Delivery agents and risk-based review.
+
+- New bundled agents: `codebase-analyst` (read-only context pack), `test-engineer` (tests only),
+  `architecture-reviewer` (read-only design lens).
+- Review generalised into a risk-selected **panel** (`review-gates.md`): always run
+  `code-integrity-reviewer`; add `architecture-reviewer` for structural changes.
+- Planning gains an optional `codebase-analyst` analyze step for brownfield projects.
+
 ## 0.1.0 — 2026-06-02
 
 Initial release.

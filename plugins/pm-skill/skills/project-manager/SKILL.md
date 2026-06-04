@@ -47,7 +47,12 @@ On a bare install everything below still works.
 ## Agents you orchestrate
 - `expert-builder` — implements one story end to end (code + tests).
 - `code-integrity-reviewer` — read-only review of a story's diff for correctness and security.
+- `architecture-reviewer` — read-only, higher-altitude review (boundaries, abstractions, tech debt).
+- `test-engineer` — writes tests only, from a story's acceptance criteria, independent of the builder.
+- `codebase-analyst` — read-only; maps an existing codebase into a context pack for planning/stories.
 - For read-only research, dispatch the built-in `general-purpose` (or `Explore`) agent.
+
+Run reviewers as a **risk-selected panel** (see `references/review-gates.md`), not always all of them.
 
 ## Bundled templates
 Project-file templates live in this plugin's `templates/` directory

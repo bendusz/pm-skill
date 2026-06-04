@@ -11,6 +11,16 @@ How a story is judged done. Two independent checks: a **reviewer agent** (qualit
   **`FAIL`** (one or more block/major).
 - Only `block`/`major` force a fix round.
 
+## The review panel — select lenses by risk
+Reviewers are separate agents, each a distinct lens. Run only the lenses a story warrants:
+- **Always:** `code-integrity-reviewer` (correctness + security baseline).
+- **Add `architecture-reviewer`** when the story changes structure — new modules, refactors,
+  cross-cutting changes, or new abstractions/interfaces. **Skip** it for trivial, localized changes.
+- *(Extensible: a `security-auditor` lens for auth/crypto/external-input/secret/dependency stories,
+  and a performance lens for hot paths, join when those agents are available.)*
+A reviewer is never the agent that built the story. Aggregate the verdicts: the story passes review
+only when **every selected lens** has no open `block`/`major`.
+
 ## Deterministic gates (you run these)
 - The gates are the project's **actual** `test` / `lint` / `build` commands as recorded in the plan
   and `CLAUDE.md`. Any that don't exist are `N/A` and skipped.
