@@ -13,10 +13,23 @@ happen to have other tools.
 
 ## Install
 
+Run these two steps **separately** — submit the first, wait for it to finish, then run the second
+(don't paste both at once, or the second line gets swallowed into the first command's argument):
+
+**1. Add the marketplace**
+
 ```
-/plugin marketplace add bendusz/pm-skill
+/plugin marketplace add https://github.com/bendusz/pm-skill
+```
+
+**2. Install the plugin**
+
+```
 /plugin install pm-skill@pm-skill
 ```
+
+Use the full `https://` URL above — the `owner/repo` shorthand resolves to SSH, which fails on
+machines without a GitHub SSH key/host key set up.
 
 If it doesn't appear right away, restart your Claude Code session.
 
