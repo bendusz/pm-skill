@@ -33,7 +33,7 @@ A small JSON companion to the prose log, so resume and tooling don't parse prose
 maintains it (create it from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template` when planning
 begins): `phase`, `signed_off` (bool), `approver`, `approved_date`, `integration_branch`,
 `current_sprint`/`total_sprints`, `current_story`/`current_story_status`, `branch`, `next`, `updated`,
-and the optional spec-driven fields `spec`, `constitution`, `last_analysis_status`, and
+and the optional spec-driven fields `spec`, `constitution`, `scale`, `last_analysis_status`, and
 `current_story_verification_status`.
 On the **parallel path** (`parallel-execution.md`), also keep `parallel_batch` — an array of
 `{story, branch, worktree, commit, status}` (`building|built|in-review|merged|blocked`); on resume,

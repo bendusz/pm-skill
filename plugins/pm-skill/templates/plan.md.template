@@ -8,6 +8,11 @@
 ## Source spec
 - docs/spec.md  <!-- or: none — intent captured inline -->
 
+## Delivery mode
+- Scale: <tiny | small | standard | large | regulated>  <!-- see references/scale-profiles.md -->
+- Checkpoint policy: <story-level | sprint-level | autonomous>
+- Autonomy: <approve each story | approve each sprint | fully autonomous>
+
 ## Goals
 - <goal>
 

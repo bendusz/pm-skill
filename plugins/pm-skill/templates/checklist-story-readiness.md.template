@@ -9,3 +9,5 @@
 - [ ] A concrete Verification command is given.
 - [ ] `depends-on` IDs are valid and (before build) already merged.
 - [ ] `[P]` and `Touches` are present; `[P]` stories have non-overlapping Touches.
+- [ ] `Risk` is set and `Review lenses` are listed (`code-integrity-reviewer` plus any warranted).
+- [ ] `Security-sensitive` / `Architecture-sensitive` flags match the story's actual scope.

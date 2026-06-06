@@ -21,7 +21,9 @@ Reviewers are separate agents, each a distinct lens. Run only the lenses a story
   auth/authz, crypto, secrets/credentials, external or untrusted input, file/network/process I/O,
   deserialization, or dependency changes. **Skip** it for changes with no security surface.
 - *(Extensible: a performance lens for hot paths can join when such an agent is available.)*
-A reviewer is never the agent that built the story. Aggregate the verdicts: the story passes review
+Start from the story's declared **Risk** / **Review lenses** (see `decomposition.md`) where present;
+still **add** a lens if the diff reveals a surface the story didn't declare (and note the gap). A
+reviewer is never the agent that built the story. Aggregate the verdicts: the story passes review
 only when **every selected lens** has no open `block`/`major`. Before acting, **triage** the
 findings — dedupe across lenses and drop false positives / out-of-scope items — and fix only the
 real `block`/`major` ones.

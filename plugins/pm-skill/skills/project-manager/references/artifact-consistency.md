@@ -25,9 +25,10 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
 - **Parallel safety:** `[P]` stories with **overlapping** `Touches`; `[P]` stories with blank `Touches`.
 - **Dependencies:** `depends-on` pointing at a missing/invalid story ID; dependency cycles.
 - **Gate references:** stories naming a gate not listed in `docs/plan.md`'s Commands.
-- **Risk lenses:** stories that appear security-sensitive (auth, secrets, untrusted input, I/O, deps)
-  with nothing indicating `security-auditor` will run; architecture-changing stories with nothing
-  indicating `architecture-reviewer` will run.
+- **Risk lenses (declared vs actual):** a story whose content looks security-sensitive (auth, secrets,
+  untrusted input, I/O, deps) but is not marked `Security-sensitive: yes` or omits `security-auditor`
+  from its `Review lenses`; likewise architecture-changing stories not marked `Architecture-sensitive`
+  or missing `architecture-reviewer`. Flag any mismatch between the declared `Risk`/lenses and the scope.
 - **Terminology drift:** the same concept named differently across spec, plan, and stories.
 - **State sanity:** stale or contradictory `tmp/pm-state.json` / `tmp/log.md` vs the committed artifacts.
 

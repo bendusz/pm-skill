@@ -56,7 +56,8 @@ a **`codebase-analyst`** for brownfield work. The PM stays an orchestrator and p
 context by handing each agent only what it needs.
 
 Default check-in is **sprint-level** (you review at each sprint boundary); configurable to
-story-level or fully autonomous.
+story-level or fully autonomous. Pick a **scale** (`tiny`→`regulated`) to right-size the workflow —
+tiny work stays lightweight; regulated work makes every gate mandatory.
 
 ## Commands
 
@@ -67,6 +68,8 @@ story-level or fully autonomous.
 | `/pm-skill:clarify` | Resolve open `[NEEDS CLARIFICATION]` in the spec, one question at a time (≤5). |
 | `/pm-skill:constitution` | Create/update `docs/constitution.md` — project-specific governing rules. |
 | `/pm-skill:analyze` | Read-only consistency & quality report across all artifacts (never edits). |
+| `/pm-skill:checklist` | Generate/evaluate a spec/plan/story/verification quality checklist under `docs/checklists/`. |
+| `/pm-skill:doctor` | Check environment readiness (toolchain, deps, gates run) before building. |
 | `/pm-skill:resume` | Read saved state + logbook and continue where you left off. |
 
 ## Artifacts
@@ -83,6 +86,7 @@ Committed under `docs/` (authoritative):
 Runtime-only under `tmp/` (gitignored, disposable):
 
 - `tmp/log.md` — the logbook. `tmp/pm-state.json` — machine-readable state for resume.
+- `tmp/environment-check.md` — `/pm-skill:doctor`'s readiness report.
 
 ## Safety
 
@@ -90,6 +94,8 @@ Runtime-only under `tmp/` (gitignored, disposable):
 - **Repository safety:** the PM never overwrites your files without asking, commits only what it
   created for the current story, runs `git init` only after asking, and never pushes without an
   explicit request.
+- **Optional hardening:** for *mechanical* enforcement (a read-only Bash posture, sign-off), the
+  bundled hardening guide uses plain Claude Code permissions/hooks — no external process or dependency.
 
 ## Optional enhancements (work alongside — not required)
 

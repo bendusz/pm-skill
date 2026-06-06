@@ -17,6 +17,10 @@ needs without reading the rest of the repo**:
 - **Acceptance criteria** (testable checkboxes).
 - **Out of scope.**
 - **Touches:** the files/modules this story will change (or `—` if unknown) — used for `[P]` safety.
+- **Risk & review lenses:** the story's `Risk` (low/med/high) and the review lenses it needs —
+  `code-integrity-reviewer` always; add `architecture-reviewer` for structural change and
+  `security-auditor` for security-sensitive surfaces. Declaring these (with `Security-sensitive` /
+  `Architecture-sensitive`) lets `/pm-skill:analyze` check declared-vs-actual instead of guessing.
 - **Verification:** the exact command(s) that prove the story is done.
 
 (Use `${CLAUDE_PLUGIN_ROOT}/templates/story.md.template` as the shape.)
