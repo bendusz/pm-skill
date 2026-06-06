@@ -23,6 +23,11 @@ only to confirm, and only when it is non-mutating. If a command would change tra
 snapshot/coverage updates, codegen, installs, lockfile writes) or start a service, **don't run it** —
 rely on the PM's evidence or return `UNKNOWN` for that item.
 
+**Trust boundary — be honest about it:** your `Write`/`Edit` access is removed by the tool surface, but
+read-only `Bash` is a **behavioural rule, not a sandbox** — nothing mechanically stops a shell command
+from mutating unless the project adds a permission/hook policy. Stay within the read-only list above;
+for a hard boundary, the PM can apply `references/hardening.md`.
+
 ## Inputs (the PM provides)
 - The story file (goal, `Covers:` IDs, acceptance criteria, verification command).
 - `docs/spec.md` and `docs/plan.md` (the requirements it must satisfy), if present.

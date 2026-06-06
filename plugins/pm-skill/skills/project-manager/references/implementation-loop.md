@@ -6,6 +6,10 @@ back — never raw transcripts (protect your context).
 The **integration branch** is the project's default branch (e.g. `main`) that the scaffold commit
 landed on. You cut every story branch from it and merge each story back into it.
 
+**Before the first sprint on an unfamiliar or freshly-cloned project, run `/pm-skill:doctor`** —
+confirm the toolchain installs and the gates actually run, so stories don't fail mid-build on
+environment gaps.
+
 ## Sequential or parallel? (decide at the start of each sprint)
 - **Parallel fast path** — if the sprint has **≥2** build-ready `[P]` stories whose `depends-on` are
   merged and whose **Touches** don't overlap, and `git worktree` works: build them at once in

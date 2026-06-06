@@ -2,6 +2,7 @@
   "project": "<name>",
   "spec": null,
   "constitution": null,
+  "scale": "standard",
   "phase": "discovery",
   "signed_off": false,
   "approver": null,

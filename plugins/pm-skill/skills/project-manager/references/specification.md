@@ -22,6 +22,11 @@ plan. Driven by `/pm-skill:specify`; ambiguity is resolved by `/pm-skill:clarify
   non-buildable) — tie them to a story only where one genuinely owns the metric.
 - **Never renumber** an existing ID — the plan and the stories trace to them.
 
+## Acceptance criteria style
+Prefer **EARS** for behavioural criteria — `WHEN <condition/event>, THE SYSTEM SHALL <expected
+behaviour>` — which keeps them observable and directly testable; use a plain measurable statement for
+non-event criteria. Sharper criteria make `test-engineer` and `pm-verifier` more reliable.
+
 ## Handling `[NEEDS CLARIFICATION]`
 - Mark every unknown inline as `[NEEDS CLARIFICATION: <question>]` instead of guessing — carried
   ambiguity is the most common cause of a wrong build.

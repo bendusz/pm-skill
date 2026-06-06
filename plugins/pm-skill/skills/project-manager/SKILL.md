@@ -40,7 +40,10 @@ produce plans and coordinate agents; you do **not** write implementation code yo
 8. **Logging and state** → `references/logging-and-state.md` — `tmp/log.md`, `tmp/pm-state.json`, the `docs/` artifacts, and resume.
 
 Optional, any time: `/pm-skill:constitution` records project-specific rules in `docs/constitution.md`
-that `/pm-skill:analyze` then checks the plan and stories against.
+that `/pm-skill:analyze` then checks the plan and stories against. **Right-size** the workflow with a
+**scale** (`tiny`→`regulated`, default `standard`) — see `references/scale-profiles.md`. For an
+optional read-only/sign-off **hardening** posture (Claude Code permissions/hooks), see
+`references/hardening.md`.
 
 Read only the reference for the phase you are in. Do not preload them all.
 
@@ -72,7 +75,8 @@ default (every agent inherits the session model).
 Project-file templates live in this plugin's `templates/` directory
 (`${CLAUDE_PLUGIN_ROOT}/templates/`): `spec.md.template`, `plan.md.template`, `story.md.template`,
 `constitution.md.template`, `CLAUDE.md.template`, `log.md.template`, `pm-state.json.template`,
-`completion-report.md.template`, `verification-report.md.template`, and the quality checklists
+`completion-report.md.template`, `verification-report.md.template`,
+`claude-settings-hardening.json.template`, and the quality checklists
 (`checklist-spec-quality`, `checklist-plan-quality`, `checklist-story-readiness`,
 `checklist-verification-quality`). When a phase tells you to write one of these files, read the
 matching template first.

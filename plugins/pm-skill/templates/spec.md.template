@@ -18,7 +18,9 @@ As a <user>, I want <capability>, so that <outcome>.
 - FR-001: <testable requirement>
 
 ## Acceptance criteria
-- AC-001: <observable / testable criterion>
+<!-- Prefer EARS form for behavioural criteria: WHEN <condition/event>, THE SYSTEM SHALL <behaviour>.
+     Use a plain measurable statement for non-event criteria. -->
+- AC-001: WHEN <condition/event>, THE SYSTEM SHALL <observable behaviour>.
 
 ## Edge cases
 - <edge case or failure mode — and the expected behaviour>

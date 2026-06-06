@@ -1,5 +1,6 @@
 # S<sprint>-<n> — <title>
 Sprint: <n> · Priority: <high|med|low> · Covers: <FR-…, AC-…> · Depends on: <ids|none> · Parallel-safe: <yes|no> · Touches: <files/modules, or —>
+Risk: <low|med|high> · Review lenses: <code-integrity-reviewer[, architecture-reviewer][, security-auditor]> · Security-sensitive: <yes|no> · Architecture-sensitive: <yes|no>
 
 ## Goal
 <one paragraph>

@@ -2,6 +2,48 @@
 
 All notable changes to this project are documented here.
 
+## 0.7.0 — 2026-06-06
+
+Mechanical rigor and right-sizing on top of the spec-driven workflow.
+
+- **EARS acceptance criteria** — `spec.md.template` now models behavioural criteria as
+  `WHEN <event>, THE SYSTEM SHALL <behaviour>` (plain measurable statements for non-event criteria),
+  making them directly testable for `test-engineer` and `pm-verifier`.
+- **`/pm-skill:checklist`** — generate (and optionally evaluate, with evidence) the spec / plan /
+  story / verification quality checklists under `docs/checklists/`.
+- **`/pm-skill:doctor`** — a read-mostly environment-readiness probe (toolchain, lockfiles, and
+  whether the gates actually run) → `tmp/environment-check.md`, run before the implementation loop.
+- **Scale profiles** (`references/scale-profiles.md`) — `tiny`→`regulated` right-size the workflow;
+  scaling down drops artifacts/ceremony but never the hard rules. `pm-state.json` gains `scale`;
+  `plan.md` gains a Delivery mode section.
+- **Story risk/lens metadata** — stories declare `Risk` and `Review lenses` (+ `Security-sensitive` /
+  `Architecture-sensitive`), so `/pm-skill:analyze` checks declared-vs-actual instead of guessing.
+- **Optional hardening** (`references/hardening.md` + `claude-settings-hardening.json.template`) — a
+  Claude Code-native hook that scopes a read-only Bash allowlist to the `pm-verifier` subagent (via the
+  `agent_type` hook input), leaving the PM unaffected; the verifier's read-only Bash is otherwise a
+  behavioural rule, not a sandbox.
+- **Validation** — `scripts/validate.sh` now also checks reference integrity (SKILL references,
+  template references, command frontmatter), parses the JSON templates, and verifies the CHANGELOG top
+  matches the plugin version.
+
+## 0.6.0 — 2026-06-06
+
+Spec-driven planning, traceability, and an independent final verification step — all Claude
+Code-native and self-contained (no external dependency).
+
+- **New commands:** `/pm-skill:specify` (durable `docs/spec.md`), `/pm-skill:clarify` (resolve
+  `[NEEDS CLARIFICATION]`, ≤5 questions), `/pm-skill:constitution` (project rules), `/pm-skill:analyze`
+  (read-only cross-artifact consistency report).
+- **New agent:** `pm-verifier` — read-only final `PASS`/`FAIL`/`UNKNOWN` gate; a story can't ship
+  without PASS.
+- **New references:** `specification.md`, `verification.md`, `artifact-consistency.md`.
+- **Traceability:** stable spec IDs (`US-`/`FR-`/`AC-`/`SM-`), a story `Covers:` field, and a plan
+  `covers` column + Traceability table.
+- **New templates:** spec, constitution, verification-report, and four quality checklists.
+- Workflow is now discover → specify → clarify → plan → sign-off → analyze → decompose → build → gate
+  → review → fix → verify → ship → log. `pm-state.json` gains `spec`, `constitution`,
+  `last_analysis_status`, and `current_story_verification_status`.
+
 ## 0.5.0 — 2026-06-04
 
 Parallel `[P]` story execution via git worktrees — opt-in, best-effort, with a hard fallback to the
