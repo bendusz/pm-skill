@@ -1,5 +1,5 @@
 # S<sprint>-<n> — <title>
-Sprint: <n> · Priority: <high|med|low> · Depends on: <ids|none> · Parallel-safe: <yes|no> · Touches: <files/modules, or —>
+Sprint: <n> · Priority: <high|med|low> · Covers: <FR-…, AC-…> · Depends on: <ids|none> · Parallel-safe: <yes|no> · Touches: <files/modules, or —>
 
 ## Goal
 <one paragraph>
@@ -15,3 +15,7 @@ Sprint: <n> · Priority: <high|med|low> · Depends on: <ids|none> · Parallel-sa
 
 ## Verification
 - Prove done with: `<command>`
+
+## Verification evidence
+<!-- Filled after the verify step: pm-verifier STATUS (PASS/FAIL/UNKNOWN), gate results, and a link to
+     docs/verification/<story-id>.md if one was written. Empty until the story is verified. -->

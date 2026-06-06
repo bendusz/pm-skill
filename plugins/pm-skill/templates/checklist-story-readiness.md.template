@@ -1,0 +1,11 @@
+# Story Readiness Checklist — <story id>
+<!-- Generated to docs/checklists/story-readiness-<id>.md (or one shared file). Check per story before build. -->
+
+- [ ] The story states a clear Goal.
+- [ ] Context is self-contained — a cold builder needs nothing else.
+- [ ] `Covers:` lists the requirement IDs (FR-/AC-) this story satisfies.
+- [ ] Acceptance criteria are testable checkboxes.
+- [ ] Out-of-scope is explicit.
+- [ ] A concrete Verification command is given.
+- [ ] `depends-on` IDs are valid and (before build) already merged.
+- [ ] `[P]` and `Touches` are present; `[P]` stories have non-overlapping Touches.

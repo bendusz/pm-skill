@@ -1,0 +1,40 @@
+# Verification
+
+The final, independent check that a story is genuinely shippable — **after** the deterministic gates
+and the reviewer/fix loop, **before** ship/merge. Run by the `pm-verifier` subagent. **No external
+harness and no separate lifecycle process** — just a read-only Claude Code subagent the PM
+dispatches.
+
+## When
+In the per-story loop: build → gate → review → fix → **verify** → ship → log. Enter verification only
+once the gates are green and no `block`/`major` review findings remain open.
+
+## Inputs to the verifier
+- The story file (goal, `Covers:` IDs, acceptance criteria, verification command).
+- `docs/spec.md` / `docs/plan.md` — the requirements the story must satisfy.
+- The diff **text** and the list of changed paths.
+- The reviewer verdicts and the gate results you already ran.
+
+## Expected report
+`pm-verifier` returns `STATUS: PASS | FAIL | UNKNOWN`, with confidence, per-criterion and per-gate
+results, review-finding resolution, open issues, and an action. It treats builder/PM summaries as
+**claims** and checks them against real repo state (it has read-only Bash for `git`/gates/grep).
+
+## Handling the verdict
+- **PASS** — required before ship. Proceed to commit/merge.
+- **FAIL** — back to the **fix loop** (builder; dispatch `debugger` first if a gate is the cause),
+  within the same **≤3-round** bound, then re-verify. **Never ship a FAIL.**
+- **UNKNOWN** — gather the **exact missing evidence** the verifier named (a command it couldn't run,
+  an artifact it lacked) and re-verify; if it can't be obtained, **escalate to the user**. Never treat
+  UNKNOWN as PASS.
+
+## Where evidence lives
+- Lightweight / single-story work: a quick **inline** verifier pass is enough — `STATUS` still
+  required, but you may skip the durable report and checklists and just summarise the result in
+  `tmp/log.md` (runtime-only).
+- Non-trivial projects (recommended): write a durable `docs/verification/<story-id>.md` from
+  `${CLAUDE_PLUGIN_ROOT}/templates/verification-report.md.template`.
+- Optionally tick `docs/checklists/verification-<id>.md` from the verification-quality template.
+- Set `current_story_verification_status` in `tmp/pm-state.json`.
+
+A story is **done** only with `pm-verifier` `PASS` (see `review-gates.md`).

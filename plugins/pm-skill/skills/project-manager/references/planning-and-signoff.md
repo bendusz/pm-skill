@@ -8,27 +8,37 @@ into the plan's Architecture and Commands sections, and keep it to embed into st
 Skip this for a greenfield project.
 
 ## 1. Write `docs/plan.md`
+If `docs/spec.md` exists, the plan **derives from it** — turn its requirements into delivery work and
+trace each story back to the spec's IDs. (No spec yet? Run `/pm-skill:specify` first for non-trivial
+work, or fold the intent straight into the plan for something small.)
+
 Initialise `tmp/pm-state.json` from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template`
 (`signed_off: false`) if it doesn't exist yet. Then create `docs/plan.md` with these sections:
 - **Overview** — what + why, 2–3 sentences.
+- **Source spec** — link `docs/spec.md` (or note "none — intent captured inline").
 - **Goals** and **Target users**.
 - **Scope** — In / Out (be explicit about what you are *not* doing).
-- **Stories** — a table: `| id | title | priority | acceptance criteria | depends-on | [P] |`.
-  Acceptance criteria must be **testable**.
+- **Stories** — a table: `| id | title | priority | covers | acceptance criteria | depends-on | [P] |`.
+  Acceptance criteria must be **testable**; `covers` lists the spec IDs (`FR-`/`AC-`) each story satisfies.
 - **Architecture** — stack, key decisions, patterns.
+- **Traceability** — every spec requirement maps to at least one story (flag any that don't).
 - **Non-functional requirements** — performance, security, etc.
 - **Commands** — the project's real `test` / `lint` / `build` / `run` commands. If one does not
   exist, write `N/A` (you'll honour that in the gates later). Discover these now.
 - **Risks** and any open questions.
-- **Clarifications** — must be **empty** before sign-off.
+- **Clarifications** — must be **empty** before sign-off (here and in `docs/spec.md`).
 - **Sign-off** — a line to be filled: `Approved by <name> on YYYY-MM-DD`.
 
-Present it. Iterate with the user until they're happy.
+Present it. Iterate with the user until they're happy. For a larger project, run `/pm-skill:analyze`
+before decomposition — optionally on the drafted plan before you record sign-off — for a read-only
+consistency and coverage check (the Stories table carries the `covers` mapping); resolve any
+CRITICAL/HIGH findings first.
 
 ## 2. Sign-off gate
-Get an **unambiguous human "approved"**. Record the approver and date in the plan's Sign-off line,
-in `tmp/log.md`, and set `signed_off: true` (with `approver` + `approved_date`) in
-`tmp/pm-state.json`. **Do not decompose or write any code before this.** The bundled sign-off hook
+Sign-off requires all three: **no blocking `[NEEDS CLARIFICATION]`** in `docs/spec.md` (or the plan),
+`docs/plan.md` **present**, and an **unambiguous human "approved"**. Record the approver and date in
+the plan's Sign-off line, in `tmp/log.md`, and set `signed_off: true` (with `approver` +
+`approved_date`) in `tmp/pm-state.json`. **Do not decompose or write any code before this.** The bundled sign-off hook
 enforces it — blocking implementation writes while `signed_off` is `false` — but it is fail-open and
 can be disabled, so holding the line is still your responsibility.
 

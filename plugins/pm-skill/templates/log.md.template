@@ -2,9 +2,11 @@
 
 ## Current State
 - Objective: <one line>
+- Spec: <none yet | docs/spec.md — clear | docs/spec.md — N clarifications open>
 - Plan: <none yet | docs/plan.md — APPROVED by <name> on <date>>
 - Sprint: <n> of <N> — "<goal>"
 - Story: <id> "<title>" — <status>
+- Verification: <pending | PASS | FAIL | UNKNOWN>
 - Branch: <branch> (clean | N uncommitted)
 - Next: <continuation point>
 

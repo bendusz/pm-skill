@@ -1,0 +1,34 @@
+<!-- Write this file to: docs/verification/<story-id>.md -->
+# Verification — <story id> "<title>"
+
+- **Date:** <YYYY-MM-DD>
+- **Story:** docs/stories/<file>.md
+- **Covers:** <FR-…, AC-…>
+- **Branch:** <story branch> → <integration branch>
+- **Changed files:**
+  - <path>
+
+## Gates
+| gate | command | result |
+| --- | --- | --- |
+| test | `<cmd or N/A>` | PASS / FAIL / N/A |
+| lint | `<cmd or N/A>` | PASS / FAIL / N/A |
+| build | `<cmd or N/A>` | PASS / FAIL / N/A |
+
+## Review
+| lens | verdict | open findings |
+| --- | --- | --- |
+| code-integrity-reviewer | PASS / CONCERNS / FAIL | <none / …> |
+
+## pm-verifier
+- **STATUS:** PASS / FAIL / UNKNOWN
+- **Confidence:** high / medium / low
+- **Evidence:** <what was run/read and what it showed>
+- **Gates:** <test: PASS|FAIL|N/A|UNKNOWN · lint: … · build: … — with evidence>
+- **Acceptance criteria:** <AC-001: PASS — evidence; …>
+- **Review findings:** <each prior block/major — resolved? evidence>
+- **Open issues:** <none / …>
+- **Action:** <PASS: may ship · FAIL: issues to fix · UNKNOWN: missing evidence needed>
+
+## Final status
+<SHIPPED on <YYYY-MM-DD> via <merge / PR link> | BLOCKED — reason>

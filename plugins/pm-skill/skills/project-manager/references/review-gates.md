@@ -1,7 +1,8 @@
-# Review Gates
+# Review & Verification Gates
 
-How a story is judged done. Two independent checks: a **reviewer agent** (qualitative) and
-**deterministic gates** (mechanical). They are separate on purpose.
+How a story is judged done. Three independent checks: a **reviewer agent** (qualitative), the
+**deterministic gates** (mechanical), and a final **`pm-verifier`** pass (independent confirmation).
+They are separate on purpose.
 
 ## The reviewer (separate agent)
 - `code-integrity-reviewer` is **never** the agent that built the story (this avoids self-review
@@ -33,11 +34,19 @@ real `block`/`major` ones.
 - **You** (the PM) run them — after the build, and again after each fix. Don't take a subagent's
   word that they pass.
 
+## Final verification gate (you dispatch this)
+After the review panel passes and the deterministic gates are green, dispatch `pm-verifier` (read-only)
+to independently confirm the story is shippable — it re-checks the acceptance criteria, the diff, the
+resolved findings, and the gates against **actual repo state**, not summaries. It returns
+`STATUS: PASS | FAIL | UNKNOWN`. **`PASS` is required before ship**; `FAIL` returns to the fix loop;
+`UNKNOWN` needs the missing evidence (or user escalation). Full handling in `verification.md`.
+
 ## Definition of done (a story)
 A story is done when **all** of these hold:
 - every acceptance criterion is met,
 - no open `block`/`major` findings across **all** selected review lenses,
 - all non-`N/A` gates are green,
+- `pm-verifier` returned `STATUS: PASS`,
 - the outcome is logged.
 
 ## Escalation

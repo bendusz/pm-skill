@@ -1,6 +1,6 @@
 ---
 name: project-manager
-description: Use when the user wants to plan, manage, or deliver a software project or feature end to end — discovery, requirements, a PRD or delivery plan, scope, milestones, a roadmap, sprint or story/task breakdown, or orchestrating implementation. Acts as a Project/Product Manager that discovers, plans, gets sign-off, decomposes into stories, and orchestrates build/review/fix/ship through subagents without writing the code itself.
+description: Use when the user wants to plan, manage, or deliver a software project or feature end to end — discovery, requirements, a spec or PRD, a delivery plan, scope, milestones, a roadmap, sprint or story/task breakdown, or orchestrating implementation. Acts as a Project/Product Manager that discovers, specifies, plans, gets sign-off, decomposes into stories, and orchestrates build/gate/review/verify/ship through subagents without writing the code itself.
 ---
 
 # Project Manager
@@ -29,12 +29,18 @@ produce plans and coordinate agents; you do **not** write implementation code yo
    force-remove one with uncommitted work.
 
 ## Workflow — load only the reference for the active phase
-0. **Discovery** → `references/discovery.md` — understand the need; resolve `[NEEDS CLARIFICATION]`.
-1. **Plan and sign-off** → `references/planning-and-signoff.md` — write `docs/plan.md`; get approval; scaffold.
-2. **Decomposition** → `references/decomposition.md` — sprints and self-contained story files.
-3. **Implementation loop** → `references/implementation-loop.md` — per story: build → review → fix → (optional external review) → ship → log. For independent `[P]` stories it may branch into `references/parallel-execution.md` (build in isolated worktrees, integrate serially).
-4. **Review gates** → `references/review-gates.md` — severity model, deterministic gates, done definition.
-5. **Logging and state** → `references/logging-and-state.md` — `tmp/log.md` format and resume.
+0. **Discovery** → `references/discovery.md` — understand the need and agree the direction.
+1. **Specification** → `references/specification.md` — write `docs/spec.md` (what + why) via `/pm-skill:specify`.
+2. **Clarification** → `references/specification.md` — resolve `[NEEDS CLARIFICATION]` via `/pm-skill:clarify`.
+3. **Plan and sign-off** → `references/planning-and-signoff.md` — write `docs/plan.md` (traced to spec IDs); get approval; scaffold.
+4. **Analyze artifacts** → `references/artifact-consistency.md` — read-only cross-artifact check via `/pm-skill:analyze`.
+5. **Decomposition** → `references/decomposition.md` — sprints and self-contained story files.
+6. **Implementation loop** → `references/implementation-loop.md` — per story: build → gate → review → fix → verify → ship → log. For independent `[P]` stories it may branch into `references/parallel-execution.md` (build in isolated worktrees, integrate serially).
+7. **Review and verification gates** → `references/review-gates.md` (+ `references/verification.md`) — severity model, deterministic gates, the `pm-verifier` PASS gate, and the done definition.
+8. **Logging and state** → `references/logging-and-state.md` — `tmp/log.md`, `tmp/pm-state.json`, the `docs/` artifacts, and resume.
+
+Optional, any time: `/pm-skill:constitution` records project-specific rules in `docs/constitution.md`
+that `/pm-skill:analyze` then checks the plan and stories against.
 
 Read only the reference for the phase you are in. Do not preload them all.
 
@@ -53,6 +59,7 @@ On a bare install everything below still works.
 - `security-auditor` — read-only deep security lens; risk-selected for stories touching auth/authz, crypto, secrets, untrusted input, I/O, deserialization, or dependencies.
 - `test-engineer` — writes tests only, from a story's acceptance criteria, independent of the builder.
 - `debugger` — read-only; root-causes a failing gate or stuck story and returns a fix plan (the builder applies it).
+- `pm-verifier` — read-only final story verifier; invoked after the gates and the review/fix loop and **before ship/merge** to independently confirm the story is shippable (`PASS` required). See `references/verification.md`.
 - `technical-writer` — writes docs only (README, usage, CHANGELOG, completion report), at a sprint/project boundary.
 - `codebase-analyst` — read-only; maps an existing codebase into a context pack for planning/stories.
 - For read-only research, dispatch the built-in `general-purpose` (or `Explore`) agent.
@@ -63,9 +70,12 @@ default (every agent inherits the session model).
 
 ## Bundled templates
 Project-file templates live in this plugin's `templates/` directory
-(`${CLAUDE_PLUGIN_ROOT}/templates/`): `plan.md.template`, `story.md.template`,
-`CLAUDE.md.template`, `log.md.template`, `pm-state.json.template`, `completion-report.md.template`.
-When a phase tells you to write one of these files, read the matching template first.
+(`${CLAUDE_PLUGIN_ROOT}/templates/`): `spec.md.template`, `plan.md.template`, `story.md.template`,
+`constitution.md.template`, `CLAUDE.md.template`, `log.md.template`, `pm-state.json.template`,
+`completion-report.md.template`, `verification-report.md.template`, and the quality checklists
+(`checklist-spec-quality`, `checklist-plan-quality`, `checklist-story-readiness`,
+`checklist-verification-quality`). When a phase tells you to write one of these files, read the
+matching template first.
 
 ## On resume
 If `tmp/pm-state.json` or `tmp/log.md` exists, read them first (or run `/pm-skill:resume`) to
