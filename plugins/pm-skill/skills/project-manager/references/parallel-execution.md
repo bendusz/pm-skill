@@ -56,10 +56,14 @@ Take one story at a time and land it before starting the next. **Work in that st
 3. **Review + fix** exactly as in the sequential loop, **in the worktree**: story-scoped diff →
    risk-selected panel → triage → fix via the builder, **≤3 rounds** (dispatch `debugger` first when
    a gate fails or a round stalls), re-gating each round. Commit accepted fixes to the story branch.
-4. On green with no open `block`/`major`: `--no-ff` merge the story branch into the integration
-   branch (**local by default; remote only on explicit request**). **Log** the outcome; set status
-   `merged`.
-5. **Remove the worktree** (`git worktree remove`) now that the work is committed and merged.
+4. **Verify.** Dispatch `pm-verifier` (read-only) **in the worktree** on the combined result — the
+   story file, `docs/spec.md`/`docs/plan.md`, the story-scoped diff, the reviewer verdicts, and the
+   gate results. Merge only on `STATUS: PASS`; `FAIL` returns to step 3's fix loop (same ≤3-round
+   bound), `UNKNOWN` needs the missing evidence or user escalation. (See `verification.md`.)
+5. On green with no open `block`/`major` and `pm-verifier` `PASS`: `--no-ff` merge the story branch
+   into the integration branch (**local by default; remote only on explicit request**). **Log** the
+   outcome; set status `merged`.
+6. **Remove the worktree** (`git worktree remove`) now that the work is committed and merged.
 
 A **blocked** story (failed tip-merge in step 1, or escalation after 3 fix rounds) **does not block
 the rest**: leave its worktree in place, set status `blocked`, and note in `tmp/log.md` what you need

@@ -10,10 +10,13 @@ Break the approved plan into sprints and **self-contained** story files.
 For each story, create `docs/stories/S<sprint>-<n>-<slug>.md` containing **everything a builder
 needs without reading the rest of the repo**:
 - **Goal** (one paragraph).
+- **Covers:** the spec requirement IDs (`FR-`/`AC-`) this story satisfies — the traceability link
+  back to `docs/spec.md`.
 - **Context (self-contained):** the architecture, files, interfaces, and conventions relevant to
   this story — summarised here so the worker's context stays small and focused.
 - **Acceptance criteria** (testable checkboxes).
 - **Out of scope.**
+- **Touches:** the files/modules this story will change (or `—` if unknown) — used for `[P]` safety.
 - **Verification:** the exact command(s) that prove the story is done.
 
 (Use `${CLAUDE_PLUGIN_ROOT}/templates/story.md.template` as the shape.)
@@ -28,9 +31,11 @@ needs without reading the rest of the repo**:
 ## Story readiness (a story is build-ready only when…)
 A story may be handed to the builder only once it passes this check:
 - **testable acceptance criteria** are present (not vague),
+- **requirement traceability** — `Covers:` names the spec IDs (`FR-`/`AC-`) it satisfies (where a spec exists),
 - the **self-contained context** a cold worker needs is present (no "go read the repo"),
 - a concrete **verification command** is given.
 If a story fails the check, fix the story first — never dispatch the builder on an unready story.
+(`${CLAUDE_PLUGIN_ROOT}/templates/checklist-story-readiness.md.template` is the full checklist.)
 
 ## Hand to the user
 Show the sprint/story map so the user can see the shape. This is visible but not a hard gate —

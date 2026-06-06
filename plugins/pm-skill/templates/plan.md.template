@@ -1,7 +1,12 @@
 # <Project> — Delivery Plan
+<!-- Source spec: docs/spec.md (or "none — intent captured inline"). The plan derives from the spec
+     and traces each story back to its FR-/AC- IDs. -->
 
 ## Overview
 <what + why, 2–3 sentences>
+
+## Source spec
+- docs/spec.md  <!-- or: none — intent captured inline -->
 
 ## Goals
 - <goal>
@@ -17,12 +22,18 @@
 - <item>
 
 ## Stories
-| id | title | priority | acceptance criteria | depends-on | [P] |
-|------|---------|----------|----------------------|------------|-----|
-| S1-1 | <title> | high | <testable criteria> | none | no |
+| id | title | priority | covers | acceptance criteria | depends-on | [P] |
+|------|---------|----------|--------|----------------------|------------|-----|
+| S1-1 | <title> | high | FR-001, AC-001 | <testable criteria> | none | no |
 
 ## Architecture
 <stack, key decisions, patterns>
+
+## Traceability
+<!-- Every spec requirement maps to at least one story; flag any that don't. -->
+| requirement | covered by | notes |
+|-------------|-----------|-------|
+| FR-001 | S1-1 | |
 
 ## Non-functional requirements
 - <performance, security, accessibility, etc.>

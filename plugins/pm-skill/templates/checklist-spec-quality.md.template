@@ -1,0 +1,11 @@
+# Spec Quality Checklist — <Project>
+<!-- Generated to docs/checklists/spec-quality.md. Check against docs/spec.md. -->
+
+- [ ] No unresolved `[NEEDS CLARIFICATION]` markers remain.
+- [ ] Every user story is clear and names the user, the capability, and the outcome.
+- [ ] Requirements have stable IDs (FR-001, …) and each one is testable.
+- [ ] Acceptance criteria (AC-…) are observable and verifiable.
+- [ ] Success metrics (SM-…) are measurable, or marked as non-buildable business metrics.
+- [ ] Assumptions are explicit.
+- [ ] Edge cases and failure modes are listed with their expected behaviour.
+- [ ] The spec stays at WHAT/WHY — no implementation, stack, or architecture detail.

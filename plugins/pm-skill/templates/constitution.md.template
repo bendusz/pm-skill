@@ -1,0 +1,37 @@
+# <Project> — Project Constitution
+
+<!--
+Project-specific governing principles and non-negotiable delivery rules. This COMPLEMENTS the
+pm-skill built-in hard rules — it never weakens them. When this file and a request conflict, the
+stricter rule wins. Keep it short and enforceable; every line should be checkable by /pm-skill:analyze.
+-->
+
+## Principles
+- <a core value that guides trade-offs, e.g. "correctness over speed">
+
+## Engineering standards
+- <language/style conventions, error-handling expectations, dependency policy>
+
+## Testing standards
+- <what must be tested, coverage expectations, test-first where practical>
+
+## Security & privacy requirements
+- <authn/authz rules, secret handling, data/PII handling>
+
+## UX / product constraints
+- <accessibility, supported platforms, performance budgets, tone>
+
+## Repository safety rules
+- No remote push without an explicit request.
+- Commit only the files for the current story; never `git add -A` over unrelated work.
+- Never overwrite an existing file without showing a diff and asking.
+
+## Required gates
+- Deterministic gates that must pass: <test / lint / build, or N/A>.
+- `pm-verifier` must return STATUS: PASS before a story ships.
+
+## Change-control rules
+- No implementation before the plan is signed off.
+- Story scope is frozen once it starts; new requirements go through a correct-course step.
+- The agent that reviews is never the agent that built.
+- Every story traces to requirement IDs (FR-/AC-).

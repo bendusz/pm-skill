@@ -1,6 +1,7 @@
 # Discovery
 
-Understand what the customer actually needs and agree the best solution — before any planning.
+Understand what the customer actually needs and agree the best solution — before specification and
+planning.
 
 ## Goal
 Reach a shared, explicit understanding with the user (the customer-facing manager) of:
@@ -24,12 +25,14 @@ Reach a shared, explicit understanding with the user (the customer-facing manage
   summary. Don't read large sources into your own context.
 
 ## Exit gate
-Do not move to planning until **every `[NEEDS CLARIFICATION]` is resolved**. If one can't be
-resolved yet, record it as an open risk and decide together whether it blocks planning.
+Move on once you and the user share the problem and the solution direction. You needn't resolve every
+detail here — record open unknowns inline as `[NEEDS CLARIFICATION: …]`; the **specification** phase
+captures them and `/pm-skill:clarify` resolves them before planning. Settle now only anything that
+would block even writing a spec.
 
 ## Output
-- A short, shared problem statement and the chosen solution direction.
+- A short, shared **problem statement** and the chosen **solution direction**.
 - Append a one-line entry to `tmp/log.md` (create it if missing) noting discovery is done and the
   direction agreed.
 
-Then load `planning-and-signoff.md`.
+Then load `specification.md`.

@@ -1,12 +1,12 @@
 # pm-skill — a Project/Product Manager skill for Claude Code
 
-Turn Claude into a disciplined **Project / Product Manager** that discovers, plans, gets your
-sign-off, decomposes work into stories, and **orchestrates** the build through specialist
-subagents — review, fix, ship, and log — **without writing the code itself**.
+Turn Claude into a disciplined **Project / Product Manager** that discovers, specifies, plans, gets
+your sign-off, decomposes work into stories, and **orchestrates** the build through specialist
+subagents — gate, review, fix, verify, ship, and log — **without writing the code itself**.
 
 One repeatable way of working:
 
-> **discover → align → plan → sign-off → decompose → orchestrate → review → ship → log**
+> **discover → specify → clarify → plan → sign-off → analyze → decompose → build → gate → review → verify → ship → log**
 
 It is generic and self-contained: it works on a bare Claude Code install and gets richer if you
 happen to have other tools.
@@ -37,22 +37,52 @@ building anything.
 
 | Phase | What happens |
 |-------|--------------|
-| Discovery | You and the PM agree the problem and the best solution; ambiguities are resolved first. |
-| Plan & sign-off | A written `docs/plan.md` with testable acceptance criteria; **you approve it** before any code. |
-| Decomposition | Sprints → self-contained story files under `docs/stories/`. |
-| Implementation loop | Per story: **build → review → fix → (optional external review) → ship → log**, run by subagents. |
+| Discovery | You and the PM agree the problem and the best solution. |
+| Specification | A durable `docs/spec.md` — user stories, requirements, acceptance criteria, success metrics (what & why, not how). |
+| Clarification | Open `[NEEDS CLARIFICATION]` questions resolved one at a time before planning. |
+| Plan & sign-off | A written `docs/plan.md` that derives from the spec (with traceability); **you approve it** before any code. |
+| Analyze | A read-only cross-artifact consistency check (coverage, contradictions, constitution) after the plan, before decomposition — optionally before sign-off. |
+| Decomposition | Sprints → self-contained story files under `docs/stories/`, each tracing to requirement IDs. |
+| Implementation loop | Per story: **build → gate → review → fix → verify → ship → log**, run by subagents. |
 | Parallel stories | Independent `[P]` stories can build at once in isolated **git worktrees**, then integrate one at a time (opt-in; safe fallback to sequential). |
-| Review gates | A separate read-only reviewer + the project's real test/lint/build gates; bounded fix loops. |
-| Logging | A `tmp/log.md` logbook so a lost session can resume. |
+| Review & verification | A separate read-only reviewer + the project's real test/lint/build gates + a final read-only `pm-verifier` PASS; bounded fix loops. |
+| Logging | A `tmp/log.md` logbook + `tmp/pm-state.json` so a lost session can resume. |
 
 Bundled specialist agents do the work — a builder (**`expert-builder`**), a risk-selected read-only
 **review panel** (**`code-integrity-reviewer`**, **`architecture-reviewer`**, **`security-auditor`**),
-a **`test-engineer`** (tests only), a **`debugger`** (read-only root-cause → fix plan), a
-**`technical-writer`** (docs only), and a **`codebase-analyst`** for brownfield work. The PM stays an
-orchestrator and protects its own context by handing each agent only what it needs.
+a **`test-engineer`** (tests only), a **`debugger`** (read-only root-cause → fix plan), a read-only
+final **`pm-verifier`** (independent PASS/FAIL before ship), a **`technical-writer`** (docs only), and
+a **`codebase-analyst`** for brownfield work. The PM stays an orchestrator and protects its own
+context by handing each agent only what it needs.
 
 Default check-in is **sprint-level** (you review at each sprint boundary); configurable to
 story-level or fully autonomous.
+
+## Commands
+
+| Command | What it does |
+|---------|--------------|
+| `/pm-skill:pm` | Act as the PM end to end — discover, plan, get sign-off, orchestrate delivery. |
+| `/pm-skill:specify` | Capture/refine `docs/spec.md` — the product spec (what & why). |
+| `/pm-skill:clarify` | Resolve open `[NEEDS CLARIFICATION]` in the spec, one question at a time (≤5). |
+| `/pm-skill:constitution` | Create/update `docs/constitution.md` — project-specific governing rules. |
+| `/pm-skill:analyze` | Read-only consistency & quality report across all artifacts (never edits). |
+| `/pm-skill:resume` | Read saved state + logbook and continue where you left off. |
+
+## Artifacts
+
+Committed under `docs/` (authoritative):
+
+- `docs/spec.md` — product specification (user stories, requirements, acceptance criteria, metrics).
+- `docs/plan.md` — delivery plan, derived from the spec with traceability.
+- `docs/stories/*.md` — self-contained story files, each tracing to requirement IDs.
+- `docs/constitution.md` — project-specific governing principles (optional).
+- `docs/checklists/*.md` — spec/plan/story/verification quality checklists (optional).
+- `docs/verification/*.md` — per-story verification reports (optional; recommended for non-trivial work).
+
+Runtime-only under `tmp/` (gitignored, disposable):
+
+- `tmp/log.md` — the logbook. `tmp/pm-state.json` — machine-readable state for resume.
 
 ## Safety
 
@@ -70,6 +100,12 @@ prefer them where useful — but nothing here is a dependency:
 - An external code-review tool (for example an OpenAI Codex–based reviewer, or another model's CLI)
   for the optional independent review step.
 - `gh` plus a GitHub remote for real pull requests (otherwise the PM uses local merges).
+
+The spec / clarify / analyze / constitution steps add spec-driven rigor (inspired by spec-driven
+development tools), and `pm-verifier` adds an independent final check — but they are **built in and
+self-contained**. pm-skill does **not** depend on `spec-kit`, and there is **no external verifier
+harness and no separate process** in this workflow: `pm-verifier` is an ordinary read-only Claude
+Code subagent the PM dispatches.
 
 ## License
 

@@ -10,9 +10,11 @@ This is both the logbook and the recovery file. Keep it in this shape:
 
 ## Current State
 - Objective: <one line>
+- Spec: docs/spec.md — <clear | N clarifications open>
 - Plan: docs/plan.md — APPROVED by <name> on <date>
 - Sprint: <n> of <N> — "<goal>"
 - Story: <id> "<title>" — <status>
+- Verification: <pending | PASS | FAIL | UNKNOWN>
 - Branch: <branch> (clean | N uncommitted)
 - Next: <continuation point>
 
@@ -30,7 +32,9 @@ This is both the logbook and the recovery file. Keep it in this shape:
 A small JSON companion to the prose log, so resume and tooling don't parse prose. The skill
 maintains it (create it from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template` when planning
 begins): `phase`, `signed_off` (bool), `approver`, `approved_date`, `integration_branch`,
-`current_sprint`/`total_sprints`, `current_story`/`current_story_status`, `branch`, `next`, `updated`.
+`current_sprint`/`total_sprints`, `current_story`/`current_story_status`, `branch`, `next`, `updated`,
+and the optional spec-driven fields `spec`, `constitution`, `last_analysis_status`, and
+`current_story_verification_status`.
 On the **parallel path** (`parallel-execution.md`), also keep `parallel_batch` — an array of
 `{story, branch, worktree, commit, status}` (`building|built|in-review|merged|blocked`); on resume,
 reconcile it against `git worktree list`, commit any dirty `building` worktree, and prune true orphans.
@@ -40,8 +44,10 @@ while it is `false`. Set it to `true` (with `approver` + `approved_date`) only a
 Keep it in step with the prose log.
 
 ## Source of truth (committed)
-`docs/plan.md` and `docs/stories/*` are version-controlled and authoritative. `tmp/log.md` only
-tracks *where you are*, not *what was decided*.
+The committed `docs/` artifacts are authoritative: `docs/spec.md` (product intent), `docs/plan.md` and
+`docs/stories/*` (delivery), `docs/constitution.md` (project rules), and the optional `docs/checklists/*`
+and `docs/verification/*`. `tmp/log.md` and `tmp/pm-state.json` only track *where you are*, not *what
+was decided* — `tmp/` is disposable.
 
 ## On resume
 When you re-enter a project (new session, or after `/compact`): **read `tmp/pm-state.json` and

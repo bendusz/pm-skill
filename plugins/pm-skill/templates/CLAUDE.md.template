@@ -1,10 +1,13 @@
 # <Project> — Project Memory
 
 ## Workflow rules (non-negotiable)
+- Capture a spec (`docs/spec.md`) before the plan for non-trivial work; the plan derives from it.
 - Never implement before the human approves the plan.
 - The PM orchestrates and does not write code — implementation is done by subagents.
+- Every story traces to requirement IDs (FR-/AC-); run `/pm-skill:analyze` before implementation on non-trivial projects.
 - Log progress to `tmp/log.md` after every meaningful step.
-- The project's gates (test/lint/build) must pass before a story is marked done.
+- The project's gates (test/lint/build) must pass, and `pm-verifier` must return PASS, before a story ships.
+- Never push to a remote without an explicit request.
 
 ## Project
 <one or two lines: what this project is and why>

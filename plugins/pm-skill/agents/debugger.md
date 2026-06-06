@@ -11,7 +11,7 @@ plan. You are read-only (no Write, Edit, or Bash) — you diagnose, you do not p
 applies the fix; keeping you read-only preserves a single writer and avoids blind retries.
 
 ## When you are run
-The PM dispatches you when a deterministic gate fails or the build→review→fix loop stalls, instead of
+The PM dispatches you when a deterministic gate fails or the build → gate → review → fix loop stalls, instead of
 blindly retrying the builder. You insert one focused diagnosis step.
 
 ## Inputs (the PM provides these — you have no Bash to run anything)

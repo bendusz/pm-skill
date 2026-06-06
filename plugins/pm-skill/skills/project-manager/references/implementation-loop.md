@@ -52,15 +52,21 @@ story is judged by the **same** deterministic gates and review panel below.
    `git grep -nIE '(API|SECRET|TOKEN|PASSWORD|PRIVATE[_-]?KEY)'` over the changed files, and if it
    trips do **not** send code out. Then an independent review → feed findings back → fix. If no
    external reviewer is available, **log that it was skipped** — never silently.
-6. **Ship.** With gates green and no open `block`/`major`, commit **only this story's files** to the
-   story branch, then integrate into the integration branch:
+6. **Verify.** Before shipping, dispatch `pm-verifier` (read-only) to independently confirm the story
+   is shippable — give it the story file, `docs/spec.md`/`docs/plan.md`, the diff text + changed paths,
+   the reviewer verdicts, and the gate results. It returns `STATUS: PASS | FAIL | UNKNOWN`. **A story
+   may not ship unless STATUS is PASS.** `FAIL` → back to **Fix** (step 4, same ≤3-round bound), then
+   re-verify; `UNKNOWN` → obtain the exact missing evidence it names and re-verify, or escalate to the
+   user. For non-trivial work, record `docs/verification/<story-id>.md`. See `references/verification.md`.
+7. **Ship.** With gates green, no open `block`/`major`, and `pm-verifier` `PASS`, commit **only this
+   story's files** to the story branch, then integrate into the integration branch:
    - **Local by default** → check out the integration branch and `--no-ff` merge the story branch
      with a PR-style message.
    - **Remote PR only if the user has explicitly asked for pushes/PRs** *and* `gh auth status`
      succeeds *and* a GitHub remote exists → push the branch, open a PR, and merge it.
    **Never push to a remote without an explicit request** (hard rule).
-7. **Log.** Append the story outcome to `tmp/log.md`.
-8. **Document (optional — at the sprint/project boundary, not per story).** Once a sprint's stories
+8. **Log.** Append the story outcome to `tmp/log.md`.
+9. **Document (optional — at the sprint/project boundary, not per story).** Once a sprint's stories
    are merged, you may dispatch `technical-writer` to refresh user-facing docs (README, usage,
    CHANGELOG) and, at project end, produce the completion report at `docs/completion-report.md` from
    `${CLAUDE_PLUGIN_ROOT}/templates/completion-report.md.template`. It writes docs only — never
@@ -71,6 +77,9 @@ story is judged by the **same** deterministic gates and review panel below.
   what it built/tested; follow-ups.
 - **To the reviewer — down:** the story file path + the diff **text you generated** (the reviewer
   can't diff). **up:** findings + verdict.
+- **To the verifier — down:** the story file + `docs/spec.md`/`docs/plan.md` + the diff text + the
+  reviewer verdicts + the gate results. **up:** `STATUS` (PASS/FAIL/UNKNOWN) + per-criterion/gate
+  evidence + the action to take.
 - **You (the PM):** run the deterministic gates yourself — their result is yours, not taken on a
   subagent's word. Never read raw worker transcripts; only their summaries.
 
