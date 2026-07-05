@@ -2,6 +2,23 @@
 
 All notable changes to this project are documented here.
 
+## 0.9.1 — 2026-07-05
+
+Agent-quality pass, driven by verified community/official best-practice research (Anthropic
+subagent docs and engineering posts; wshobson/agents and VoltAgent conventions).
+
+- **Trigger-condition descriptions** — every agent's `description` now states *when* to use it
+  (concrete activation conditions, `PROACTIVELY` where standalone use is safe), not just what it
+  is, making delegation reliable inside and outside the PM loop.
+- **Explicit completion criteria** — every agent now defines what *done* means; `pm-verifier`
+  gains the early-victory rule (MUST run the verification command and every runnable non-mutating
+  gate itself before PASS), and builder/test-engineer must run what they wrote before reporting.
+- **Reviewer calibration** — the three review lenses gain a shared approach/calibration block
+  (diff-first evidence, named-risk-only exploration, honest severity, no invented findings).
+- **Model tiering on by default for routine roles** — `debugger`, `test-engineer`,
+  `technical-writer`, `codebase-analyst` ship pinned to `sonnet`; the five quality-critical agents
+  keep `model: inherit`. `references/model-tiering.md` rewritten around the shipped defaults.
+
 ## 0.9.0 — 2026-07-05
 
 Multi-actor PM state: several people can run concurrent PM sessions on one repo without

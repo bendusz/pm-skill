@@ -77,4 +77,28 @@ if grep -rnE '/speckit|\btmux\b|\bsockets?\b|\bPi\b' README.md plugins/pm-skill 
   err "forbidden reference (speckit/tmux/socket/Pi) found"
 fi
 
+# 13) agent frontmatter must be valid YAML — an unquoted plain scalar may not contain ': '
+# (a colon+space mid-value turns the line into a nested mapping and breaks agent loading).
+for md in plugins/pm-skill/agents/*.md plugins/pm-skill/skills/project-manager/SKILL.md; do
+  [ -f "$md" ] || continue
+  fm="$(awk 'NR==1 && $0!="---"{exit} /^---$/{n++; next} n==1{print} n==2{exit}' "$md")"
+  [ -n "$fm" ] || { err "no frontmatter block in $md"; continue; }
+  while IFS= read -r line; do
+    case "$line" in
+      [a-z]*': '*) ;;
+      *) err "malformed frontmatter line in $md: ${line%%:*}"; continue ;;
+    esac
+    val="${line#*: }"
+    case "$val" in
+      \"*\"|\'*\') ;;  # quoted scalar — ': ' is fine inside quotes
+      *': '*) err "unquoted ': ' inside frontmatter value in $md (invalid YAML plain scalar): key '${line%%:*}'" ;;
+    esac
+  done < <(printf '%s\n' "$fm")
+  if command -v ruby >/dev/null 2>&1; then
+    # shellcheck disable=SC2016  # $stdin is a Ruby global, not a shell expansion
+    printf '%s\n' "$fm" | ruby -ryaml -e 'YAML.safe_load($stdin.read)' >/dev/null 2>&1 || \
+      err "frontmatter fails strict YAML parse: $md"
+  fi
+done
+
 if [ "$fail" -eq 0 ]; then echo "validate.sh: OK"; else echo "validate.sh: FAILED" >&2; exit 1; fi
