@@ -24,14 +24,18 @@ story is judged by the **same** deterministic gates and review panel below.
    context + a verification command — see `decomposition.md`); if not, fix the story first. Ensure
    the working tree is **clean** (if it has unrelated changes, stop and ask — see Repository
    safety). Then, from the integration branch, create and check out the story branch
-   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here.
+   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here. Reset
+   `current_story_rounds` and `current_story_retries` to `0` in `pm/pm-state.json` — the loop
+   bounds below are enforced from these persisted counters, not from memory, so they survive a
+   session loss mid-story.
 1. **Build.** *(Optional, for clear acceptance criteria: first dispatch `test-engineer` to write the
    acceptance tests — TDD red. Then tell the builder those tests already exist: it must make them
    pass and add only *further* coverage, not rewrite them.)* Dispatch `expert-builder`
    with **only the story file path** (it reads the project `CLAUDE.md` itself). It edits the working
    tree (no commits — you own git) and returns a structured summary, including the **list of files it
-   changed**. If it returns *blocked* or fails, retry up to **2** times with clarification, then
-   escalate to the user.
+   changed**. If it returns *blocked* or fails, retry up to **2** times with clarification —
+   incrementing `current_story_retries` in `pm/pm-state.json` per retry (the cap counts retries
+   already spent by a previous session) — then escalate to the user.
 2. **Gate.** Run the project's deterministic gates yourself (test/lint/build per
    `review-gates.md`; skip any that are `N/A`). If a gate fails, go to Fix (step 4) before review.
 3. **Review.** Produce the diff yourself and pass it to the reviewers inline — they have no Bash and
@@ -49,8 +53,9 @@ story is judged by the **same** deterministic gates and review panel below.
    root-cause it — give it the failing command's output, the
    diff, and the implicated paths — then forward its fix plan to `expert-builder` instead of a blind
    retry (`debugger` is read-only; the builder applies the fix). After each fix, **re-run the gates
-   and regenerate the diff for re-review**, **up to 3 rounds**; if still failing, **escalate to the
-   user**.
+   and regenerate the diff for re-review**, **up to 3 rounds** — increment `current_story_rounds`
+   in `pm/pm-state.json` as each round starts; the cap counts rounds already spent by a previous
+   session — and if still failing, **escalate to the user**.
 5. **External review (optional).** Only if an external reviewer is **explicitly available**:
    secret-scan the diff first — if no scanner exists, run
    `git grep -nIE '(API|SECRET|TOKEN|PASSWORD|PRIVATE[_-]?KEY)'` over the changed files, and if it
@@ -69,7 +74,9 @@ story is judged by the **same** deterministic gates and review panel below.
    - **Remote PR only if the user has explicitly asked for pushes/PRs** *and* `gh auth status`
      succeeds *and* a GitHub remote exists → push the branch, open a PR, and merge it.
    **Never push to a remote without an explicit request** (hard rule).
-8. **Log.** Append the story outcome to `tmp/log.md`.
+8. **Log.** Append the story outcome to `pm/log.md` and update `pm/pm-state.json`, then **commit
+   the `pm/` state update alongside the ship** (on the integration branch, right after the merge) —
+   the pushed repo must always carry the current resume point. Never write secrets into `pm/`.
 9. **Document (optional — at the sprint/project boundary, not per story).** Once a sprint's stories
    are merged, you may dispatch `technical-writer` to refresh user-facing docs (README, usage,
    CHANGELOG) and, at project end, produce the completion report at `docs/completion-report.md` from
@@ -88,14 +95,19 @@ story is judged by the **same** deterministic gates and review panel below.
   subagent's word. Never read raw worker transcripts; only their summaries.
 
 ## Scope freeze
-Once a story starts, its scope is **frozen**. If new requirements appear, stop and run a
-**correct-course** step: revise the story (or the plan) explicitly with the user, then restart the
-story. Never drip-feed new asks mid-flight.
+Once a story starts, its scope is **frozen**. If new requirements appear, stop and run
+`/pm-skill:correct-course`: checkpoint the in-flight work, apply the change at the right altitude
+(spec / plan / story), re-sign-off if the change is material, then restart the affected story with
+fresh counters. Never drip-feed new asks mid-flight.
 
 ## Checkpoints
 - **Default: sprint-level.** Run all stories in a sprint, then pause for the user's review at the
   sprint boundary. (Configurable per project to *story-level* — pause before each merge — or
   *fully autonomous*.)
 - **Always escalate immediately** for high-risk or large-blast-radius merges, regardless of mode.
+- **Offer a handoff at natural stops.** At a sprint checkpoint, before a long pause, or when the
+  session's context is running long, offer `/pm-skill:handoff` — a committed `pm/HANDOFF.md` is
+  what lets the next session skip re-discovery. (A bundled SessionStart hook re-grounds new and
+  freshly-compacted sessions from `pm/` automatically.)
 
 See `review-gates.md` for the severity model and the definition of done.

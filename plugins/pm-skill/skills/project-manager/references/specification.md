@@ -46,6 +46,6 @@ be carried as an explicit assumption/risk — decide that with the user.
 - `docs/spec.md`.
 - Optionally `docs/checklists/spec-quality.md` from
   `${CLAUDE_PLUGIN_ROOT}/templates/checklist-spec-quality.md.template`.
-- A one-line `tmp/log.md` entry; set `spec` in `tmp/pm-state.json`.
+- A one-line `pm/log.md` entry; set `spec` in `pm/pm-state.json`.
 
 Then run `/pm-skill:clarify` if markers remain, otherwise load `planning-and-signoff.md`.

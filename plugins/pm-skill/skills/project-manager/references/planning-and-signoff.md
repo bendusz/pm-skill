@@ -12,8 +12,12 @@ If `docs/spec.md` exists, the plan **derives from it** — turn its requirements
 trace each story back to the spec's IDs. (No spec yet? Run `/pm-skill:specify` first for non-trivial
 work, or fold the intent straight into the plan for something small.)
 
-Initialise `tmp/pm-state.json` from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template`
-(`signed_off: false`) if it doesn't exist yet. Then create `docs/plan.md` with these sections:
+Initialise `pm/pm-state.json` from `${CLAUDE_PLUGIN_ROOT}/templates/pm-state.json.template`
+(`signed_off: false`) if it doesn't exist yet. `pm/` is **git-tracked**: create the directory,
+verify the state files are not matched by `.gitignore` (`git check-ignore pm/pm-state.json
+pm/log.md` must fail — check the files, not just the directory, since a `pm/*` rule ignores the
+files while the directory check passes; fix the rule if anything matches), and commit `pm/` from
+the first state write onward (see `logging-and-state.md`; never write secrets into it). Then create `docs/plan.md` with these sections:
 - **Overview** — what + why, 2–3 sentences.
 - **Source spec** — link `docs/spec.md` (or note "none — intent captured inline").
 - **Goals** and **Target users**.
@@ -37,8 +41,8 @@ CRITICAL/HIGH findings first.
 ## 2. Sign-off gate
 Sign-off requires all three: **no blocking `[NEEDS CLARIFICATION]`** in `docs/spec.md` (or the plan),
 `docs/plan.md` **present**, and an **unambiguous human "approved"**. Record the approver and date in
-the plan's Sign-off line, in `tmp/log.md`, and set `signed_off: true` (with `approver` +
-`approved_date`) in `tmp/pm-state.json`. **Do not decompose or write any code before this.** The bundled sign-off hook
+the plan's Sign-off line, in `pm/log.md`, and set `signed_off: true` (with `approver` +
+`approved_date`) in `pm/pm-state.json`. **Do not decompose or write any code before this.** The bundled sign-off hook
 enforces it — blocking implementation writes while `signed_off` is `false` — but it is fail-open and
 can be disabled, so holding the line is still your responsibility.
 
@@ -46,7 +50,9 @@ can be disabled, so holding the line is still your responsibility.
 - If the project is **not** a git repo, offer to `git init` — **ask first**.
 - Generate a project `CLAUDE.md` from `${CLAUDE_PLUGIN_ROOT}/templates/CLAUDE.md.template`. If one
   **already exists**, do **not** overwrite it — show a diff and ask, or append a clearly-marked section.
-- Ensure `.gitignore` includes `tmp/` (append; don't clobber an existing `.gitignore`).
+- Ensure `.gitignore` includes `tmp/` (append; don't clobber an existing `.gitignore`) — `tmp/` is
+  ephemeral scratch and never enters git. The tracked `pm/` state files must **not** be ignored
+  (`git check-ignore pm/pm-state.json pm/log.md` must fail).
 - Commit **only** the files you created/changed (no `git add -A` over the user's other work).
 - If git has no `user.name`/`user.email`, ask before committing.
 - The branch the scaffold commit lands on (default `main`) is the **integration branch** — the

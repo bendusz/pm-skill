@@ -9,7 +9,10 @@
   "total_sprints": 1,
   "current_story": "S1-2",
   "current_story_status": "in review",
+  "current_story_rounds": 1,
+  "current_story_retries": 0,
   "branch": "pm/S1-2-add-and-list",
-  "next": "Address review findings on S1-2, then merge and finish sprint 1.",
+  "next": "read pm/HANDOFF.md, then fix the unsafe-write finding on S1-2",
+  "handoff_written": "2026-06-04 15:20",
   "updated": "2026-06-04 15:20"
 }

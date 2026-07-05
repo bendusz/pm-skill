@@ -2,6 +2,54 @@
 
 All notable changes to this project are documented here.
 
+## 0.8.0 — 2026-07-05
+
+Durable, git-tracked session state: the PM state files move from gitignored `tmp/` to a tracked
+`pm/` directory.
+
+- **Tracked `pm/` state directory** — `pm/pm-state.json`, `pm/log.md`, and the optional
+  `pm/HANDOFF.md` replace `tmp/pm-state.json` / `tmp/log.md`. The state trio is the
+  project's only durable resume point, so it now lives in git and travels with every clone/push;
+  state updates are committed alongside the work they describe (e.g. with each story's ship/log
+  commit). Bootstrap verifies the state files are not gitignored (`git check-ignore
+  pm/pm-state.json pm/log.md` — the files, not the directory, so `pm/*`-style rules are caught)
+  and commits `pm/` from the first state write.
+- **`/pm-skill:handoff`** — end a session by writing `pm/HANDOFF.md` (from the new
+  `HANDOFF.md.template`): a token-efficient, agent-to-agent briefing — position, in-flight story
+  state, gate results, open findings, decisions not yet in docs, gotchas, `READ_FIRST`/`SKIP`
+  pointers, ordered next steps. `/pm-skill:resume` reads it (after `pm-state.json`) when current;
+  staleness is a JSON check — the new `handoff_written` state field vs `updated`. A worked
+  handoff example ships in `examples/todo-cli/pm/`.
+- **Session re-grounding hook** — a new `SessionStart` hook (`hooks/session-context.sh`) injects a
+  short pm/-state pointer (phase, story, next step, handoff freshness) into every new, resumed,
+  cleared, or **freshly-compacted** session of a PM-managed project; silent everywhere else. The
+  PM also offers `/pm-skill:handoff` at sprint checkpoints and when context runs long.
+- **Secrets guard hook** — a new `PreToolUse` hook (`hooks/pm-secrets-guard.sh`) blocks writes into
+  the tracked `pm/` directory whose content matches high-confidence secret shapes (AWS/GitHub/
+  Slack/API tokens, PEM private keys, JWTs, quoted credential assignments). Fail-open, same
+  `PM_SKILL_NO_ENFORCE=1` kill switch; a tripwire for accidents, not a scanner.
+- **Loop bounds survive resume** — new `current_story_rounds` / `current_story_retries` state
+  fields persist the ≤3 fix-round / ≤2 builder-retry caps across sessions (parallel-path batch
+  entries carry the same counters), so a resumed session can no longer silently reset the bounds.
+- **`/pm-skill:correct-course`** — the sanctioned path for mid-flight scope changes: checkpoint the
+  in-flight story, apply the change at the right altitude (spec / plan / story), void sign-off if
+  the change is material (`signed_off: false` re-engages the hook), reset the story's counters,
+  log and commit.
+- **`/pm-skill:doctor` checks PM-state health** — state JSON parses, `pm/` not gitignored, `tmp/`
+  ignored, log/state/plan sign-off agreement, and handoff freshness.
+- **CI hardening** — the validate workflow now also runs `shellcheck` over all hooks and scripts;
+  `validate.sh` checks every bundled hook is executable.
+- **`tmp/` stays scratch and gitignored** — prompts, raw subagent/review output, diffs,
+  `tmp/environment-check.md`, `tmp/worktrees/`, one-off scripts. Nothing in `tmp/` may be
+  load-bearing for resume.
+- **No-secrets rule (now load-bearing)** — `pm/` is tracked, so secrets/credentials must never be
+  written into the state files; reference secret locations, never values.
+- **Migration** — on `/pm-skill:resume` (or any state read), a pre-0.8 project with state still
+  under `tmp/` is migrated: files move to `pm/`, one-line pointer stubs are left in `tmp/`, repo
+  references are updated, and the result is committed. The sign-off hook reads
+  `pm/pm-state.json` and falls back to `tmp/pm-state.json` for not-yet-migrated projects; its
+  pre-sign-off allowlist now includes `pm/*`.
+
 ## 0.7.0 — 2026-06-06
 
 Mechanical rigor and right-sizing on top of the spec-driven workflow.

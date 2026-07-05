@@ -31,10 +31,10 @@ results, review-finding resolution, open issues, and an action. It treats builde
 ## Where evidence lives
 - Lightweight / single-story work: a quick **inline** verifier pass is enough — `STATUS` still
   required, but you may skip the durable report and checklists and just summarise the result in
-  `tmp/log.md` (runtime-only).
+  `pm/log.md`.
 - Non-trivial projects (recommended): write a durable `docs/verification/<story-id>.md` from
   `${CLAUDE_PLUGIN_ROOT}/templates/verification-report.md.template`.
 - Optionally tick `docs/checklists/verification-<id>.md` from the verification-quality template.
-- Set `current_story_verification_status` in `tmp/pm-state.json`.
+- Set `current_story_verification_status` in `pm/pm-state.json`.
 
 A story is **done** only with `pm-verifier` `PASS` (see `review-gates.md`).

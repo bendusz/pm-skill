@@ -21,8 +21,10 @@ cwd="$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)"
 file="$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)"
 [ -n "$cwd" ] || cwd="$PWD"
 
-# Only active in a PM-managed project.
-state="$cwd/tmp/pm-state.json"
+# Only active in a PM-managed project. State lives in the tracked pm/ directory;
+# fall back to the pre-0.8 tmp/ location for projects that haven't migrated yet.
+state="$cwd/pm/pm-state.json"
+[ -f "$state" ] || state="$cwd/tmp/pm-state.json"
 [ -f "$state" ] || exit 0
 
 # Only enforce while the plan is explicitly not yet signed off.
@@ -40,15 +42,15 @@ rel="${file#"$cwd"/}"
 
 # Allow the planning artifacts the PM legitimately writes before sign-off.
 case "$rel" in
-  docs/*|tmp/*|.git/*|CLAUDE.md|.gitignore) exit 0 ;;
+  docs/*|pm/*|tmp/*|.git/*|CLAUDE.md|.gitignore) exit 0 ;;
 esac
 
 # Otherwise this is an implementation write before sign-off — block it.
 cat >&2 <<'MSG'
 pm-skill: implementation is blocked until the plan is signed off.
-A PM-managed project is in planning (tmp/pm-state.json: signed_off=false).
+A PM-managed project is in planning (pm/pm-state.json: signed_off=false).
 Get the user's explicit approval on docs/plan.md, record it, and set
-signed_off=true in tmp/pm-state.json — then implementation may proceed.
+signed_off=true in pm/pm-state.json — then implementation may proceed.
 (Set PM_SKILL_NO_ENFORCE=1 to disable this gate.)
 MSG
 exit 2

@@ -7,7 +7,10 @@ writes into a real project:
 - `todo-cli/docs/plan.md` — the signed-off delivery plan.
 - `todo-cli/docs/stories/` — two self-contained story files.
 - `todo-cli/CLAUDE.md` — the generated project memory (workflow rules first).
-- `todo-cli/tmp/pm-state.json` — machine-readable state (a mid-run snapshot).
-- `todo-cli/tmp/log.md` — the recovery logbook (a mid-run snapshot).
+- `todo-cli/pm/pm-state.json` — machine-readable state (a mid-run snapshot).
+- `todo-cli/pm/log.md` — the recovery logbook (a mid-run snapshot).
+- `todo-cli/pm/HANDOFF.md` — an end-of-session handoff (`/pm-skill:handoff`): terse, agent-to-agent,
+  pointers over prose.
 
-In a real run these live in *your* project, and `tmp/` is gitignored.
+In a real run these live in *your* project: `pm/` is git-tracked (the durable resume point,
+committed alongside the work), while `tmp/` holds only ephemeral scratch and is gitignored.

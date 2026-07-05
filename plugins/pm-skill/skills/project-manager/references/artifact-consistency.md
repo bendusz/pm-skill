@@ -10,8 +10,8 @@ logs or state. Offer remediation as *suggestions* only. If the artifact set is l
 reading to a read-only `general-purpose`/`Explore` subagent and take back only the findings.
 
 ## Inputs (whichever exist)
-`docs/constitution.md`, `docs/spec.md`, `docs/plan.md`, `docs/stories/*.md`, `tmp/pm-state.json`,
-`tmp/log.md`. Note in the report any that are absent.
+`docs/constitution.md`, `docs/spec.md`, `docs/plan.md`, `docs/stories/*.md`, `pm/pm-state.json`,
+`pm/log.md`. Note in the report any that are absent.
 
 ## What to detect
 - **Clarifications:** unresolved `[NEEDS CLARIFICATION]` markers in the spec or plan.
@@ -19,8 +19,8 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
 - **Story grounding:** stories that cover **no** requirement (orphan scope).
 - **Testability:** acceptance criteria that are not observable/testable as written.
 - **Verification:** stories missing a concrete verification command; the plan missing real commands.
-- **Sign-off:** missing or inconsistent sign-off across `docs/plan.md`, `tmp/log.md`, and
-  `tmp/pm-state.json`.
+- **Sign-off:** missing or inconsistent sign-off across `docs/plan.md`, `pm/log.md`, and
+  `pm/pm-state.json`.
 - **Constitution alignment:** plan/stories that conflict with a rule in `docs/constitution.md`.
 - **Parallel safety:** `[P]` stories with **overlapping** `Touches`; `[P]` stories with blank `Touches`.
 - **Dependencies:** `depends-on` pointing at a missing/invalid story ID; dependency cycles.
@@ -30,7 +30,8 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
   from its `Review lenses`; likewise architecture-changing stories not marked `Architecture-sensitive`
   or missing `architecture-reviewer`. Flag any mismatch between the declared `Risk`/lenses and the scope.
 - **Terminology drift:** the same concept named differently across spec, plan, and stories.
-- **State sanity:** stale or contradictory `tmp/pm-state.json` / `tmp/log.md` vs the committed artifacts.
+- **State sanity:** stale or contradictory `pm/pm-state.json` / `pm/log.md` vs the `docs/` artifacts;
+  `pm/` state files matched by `.gitignore` or left uncommitted while `docs/` moved on.
 
 ## Severities
 - **CRITICAL** — blocks safe delivery, or violates the constitution or the sign-off rule.
