@@ -80,6 +80,7 @@ default (every agent inherits the session model).
 Project-file templates live in this plugin's `templates/` directory
 (`${CLAUDE_PLUGIN_ROOT}/templates/`): `spec.md.template`, `plan.md.template`, `story.md.template`,
 `constitution.md.template`, `CLAUDE.md.template`, `log.md.template`, `pm-state.json.template`,
+`actor-state.json.template`,
 `HANDOFF.md.template`, `completion-report.md.template`, `verification-report.md.template`,
 `claude-settings-hardening.json.template`, and the quality checklists
 (`checklist-spec-quality`, `checklist-plan-quality`, `checklist-story-readiness`,

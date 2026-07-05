@@ -27,8 +27,8 @@ Inspect (whichever apply):
     recent activity); every `pm/actors/*.json` parses and matches a recent git author (flag
     orphans from a changed git identity); your own actor id is derivable (git `user.email` /
     `user.name` set).
-  - The log's Current State block agrees with `pm-state.json` (story, sprint, sign-off status), and
-    `docs/plan.md`'s Sign-off line agrees with `signed_off`.
+  - `docs/plan.md`'s Sign-off line agrees with `signed_off` in `pm/pm-state.json` (the v0.9 log is
+    append-only and has no Current State block to cross-check).
   - `handoff_written` vs `updated` in `pm/actors/<you>.json`: flag a stale
     `pm/actors/<you>.HANDOFF.md` (updated is newer) so resume doesn't trust an outdated briefing.
 

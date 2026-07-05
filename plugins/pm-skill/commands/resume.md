@@ -8,7 +8,9 @@ First read the shared `pm/pm-state.json` (phase, sprint, sign-off status, `assig
 **your** `pm/actors/<actor-id>.json` (actor id per `references/logging-and-state.md`: slug of git
 `user.email` local part, fallback `user.name`) — your story, branch, loop counters
 (`current_story_rounds`/`current_story_retries`; the fix/retry caps count what earlier sessions
-already spent), and `next`. If `pm/actors/<you>.HANDOFF.md` exists and is current (your `updated`
+already spent), and `next`. On a v0.9 layout with no `pm/actors/<you>.json` yet (you are a new
+actor on this project), create it from `${CLAUDE_PLUGIN_ROOT}/templates/actor-state.json.template`
+and commit it before continuing. If `pm/actors/<you>.HANDOFF.md` exists and is current (your `updated`
 is not newer than `handoff_written`), use it as the primary briefing — it carries the in-flight
 detail, decisions, gotchas, `READ_FIRST`/`SKIP` pointers, and ordered next steps. Fall back to
 `pm/log.md` for anything it doesn't cover. Summarise for the user where things stand — including
