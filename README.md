@@ -59,7 +59,7 @@ building anything.
 | Implementation loop | Per story: **build → gate → review → fix → verify → ship → log**, run by subagents. |
 | Parallel stories | Independent `[P]` stories can build at once in isolated **git worktrees**, then integrate one at a time (opt-in; safe fallback to sequential). |
 | Review & verification | A separate read-only reviewer + the project's real test/lint/build gates + a final read-only `pm-verifier` PASS; bounded fix loops. |
-| Logging | A `pm/log.md` logbook + `pm/pm-state.json` so a lost session can resume. |
+| Logging | A shared author-prefixed `pm/log.md` + per-actor state under `pm/actors/` so concurrent PM sessions never overwrite each other and any lost session can resume. |
 
 Bundled specialist agents do the work — a builder (**`expert-builder`**), a risk-selected read-only
 **review panel** (**`code-integrity-reviewer`**, **`architecture-reviewer`**, **`security-auditor`**),
@@ -98,13 +98,14 @@ Committed under `docs/` (authoritative):
 - `docs/checklists/*.md` — spec/plan/story/verification quality checklists (optional).
 - `docs/verification/*.md` — per-story verification reports (optional; recommended for non-trivial work).
 
-Committed under `pm/` (tracked session state — the project's resume point):
+Committed under `pm/` (tracked session state — the project's resume point; solo is a team of one):
 
-- `pm/log.md` — the logbook. `pm/pm-state.json` — machine-readable state for resume.
-- `pm/HANDOFF.md` — optional end-of-session briefing from `/pm-skill:handoff`, written terse for
-  the next agent (not for humans) so `/pm-skill:resume` restarts without re-discovery.
-- State updates are committed alongside the work they describe, so the pushed repo always carries
-  the current resume point. Never write secrets into `pm/` — reference locations, not values.
+- `pm/pm-state.json` — shared project state (sign-off, sprint, active story claims).
+- `pm/log.md` — one shared, append-only, author-prefixed logbook (`merge=union` — concurrent
+  appends merge cleanly).
+- `pm/actors/<id>.json` + `pm/actors/<id>.HANDOFF.md` — each person's working position and
+  end-of-session briefing; nobody writes anyone else's files (a bundled hook enforces it).
+- State updates are committed alongside the work they describe. Never write secrets into `pm/`.
 
 Scratch under `tmp/` (gitignored, disposable — never load-bearing for resume):
 
@@ -116,6 +117,7 @@ Scratch under `tmp/` (gitignored, disposable — never load-bearing for resume):
 - **No implementation before your sign-off** — behavioural rule plus a bundled fail-open hook.
 - **No secrets in tracked state:** a bundled hook blocks secret-shaped content (key tokens, PEM
   blocks, credential assignments) from being written into the git-tracked `pm/` directory.
+- **Actor isolation:** a bundled hook blocks writes to another person's `pm/actors/` state files.
 - **Repository safety:** the PM never overwrites your files without asking, commits only what it
   created for the current story, runs `git init` only after asking, and never pushes without an
   explicit request.

@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented here.
 
+## 0.9.0 — 2026-07-05
+
+Multi-actor PM state: several people can run concurrent PM sessions on one repo without
+overwriting each other. Solo is a team of one — same layout, no mode switch.
+(Design: `docs/specs/2026-07-05-v0.9-multi-actor-state.md`.)
+
+- **Shared core + per-actor state** — `pm/pm-state.json` slims to project facts plus an
+  `assignments` claims map; each person's position (story, branch, loop counters, next, handoff
+  freshness) lives in `pm/actors/<id>.json`, identity derived from git `user.email`/`user.name`.
+- **Shared append-only log** — author-prefixed entries, `merge=union` gitattribute (bootstrap
+  writes it) so concurrent appends merge cleanly; the mutable Current State block is removed.
+- **Per-actor handoffs** — `/pm-skill:handoff` writes `pm/actors/<id>.HANDOFF.md`; staleness is
+  checked against the actor file.
+- **Claim & sync discipline** — pull before claim/ship, claim commits pushed promptly, re-gate if
+  the integration tip moved, claims released in the ship commit; `/pm-skill:doctor` and
+  `/pm-skill:analyze` flag double-claims, stale claims, and cross-actor `Touches` overlap.
+- **`actor-guard.sh`** — new fail-open hook blocking writes to another actor's state files; the
+  session hook now shows your position plus teammates' one-liners.
+- **Migration** — flat 0.8 layouts split into shared + actor files on resume (log block stripped,
+  gitattribute added); pre-0.8 `tmp/` layouts chain through in one pass.
+
 ## 0.8.0 — 2026-07-05
 
 Durable, git-tracked session state: the PM state files move from gitignored `tmp/` to a tracked
