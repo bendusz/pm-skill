@@ -16,7 +16,7 @@ produce plans and coordinate agents; you do **not** write implementation code yo
    build loop, just the story file). Take back only a structured summary — never raw
    transcripts. Delegate heavy reading/research to read-only subagents.
 3. **No implementation before explicit human sign-off** on the plan.
-4. **Always log.** Append to `pm/log.md` after every meaningful step. `pm/` is git-tracked —
+4. **Always log.** Append an author-prefixed entry to `pm/log.md` after every meaningful step. `pm/` is git-tracked —
    commit state updates with the work they describe, and **never** write secrets/credentials into
    the state files (reference secret locations, never values).
 5. **Separate reviewer.** The agent that reviews is never the agent that built.
@@ -39,11 +39,11 @@ produce plans and coordinate agents; you do **not** write implementation code yo
 5. **Decomposition** → `references/decomposition.md` — sprints and self-contained story files.
 6. **Implementation loop** → `references/implementation-loop.md` — per story: build → gate → review → fix → verify → ship → log. For independent `[P]` stories it may branch into `references/parallel-execution.md` (build in isolated worktrees, integrate serially).
 7. **Review and verification gates** → `references/review-gates.md` (+ `references/verification.md`) — severity model, deterministic gates, the `pm-verifier` PASS gate, and the done definition.
-8. **Logging and state** → `references/logging-and-state.md` — `pm/log.md`, `pm/pm-state.json`, the `docs/` artifacts, and resume.
+8. **Logging and state** → `references/logging-and-state.md` — the shared `pm/pm-state.json` + `pm/log.md`, your `pm/actors/<id>.json`, the `docs/` artifacts, and resume.
 
 Optional, any time: `/pm-skill:constitution` records project-specific rules in `docs/constitution.md`
 that `/pm-skill:analyze` then checks the plan and stories against. At the end of a session,
-`/pm-skill:handoff` writes a token-efficient `pm/HANDOFF.md` briefing that `/pm-skill:resume` reads
+`/pm-skill:handoff` writes a token-efficient `pm/actors/<id>.HANDOFF.md` briefing that `/pm-skill:resume` reads
 to continue at full speed. When scope changes mid-flight, `/pm-skill:correct-course` is the one
 sanctioned path — it re-plans at the right altitude and re-runs sign-off if the change is material. **Right-size** the workflow with a
 **scale** (`tiny`→`regulated`, default `standard`) — see `references/scale-profiles.md`. For an
@@ -87,8 +87,8 @@ Project-file templates live in this plugin's `templates/` directory
 matching template first.
 
 ## On resume
-If `pm/pm-state.json` or `pm/log.md` exists, read them first (or run `/pm-skill:resume`) to
-recover the objective, current sprint/story, branch state, sign-off status, and next step — and
-read `pm/HANDOFF.md` when present and current, it's the fastest route back in — then continue
-from there. If only the old `tmp/` state files exist (a pre-0.8 project), migrate them to
-the tracked `pm/` directory first — see `references/logging-and-state.md`.
+If `pm/pm-state.json` or `pm/log.md` exists, read the shared state and **your** `pm/actors/<id>.json`
+first (or run `/pm-skill:resume`) to recover the objective, current sprint/story, branch state,
+sign-off status, and next step — and read `pm/actors/<id>.HANDOFF.md` when present and current, it's the
+fastest route back in — then continue from there. If the layout is flat 0.8 (personal fields in
+`pm-state.json`) or pre-0.8 (`tmp/`), migrate per `references/logging-and-state.md` first.

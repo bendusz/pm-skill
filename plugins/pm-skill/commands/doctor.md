@@ -18,13 +18,19 @@ Inspect (whichever apply):
 - **Setup steps:** any documented bootstrap (README/CONTRIBUTING) needed before the gates pass.
 - **PM state health** (when `pm/` exists — report `OK` / `DRIFT` per check):
   - `pm/pm-state.json` parses as JSON (`jq empty` or equivalent).
-  - `git check-ignore pm/pm-state.json pm/log.md` **fails** — check the state *files*, not the
-    directory (a `pm/*` ignore rule passes a directory check while still ignoring the files) —
-    and `tmp/` **is** ignored; `pm/` has no uncommitted changes older than the last work commit.
+  - `git check-ignore pm/pm-state.json pm/log.md pm/actors/<you>.json` **fails** — check the state
+    *files*, not the directory (a `pm/*` ignore rule passes a directory check while still ignoring
+    the files) — and `tmp/` **is** ignored; `pm/` has no uncommitted changes older than the last
+    work commit; `.gitattributes` carries `pm/log.md merge=union`.
+  - **Team health:** every `assignments` story maps to exactly one actor with a matching story
+    branch (flag double-claims and stale claims — an assignment whose actor has no branch or
+    recent activity); every `pm/actors/*.json` parses and matches a recent git author (flag
+    orphans from a changed git identity); your own actor id is derivable (git `user.email` /
+    `user.name` set).
   - The log's Current State block agrees with `pm-state.json` (story, sprint, sign-off status), and
     `docs/plan.md`'s Sign-off line agrees with `signed_off`.
-  - `handoff_written` vs `updated`: flag a stale `pm/HANDOFF.md` (updated is newer) so resume
-    doesn't trust an outdated briefing.
+  - `handoff_written` vs `updated` in `pm/actors/<you>.json`: flag a stale
+    `pm/actors/<you>.HANDOFF.md` (updated is newer) so resume doesn't trust an outdated briefing.
 
 Stay read-only where you can and run only **non-mutating** probes. Do **not** install, upgrade, or
 write project files (delegate heavy reading to a read-only subagent if useful).

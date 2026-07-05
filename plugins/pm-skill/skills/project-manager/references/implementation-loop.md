@@ -112,8 +112,8 @@ fresh counters. Never drip-feed new asks mid-flight.
   *fully autonomous*.)
 - **Always escalate immediately** for high-risk or large-blast-radius merges, regardless of mode.
 - **Offer a handoff at natural stops.** At a sprint checkpoint, before a long pause, or when the
-  session's context is running long, offer `/pm-skill:handoff` — a committed `pm/HANDOFF.md` is
-  what lets the next session skip re-discovery. (A bundled SessionStart hook re-grounds new and
-  freshly-compacted sessions from `pm/` automatically.)
+  session's context is running long, offer `/pm-skill:handoff` — a committed
+  `pm/actors/<id>.HANDOFF.md` is what lets the next session skip re-discovery. (A bundled
+  SessionStart hook re-grounds new and freshly-compacted sessions from `pm/` automatically.)
 
 See `review-gates.md` for the severity model and the definition of done.

@@ -25,7 +25,9 @@ Do this, in order:
    `pm/pm-state.json` (the sign-off hook re-engages and blocks implementation writes — that is
    intended), present the updated plan, and get a fresh explicit approval before any further
    implementation. A cosmetic story-level tweak needs no re-sign-off — record it in `pm/log.md`
-   and move on. When unsure, treat it as material.
+   and move on. When unsure, treat it as material. In a team, voiding sign-off halts **every**
+   actor's implementation (the hook re-engages for all) — announce it in `pm/log.md` immediately
+   and push the state change so teammates see it within one fetch.
 4. **Reset the affected story.** If the in-flight story's scope changed, restart it from step 0 of
    the implementation loop against the revised story file, resetting `current_story_rounds` and
    `current_story_retries` to `0`. Unaffected stories keep their state.

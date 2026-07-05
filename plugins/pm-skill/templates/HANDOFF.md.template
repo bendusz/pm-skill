@@ -1,4 +1,4 @@
-<!-- pm/HANDOFF.md — agent-to-agent handoff. Terse by design: fragments over sentences, pointers
+<!-- pm/actors/<id>.HANDOFF.md — agent-to-agent handoff. Terse by design: fragments over sentences, pointers
      over prose. Overwrite on every handoff. Omit any empty section. NO SECRETS — pm/ is tracked;
      reference locations, never values. -->
 # HANDOFF <YYYY-MM-DD HH:MM>

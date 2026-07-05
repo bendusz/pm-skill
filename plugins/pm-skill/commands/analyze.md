@@ -8,7 +8,10 @@ Use the `project-manager` skill to run a **read-only** cross-artifact analysis. 
 Scope: $ARGUMENTS  (optional — narrow to a sprint, story, or requirement; default is everything)
 
 Inputs (whichever exist): `docs/constitution.md`, `docs/spec.md`, `docs/plan.md`,
-`docs/stories/*.md`, `pm/pm-state.json`, `pm/log.md`. Note any that are absent.
+`docs/stories/*.md`, `pm/pm-state.json`, `pm/actors/*.json`, `pm/log.md`. Note any that are
+absent. Team checks: two actors claiming one story in `assignments`; an assignment pointing at a
+nonexistent story or actor file; in-flight stories of **different actors** whose `Touches`
+overlap (serialize or re-scope them).
 
 **Strictly read-only.** Do **not** edit, create, fix, or scaffold anything — not even logs or state.
 You may *suggest* remediation; you must not apply it.
