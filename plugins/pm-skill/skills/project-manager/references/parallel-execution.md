@@ -82,11 +82,14 @@ from the user. A partial batch still checkpoints at the sprint boundary.
   already `true`.
 
 ## State & resume
-Track the batch in `pm/pm-state.json` `parallel_batch` — each entry
-`{story, branch, worktree, commit, status}` with status `building|built|in-review|merged|blocked`.
-During a story's integration tail, carry its fix `rounds` and builder `retries` in its batch entry
-(same role as `current_story_rounds`/`current_story_retries` on the sequential path): the ≤3-round /
-≤2-retry caps count what a previous session already spent.
+Track the batch in **your** `pm/actors/<you>.json` `parallel_batch` — each entry
+`{story, branch, worktree, commit, status, rounds, retries}` with status
+`building|built|in-review|merged|blocked`; `rounds`/`retries` play the same role as
+`current_story_rounds`/`current_story_retries` on the sequential path, and the ≤3-round / ≤2-retry
+caps count what a previous session already spent. The batch is per-actor: claim every batch story
+in the shared `assignments` before building (as in the sequential step 0), and release each claim
+as it merges. Cross-actor coordination happens through `assignments`, never through another
+actor's batch.
 
 On resume, **from the main checkout**:
 - Reconcile `parallel_batch` against `git worktree list`. If a `built`/`in-review` story's worktree
