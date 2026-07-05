@@ -9,9 +9,12 @@ Scope: $ARGUMENTS  (optional — narrow to a sprint, story, or requirement; defa
 
 Inputs (whichever exist): `docs/constitution.md`, `docs/spec.md`, `docs/plan.md`,
 `docs/stories/*.md`, `pm/pm-state.json`, `pm/actors/*.json`, `pm/log.md`. Note any that are
-absent. Team checks: two actors claiming one story in `assignments`; an assignment pointing at a
-nonexistent story or actor file; in-flight stories of **different actors** whose `Touches`
-overlap (serialize or re-scope them).
+absent. Team checks: a **claim conflict** — an actor file whose `current_story` names a story that
+`assignments` maps to a *different* actor, or two actor files sharing one `current_story`
+(`assignments` is a story→actor map, so it can only ever show one claimant — the race surfaces in
+the actor files; compare them against the map); an assignment pointing at a nonexistent story or
+actor file; in-flight stories of **different actors** whose `Touches` overlap (serialize or
+re-scope them).
 
 **Strictly read-only.** Do **not** edit, create, fix, or scaffold anything — not even logs or state.
 You may *suggest* remediation; you must not apply it.

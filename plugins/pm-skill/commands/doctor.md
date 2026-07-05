@@ -22,9 +22,11 @@ Inspect (whichever apply):
     *files*, not the directory (a `pm/*` ignore rule passes a directory check while still ignoring
     the files) — and `tmp/` **is** ignored; `pm/` has no uncommitted changes older than the last
     work commit; `.gitattributes` carries `pm/log.md merge=union`.
-  - **Team health:** every `assignments` story maps to exactly one actor with a matching story
-    branch (flag double-claims and stale claims — an assignment whose actor has no branch or
-    recent activity); every `pm/actors/*.json` parses and matches a recent git author (flag
+  - **Team health:** every actor file's `current_story` agrees with `assignments` (flag a claim
+    conflict — an actor working a story the map assigns to someone else, or two actor files
+    sharing one `current_story`; the map itself can only show one claimant) and every assignment's
+    actor has a matching story branch (flag stale claims — an assignment whose actor has no branch
+    or recent activity); every `pm/actors/*.json` parses and matches a recent git author (flag
     orphans from a changed git identity); your own actor id is derivable (git `user.email` /
     `user.name` set).
   - `docs/plan.md`'s Sign-off line agrees with `signed_off` in `pm/pm-state.json` (the v0.9 log is

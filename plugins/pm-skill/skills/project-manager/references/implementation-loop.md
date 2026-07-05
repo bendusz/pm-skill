@@ -30,10 +30,12 @@ story is judged by the **same** deterministic gates and review panel below.
    teammates' pull-integration-and-check flow). Push it only under the user's standing push
    permission — **never push without an explicit request** (hard rule); without pushes, tell the
    user the claim stays local-only until pushed. Then create and check out the story branch
-   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens on the story branch. Reset
-   `current_story_rounds` and `current_story_retries` to `0` in `pm/actors/<you>.json` — the loop
-   bounds below are enforced from these persisted counters, not from memory, so they survive a
-   session loss mid-story.
+   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens on the story branch. **Record
+   your position** in `pm/actors/<you>.json` now: set `current_story`, `current_story_status`
+   (`building`), `branch`, `next`, and `updated`, and reset `current_story_rounds` and
+   `current_story_retries` to `0` — resume and the session hook read position from the actor
+   file (the shared state no longer carries it), and the loop bounds below are enforced from
+   these persisted counters, not from memory, so everything survives a session loss mid-story.
 1. **Build.** *(Optional, for clear acceptance criteria: first dispatch `test-engineer` to write the
    acceptance tests — TDD red. Then tell the builder those tests already exist: it must make them
    pass and add only *further* coverage, not rewrite them.)* Dispatch `expert-builder`

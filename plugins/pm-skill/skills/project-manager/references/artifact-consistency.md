@@ -32,9 +32,12 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
 - **Terminology drift:** the same concept named differently across spec, plan, and stories.
 - **State sanity:** stale or contradictory `pm/pm-state.json` / `pm/log.md` vs the `docs/` artifacts;
   `pm/` state files matched by `.gitignore` or left uncommitted while `docs/` moved on.
-- **Team checks:** two actors claiming one story in `assignments`; an assignment pointing at a
-  nonexistent story or actor file; in-flight stories of **different actors** whose `Touches`
-  overlap (serialize or re-scope them).
+- **Team checks:** a **claim conflict** — an actor file whose `current_story` names a story that
+  `assignments` maps to a *different* actor, or two actor files sharing one `current_story`
+  (`assignments` is a story→actor map, so it can only ever show one claimant — the race surfaces
+  in the actor files; compare them against the map); an assignment pointing at a nonexistent
+  story or actor file; in-flight stories of **different actors** whose `Touches` overlap
+  (serialize or re-scope them).
 
 ## Severities
 - **CRITICAL** — blocks safe delivery, or violates the constitution or the sign-off rule.
