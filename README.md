@@ -84,7 +84,7 @@ tiny work stays lightweight; regulated work makes every gate mandatory.
 | `/pm-skill:checklist` | Generate/evaluate a spec/plan/story/verification quality checklist under `docs/checklists/`. |
 | `/pm-skill:doctor` | Check environment readiness (toolchain, deps, gates run) and PM-state health before building. |
 | `/pm-skill:correct-course` | Handle a mid-flight scope change — re-plan at the right altitude, re-sign-off if material. |
-| `/pm-skill:handoff` | End a session cleanly — write a token-efficient `pm/HANDOFF.md` briefing for the next agent. |
+| `/pm-skill:handoff` | End a session cleanly — write a token-efficient `pm/actors/<id>.HANDOFF.md` briefing for the next agent. |
 | `/pm-skill:resume` | Read saved state, handoff, and logbook — then continue where you left off. |
 
 ## Artifacts
