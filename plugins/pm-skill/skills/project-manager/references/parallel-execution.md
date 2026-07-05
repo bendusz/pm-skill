@@ -66,7 +66,7 @@ Take one story at a time and land it before starting the next. **Work in that st
 6. **Remove the worktree** (`git worktree remove`) now that the work is committed and merged.
 
 A **blocked** story (failed tip-merge in step 1, or escalation after 3 fix rounds) **does not block
-the rest**: leave its worktree in place, set status `blocked`, and note in `tmp/log.md` what you need
+the rest**: leave its worktree in place, set status `blocked`, and note in `pm/log.md` what you need
 from the user. A partial batch still checkpoints at the sprint boundary.
 
 ## Worktree safety (non-negotiable)
@@ -77,12 +77,16 @@ from the user. A partial batch still checkpoints at the sprint boundary.
 - **No orphans:** clean up every worktree you created — on success *or* error/interruption.
 - Give every worktree its **own** branch (git refuses to check the same branch out twice — don't
   `--force` past it). **Don't run `git gc`** while worktrees are active.
-- The sign-off hook fail-opens inside a worktree (no `tmp/pm-state.json` there); that's fine —
-  worktrees exist only after sign-off, when `signed_off` is already `true`.
+- The sign-off hook is satisfied inside a worktree: `pm/pm-state.json` is tracked, so the worktree's
+  checkout carries it — and worktrees exist only after sign-off, when the committed `signed_off` is
+  already `true`.
 
 ## State & resume
-Track the batch in `tmp/pm-state.json` `parallel_batch` — each entry
+Track the batch in `pm/pm-state.json` `parallel_batch` — each entry
 `{story, branch, worktree, commit, status}` with status `building|built|in-review|merged|blocked`.
+During a story's integration tail, carry its fix `rounds` and builder `retries` in its batch entry
+(same role as `current_story_rounds`/`current_story_retries` on the sequential path): the ≤3-round /
+≤2-retry caps count what a previous session already spent.
 
 On resume, **from the main checkout**:
 - Reconcile `parallel_batch` against `git worktree list`. If a `built`/`in-review` story's worktree
@@ -91,7 +95,7 @@ On resume, **from the main checkout**:
 - For a `building` worktree that still has **uncommitted** changes, commit them now (story-path-
   scoped) and advance it to `built` — never prune a dirty worktree.
 - For a `blocked` story, present the blocker to the user and re-enter the **appropriate**
-  continuation per its `tmp/log.md` note — resolve the **tip-merge conflict** (step 1) or re-run the
+  continuation per its `pm/log.md` note — resolve the **tip-merge conflict** (step 1) or re-run the
   **fix loop** (step 3) — before continuing the remaining unmerged stories.
 - Then `git worktree prune` true orphans and continue the integration tail.
 

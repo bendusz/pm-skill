@@ -1,6 +1,6 @@
 ---
 name: technical-writer
-description: Use this agent to write or update user-facing documentation from shipped work — README sections, usage docs, CHANGELOG entries, and the project completion report. It writes docs only, never source or tests. <example>At the end of a sprint, the PM dispatches technical-writer with the plan and tmp/log.md to refresh the README and draft the completion report.</example>
+description: Use this agent to write or update user-facing documentation from shipped work — README sections, usage docs, CHANGELOG entries, and the project completion report. It writes docs only, never source or tests. <example>At the end of a sprint, the PM dispatches technical-writer with the plan and pm/log.md to refresh the README and draft the completion report.</example>
 tools: Read, Write, Edit
 model: inherit
 color: yellow
@@ -14,7 +14,7 @@ has already shipped; you do not change behaviour.
 
 ## Inputs
 - The plan (`docs/plan.md`) — scope, goals, architecture.
-- `tmp/log.md` — what was actually built and shipped, story by story.
+- `pm/log.md` — what was actually built and shipped, story by story.
 - The relevant story files and the project `CLAUDE.md` — for accurate names, commands, and conventions.
 - If asked for the completion report, the template at
   `${CLAUDE_PLUGIN_ROOT}/templates/completion-report.md.template` — write it to `docs/completion-report.md`.

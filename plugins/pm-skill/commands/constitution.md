@@ -21,6 +21,6 @@ Do this:
   - security-sensitive work gets a security review;
   - every story traces to requirement IDs;
   - `pm-verifier` must return PASS before ship.
-- Append a one-line entry to `tmp/log.md` and set `constitution` in `tmp/pm-state.json` (if state exists).
+- Append a one-line entry to `pm/log.md` and set `constitution` in `pm/pm-state.json` (if state exists).
 
 Keep it short and enforceable — `/pm-skill:analyze` checks the plan and stories against it.

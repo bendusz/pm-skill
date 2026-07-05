@@ -2,7 +2,7 @@
 
 Right-size the workflow to the work. The full lifecycle (spec → clarify → plan → analyze → decompose →
 verify → ship) is right for serious projects but heavy for a one-file fix. Pick a **scale** up front,
-record it in `docs/plan.md` (Delivery mode) and `tmp/pm-state.json` (`scale`). Default is `standard`.
+record it in `docs/plan.md` (Delivery mode) and `pm/pm-state.json` (`scale`). Default is `standard`.
 
 | Scale | Use for | Artifacts & gates |
 | --- | --- | --- |
@@ -23,4 +23,4 @@ record it in `docs/plan.md` (Delivery mode) and `tmp/pm-state.json` (`scale`). D
 
 ## Recording it
 - `docs/plan.md` → **Delivery mode**: scale, checkpoint policy, autonomy.
-- `tmp/pm-state.json` → `"scale": "standard"`.
+- `pm/pm-state.json` → `"scale": "standard"`.

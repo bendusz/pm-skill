@@ -13,3 +13,4 @@
 - 2026-06-04 15:02 — Plan approved and signed off. Scaffolded repo, CLAUDE.md, .gitignore, pm-state.
 - 2026-06-04 15:12 — S1-1 (CLI skeleton + store) built, reviewed (PASS), tests green, merged to main.
 - 2026-06-04 15:20 — S1-2 built; code-integrity-reviewer raised 1 major (unsafe write); fixing.
+- 2026-06-04 15:20 — Handoff written (pm/HANDOFF.md); session ends mid-fix on S1-2, round 1/3 used.

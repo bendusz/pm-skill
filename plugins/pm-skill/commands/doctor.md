@@ -16,13 +16,22 @@ Inspect (whichever apply):
 - **Config:** a missing `.env.example` or required env vars; CI config.
 - **Containers:** a `Dockerfile` / devcontainer that defines the expected environment.
 - **Setup steps:** any documented bootstrap (README/CONTRIBUTING) needed before the gates pass.
+- **PM state health** (when `pm/` exists — report `OK` / `DRIFT` per check):
+  - `pm/pm-state.json` parses as JSON (`jq empty` or equivalent).
+  - `git check-ignore pm/pm-state.json pm/log.md` **fails** — check the state *files*, not the
+    directory (a `pm/*` ignore rule passes a directory check while still ignoring the files) —
+    and `tmp/` **is** ignored; `pm/` has no uncommitted changes older than the last work commit.
+  - The log's Current State block agrees with `pm-state.json` (story, sprint, sign-off status), and
+    `docs/plan.md`'s Sign-off line agrees with `signed_off`.
+  - `handoff_written` vs `updated`: flag a stale `pm/HANDOFF.md` (updated is newer) so resume
+    doesn't trust an outdated briefing.
 
 Stay read-only where you can and run only **non-mutating** probes. Do **not** install, upgrade, or
 write project files (delegate heavy reading to a read-only subagent if useful).
 
 Write the findings to `tmp/environment-check.md` (runtime-only): each check → `OK` / `MISSING` /
 `UNKNOWN` with the evidence, then a one-line verdict (ready / blockers + what's missing). Append a
-one-line entry to `tmp/log.md`.
+one-line entry to `pm/log.md`.
 
 Run this before the implementation loop on an unfamiliar or freshly-cloned project — environment and
 dependency gaps are a common cause of mid-build failure.

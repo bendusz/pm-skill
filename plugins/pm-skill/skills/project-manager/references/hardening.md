@@ -7,7 +7,11 @@ is entirely opt-in and lives in the *project's* own config, not in the plugin �
 
 ## What's already enforced
 - **Sign-off:** the bundled `PreToolUse` hook (`hooks/require-signoff.sh`) blocks implementation writes
-  until `tmp/pm-state.json` has `signed_off: true`. Fail-open; kill switch `PM_SKILL_NO_ENFORCE=1`.
+  until `pm/pm-state.json` has `signed_off: true`. Fail-open; kill switch `PM_SKILL_NO_ENFORCE=1`.
+- **No secrets in `pm/`:** the bundled `PreToolUse` hook (`hooks/pm-secrets-guard.sh`) blocks writes
+  into the git-tracked `pm/` directory whose content matches high-confidence secret shapes (AWS/GitHub/
+  Slack/API tokens, PEM private keys, JWTs, quoted credential assignments). A tripwire for accidents,
+  not a scanner — prose about secrets never trips it. Same fail-open design and kill switch.
 - **Read-only review/verify agents:** `code-integrity-reviewer`, `architecture-reviewer`,
   `security-auditor`, `debugger`, and `codebase-analyst` are granted only `Read`/`Grep`/`Glob`, so the
   tool surface itself blocks writes. `pm-verifier` also has `Bash` (it must run the gates) — see below.

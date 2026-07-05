@@ -32,7 +32,7 @@ would block even writing a spec.
 
 ## Output
 - A short, shared **problem statement** and the chosen **solution direction**.
-- Append a one-line entry to `tmp/log.md` (create it if missing) noting discovery is done and the
+- Append a one-line entry to `pm/log.md` (create it if missing) noting discovery is done and the
   direction agreed.
 
 Then load `specification.md`.

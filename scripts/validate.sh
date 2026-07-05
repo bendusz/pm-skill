@@ -2,7 +2,7 @@
 # Portable validation for the pm-skill plugin — runs locally and in CI (no `claude` CLI needed).
 set -u
 root="$(cd "$(dirname "$0")/.." && pwd)"
-cd "$root"
+cd "$root" || exit 2
 fail=0
 err(){ echo "FAIL: $*" >&2; fail=1; }
 
@@ -31,9 +31,10 @@ for md in plugins/pm-skill/skills/project-manager/SKILL.md plugins/pm-skill/agen
   head -n 12 "$md" | grep -q '^description:' || err "no 'description:' frontmatter in $md"
 done
 
-# 5) the sign-off hook must be executable
-[ -x plugins/pm-skill/hooks/require-signoff.sh ] || \
-  err "hook not executable: plugins/pm-skill/hooks/require-signoff.sh"
+# 5) every bundled hook script must be executable
+for h in plugins/pm-skill/hooks/*.sh; do
+  [ -x "$h" ] || err "hook not executable: $h"
+done
 
 # 6) the installed plugin must stay generic (no third-party plugin names)
 if grep -riE 'superpowers|skill-codex|\bcodex\b' plugins/pm-skill/ >/dev/null 2>&1; then
@@ -43,15 +44,15 @@ fi
 # 7) every references/<x>.md named in SKILL.md exists
 skill=plugins/pm-skill/skills/project-manager/SKILL.md
 if [ -f "$skill" ]; then
-  for r in $(grep -oE 'references/[a-z0-9-]+\.md' "$skill" | sort -u); do
+  while IFS= read -r r; do
     [ -f "plugins/pm-skill/skills/project-manager/$r" ] || err "SKILL.md references missing file: $r"
-  done
+  done < <(grep -oE 'references/[a-z0-9-]+\.md' "$skill" | sort -u)
 fi
 
 # 8) every *.template referenced (path or bare name) in skills/commands/agents exists
-for t in $(grep -rhoE '[A-Za-z0-9._-]+\.template' plugins/pm-skill/skills plugins/pm-skill/commands plugins/pm-skill/agents 2>/dev/null | sort -u); do
+while IFS= read -r t; do
   [ -f "plugins/pm-skill/templates/$t" ] || err "referenced template missing: $t"
-done
+done < <(grep -rhoE '[A-Za-z0-9._-]+\.template' plugins/pm-skill/skills plugins/pm-skill/commands plugins/pm-skill/agents 2>/dev/null | sort -u)
 
 # 9) every command has 'description:' frontmatter
 for md in plugins/pm-skill/commands/*.md; do

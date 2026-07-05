@@ -16,7 +16,7 @@ Do this:
 - Mark every unknown inline as `[NEEDS CLARIFICATION: <question>]`. Do not guess.
 - Stay at product altitude — **what and why**, not how. Do **not** design architecture, do **not**
   create `docs/plan.md`, and do **not** write implementation code.
-- Append a one-line entry to `tmp/log.md` and set `spec` in `tmp/pm-state.json` (if state exists).
+- Append a one-line entry to `pm/log.md` and set `spec` in `pm/pm-state.json` (if state exists).
 
 End by telling the user whether any `[NEEDS CLARIFICATION]` remain: if so, recommend
 `/pm-skill:clarify` before planning; if not, the spec is ready for planning (`/pm-skill:pm`).

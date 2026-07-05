@@ -8,7 +8,7 @@ Use the `project-manager` skill to run a **read-only** cross-artifact analysis. 
 Scope: $ARGUMENTS  (optional — narrow to a sprint, story, or requirement; default is everything)
 
 Inputs (whichever exist): `docs/constitution.md`, `docs/spec.md`, `docs/plan.md`,
-`docs/stories/*.md`, `tmp/pm-state.json`, `tmp/log.md`. Note any that are absent.
+`docs/stories/*.md`, `pm/pm-state.json`, `pm/log.md`. Note any that are absent.
 
 **Strictly read-only.** Do **not** edit, create, fix, or scaffold anything — not even logs or state.
 You may *suggest* remediation; you must not apply it.

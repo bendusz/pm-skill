@@ -3,7 +3,7 @@
 ## Workflow rules (non-negotiable)
 - Never implement before the human approves the plan.
 - The PM orchestrates and does not write code — implementation is done by subagents.
-- Log progress to `tmp/log.md` after every meaningful step.
+- Log progress to `pm/log.md` after every meaningful step.
 - The project's gates (test/lint/build) must pass before a story is marked done.
 
 ## Project
