@@ -1,14 +1,8 @@
 # PM Log — <project>
 
-## Current State
-- Objective: <one line>
-- Spec: <none yet | docs/spec.md — clear | docs/spec.md — N clarifications open>
-- Plan: <none yet | docs/plan.md — APPROVED by <name> on <date>>
-- Sprint: <n> of <N> — "<goal>"
-- Story: <id> "<title>" — <status>
-- Verification: <pending | PASS | FAIL | UNKNOWN>
-- Branch: <branch> (clean | N uncommitted)
-- Next: <continuation point>
+<!-- Append-only. One entry per line; never edit or reorder old entries.        -->
+<!-- Current position lives in pm/pm-state.json + pm/actors/<id>.json — NOT here -->
+<!-- (mutable blocks in this file would conflict under concurrent editing).      -->
 
 ## Log
-- <YYYY-MM-DD HH:MM> — <2–3 sentence summary>
+- <YYYY-MM-DD HH:MM> <actor-id> — <2–3 sentence summary, written for a colleague with zero context>
