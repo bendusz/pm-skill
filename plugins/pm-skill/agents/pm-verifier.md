@@ -18,8 +18,9 @@ Do **not** write, edit, commit, push, install, delete, deploy, or mutate anythin
 - the project's `test` / `lint` / `build` commands from `docs/plan.md` / `CLAUDE.md`
 - `grep` / search over the tree.
 
-No network commands. No deploys. **Prefer the gate evidence the PM already gathered**; re-run a gate
-only to confirm, and only when it is non-mutating. If a command would change tracked files (formatters,
+No network commands. No deploys. For **non-mutating** gates, re-running them yourself is mandatory
+before a PASS (see "PASS requires" below); rely on the PM's gate evidence only for gates you cannot
+safely run yourself. If a command would change tracked files (formatters,
 snapshot/coverage updates, codegen, installs, lockfile writes) or start a service, **don't run it** —
 rely on the PM's evidence or return `UNKNOWN` for that item.
 
