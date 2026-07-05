@@ -10,7 +10,8 @@ Scope: $ARGUMENTS  (optional — narrow to a sprint, story, or requirement; defa
 Inputs (whichever exist): `docs/constitution.md`, `docs/spec.md`, `docs/plan.md`,
 `docs/stories/*.md`, `pm/pm-state.json`, `pm/actors/*.json`, `pm/log.md`. Note any that are
 absent. Team checks: a **claim conflict** — an actor file whose `current_story` names a story that
-`assignments` maps to a *different* actor, or two actor files sharing one `current_story`
+`assignments` maps to a *different* actor, or two actor files sharing one **non-null**
+`current_story` (idle/new actors all carry `current_story: null` — never flag those)
 (`assignments` is a story→actor map, so it can only ever show one claimant — the race surfaces in
 the actor files; compare them against the map); an assignment pointing at a nonexistent story or
 actor file; in-flight stories of **different actors** whose `Touches` overlap (serialize or

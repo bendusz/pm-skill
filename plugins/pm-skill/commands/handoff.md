@@ -28,7 +28,9 @@ Then finish the handoff:
   step>`, set `handoff_written` to now, and refresh `updated` (same value — your `updated` newer
   than `handoff_written` is how resume detects a stale handoff).
 - Append a one-line entry to `pm/log.md` (handoff written, where work stopped).
-- **Commit the `pm/` files (your actor file + your handoff)** — a handoff that isn't in the repo doesn't survive the session.
+- **Commit the `pm/` files (your actor file, your handoff, and the `pm/log.md` entry you just
+  appended)** — a handoff that isn't in the repo doesn't survive the session, and a log entry left
+  uncommitted vanishes from the shared history.
 
 `/pm-skill:resume` reads this file (after `pm/pm-state.json`) to skip re-discovery. If your position has
 moved on since the handoff was written (your actor file's `updated` is newer than its
