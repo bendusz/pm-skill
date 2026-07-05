@@ -15,7 +15,8 @@ overwriting each other. Solo is a team of one — same layout, no mode switch.
   writes it) so concurrent appends merge cleanly; the mutable Current State block is removed.
 - **Per-actor handoffs** — `/pm-skill:handoff` writes `pm/actors/<id>.HANDOFF.md`; staleness is
   checked against the actor file.
-- **Claim & sync discipline** — pull before claim/ship, claim commits pushed promptly, re-gate if
+- **Claim & sync discipline** — pull before claim/ship, claims committed on the integration
+  branch (pushed only under the user's standing push permission), re-gate if
   the integration tip moved, claims released in the ship commit; `/pm-skill:doctor` and
   `/pm-skill:analyze` flag double-claims, stale claims, and cross-actor `Touches` overlap.
 - **`actor-guard.sh`** — new fail-open hook blocking writes to another actor's state files; the

@@ -42,7 +42,7 @@ rel="${file#"$cwd"/}"
 
 # Allow the planning artifacts the PM legitimately writes before sign-off.
 case "$rel" in
-  docs/*|pm/*|tmp/*|.git/*|CLAUDE.md|.gitignore) exit 0 ;;
+  docs/*|pm/*|tmp/*|.git/*|CLAUDE.md|.gitignore|.gitattributes) exit 0 ;;
 esac
 
 # Otherwise this is an implementation write before sign-off — block it.

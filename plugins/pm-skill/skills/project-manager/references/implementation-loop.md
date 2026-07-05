@@ -24,10 +24,13 @@ story is judged by the **same** deterministic gates and review panel below.
    context + a verification command — see `decomposition.md`); if not, fix the story first. Ensure
    the working tree is **clean** (if it has unrelated changes, stop and ask — see Repository
    safety). **Claim the story:** pull/rebase the integration branch first, confirm no other actor
-   holds it in `assignments` (if one does, pick another story or resolve with them), then set
-   `assignments["<story-id>"] = <you>` in `pm/pm-state.json`, create and check out the story
-   branch `pm/S<sprint>-<n>-<slug>`, and commit (and push, when a remote exists) the claim
-   promptly so teammates see it. All of this story's work happens on the story branch. Reset
+   holds it in `assignments` (if one does, pick another story or resolve with them), then — still
+   **on the integration branch** — set `assignments["<story-id>"] = <you>` in `pm/pm-state.json`
+   and commit the claim there (a claim committed only to a story branch is invisible to
+   teammates' pull-integration-and-check flow). Push it only under the user's standing push
+   permission — **never push without an explicit request** (hard rule); without pushes, tell the
+   user the claim stays local-only until pushed. Then create and check out the story branch
+   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens on the story branch. Reset
    `current_story_rounds` and `current_story_retries` to `0` in `pm/actors/<you>.json` — the loop
    bounds below are enforced from these persisted counters, not from memory, so they survive a
    session loss mid-story.
