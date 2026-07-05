@@ -73,8 +73,9 @@ On a bare install everything below still works.
 - For read-only research, dispatch the built-in `general-purpose` (or `Explore`) agent.
 
 Run reviewers as a **risk-selected panel** (see `references/review-gates.md`), not always all of them.
-**Optional:** `references/model-tiering.md` maps agents to cheaper/stronger models by tier — off by
-default (every agent inherits the session model).
+**Model tiering:** four routine agents (`debugger`, `test-engineer`, `technical-writer`,
+`codebase-analyst`) ship pinned to a mid-tier model; the five quality-critical agents inherit the
+session model. See `references/model-tiering.md` to override either way.
 
 ## Bundled templates
 Project-file templates live in this plugin's `templates/` directory
