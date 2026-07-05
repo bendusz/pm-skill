@@ -10,15 +10,7 @@
   "integration_branch": "main",
   "current_sprint": null,
   "total_sprints": null,
-  "current_story": null,
-  "current_story_status": null,
-  "current_story_verification_status": null,
-  "current_story_rounds": null,
-  "current_story_retries": null,
   "last_analysis_status": null,
-  "branch": null,
-  "parallel_batch": [],
-  "next": "<continuation point>",
-  "handoff_written": null,
+  "assignments": {},
   "updated": "<YYYY-MM-DD HH:MM>"
 }

@@ -23,18 +23,28 @@ story is judged by the **same** deterministic gates and review panel below.
 0. **Ready & branch.** Confirm the story is **build-ready** (testable criteria + self-contained
    context + a verification command — see `decomposition.md`); if not, fix the story first. Ensure
    the working tree is **clean** (if it has unrelated changes, stop and ask — see Repository
-   safety). Then, from the integration branch, create and check out the story branch
-   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens here. Reset
-   `current_story_rounds` and `current_story_retries` to `0` in `pm/pm-state.json` — the loop
-   bounds below are enforced from these persisted counters, not from memory, so they survive a
-   session loss mid-story.
+   safety). **Claim the story — one commit on the integration branch:** pull/rebase it first,
+   confirm no other actor holds the story in `assignments` (if one does, pick another story or
+   resolve with them), then set `assignments["<story-id>"] = <you>` in `pm/pm-state.json` **and
+   record your position** in `pm/actors/<you>.json` — `current_story`, `current_story_status`
+   (`building`), `branch` (the planned story branch name), `next`, `updated`, and
+   `current_story_rounds`/`current_story_retries` reset to `0` — and commit **both files
+   together**. (A claim committed only to a story branch is invisible to teammates'
+   pull-integration-and-check flow, and an assignment without the matching actor position reads
+   as a stale claim to doctor/analyze.) Push it only under the user's standing push permission —
+   **never push without an explicit request** (hard rule); without pushes, tell the user the
+   claim stays local-only until pushed. Then create and check out the story branch
+   `pm/S<sprint>-<n>-<slug>` — all of this story's work happens there. Resume and the session
+   hook read position from the actor file (the shared state no longer carries it), and the loop
+   bounds below are enforced from the persisted counters, not from memory, so everything
+   survives a session loss mid-story.
 1. **Build.** *(Optional, for clear acceptance criteria: first dispatch `test-engineer` to write the
    acceptance tests — TDD red. Then tell the builder those tests already exist: it must make them
    pass and add only *further* coverage, not rewrite them.)* Dispatch `expert-builder`
    with **only the story file path** (it reads the project `CLAUDE.md` itself). It edits the working
    tree (no commits — you own git) and returns a structured summary, including the **list of files it
    changed**. If it returns *blocked* or fails, retry up to **2** times with clarification —
-   incrementing `current_story_retries` in `pm/pm-state.json` per retry (the cap counts retries
+   incrementing `current_story_retries` in `pm/actors/<you>.json` per retry (the cap counts retries
    already spent by a previous session) — then escalate to the user.
 2. **Gate.** Run the project's deterministic gates yourself (test/lint/build per
    `review-gates.md`; skip any that are `N/A`). If a gate fails, go to Fix (step 4) before review.
@@ -54,7 +64,7 @@ story is judged by the **same** deterministic gates and review panel below.
    diff, and the implicated paths — then forward its fix plan to `expert-builder` instead of a blind
    retry (`debugger` is read-only; the builder applies the fix). After each fix, **re-run the gates
    and regenerate the diff for re-review**, **up to 3 rounds** — increment `current_story_rounds`
-   in `pm/pm-state.json` as each round starts; the cap counts rounds already spent by a previous
+   in `pm/actors/<you>.json` as each round starts; the cap counts rounds already spent by a previous
    session — and if still failing, **escalate to the user**.
 5. **External review (optional).** Only if an external reviewer is **explicitly available**:
    secret-scan the diff first — if no scanner exists, run
@@ -68,15 +78,18 @@ story is judged by the **same** deterministic gates and review panel below.
    re-verify; `UNKNOWN` → obtain the exact missing evidence it names and re-verify, or escalate to the
    user. For non-trivial work, record `docs/verification/<story-id>.md`. See `references/verification.md`.
 7. **Ship.** With gates green, no open `block`/`major`, and `pm-verifier` `PASS`, commit **only this
-   story's files** to the story branch, then integrate into the integration branch:
+   story's files** to the story branch. **Sync first:** pull/rebase the integration branch; if its
+   tip moved after your gates ran, re-gate on the merged result before merging. Then integrate:
    - **Local by default** → check out the integration branch and `--no-ff` merge the story branch
      with a PR-style message.
    - **Remote PR only if the user has explicitly asked for pushes/PRs** *and* `gh auth status`
      succeeds *and* a GitHub remote exists → push the branch, open a PR, and merge it.
    **Never push to a remote without an explicit request** (hard rule).
-8. **Log.** Append the story outcome to `pm/log.md` and update `pm/pm-state.json`, then **commit
-   the `pm/` state update alongside the ship** (on the integration branch, right after the merge) —
-   the pushed repo must always carry the current resume point. Never write secrets into `pm/`.
+8. **Log.** Append the story outcome to `pm/log.md` (author-prefixed entry), update
+   `pm/actors/<you>.json`, and **remove the story's entry from `assignments`** in
+   `pm/pm-state.json` — then **commit this `pm/` state update alongside the ship** (on the
+   integration branch, right after the merge), so the pushed repo carries the current resume point
+   and the released claim. Never write secrets into `pm/`.
 9. **Document (optional — at the sprint/project boundary, not per story).** Once a sprint's stories
    are merged, you may dispatch `technical-writer` to refresh user-facing docs (README, usage,
    CHANGELOG) and, at project end, produce the completion report at `docs/completion-report.md` from
@@ -106,8 +119,8 @@ fresh counters. Never drip-feed new asks mid-flight.
   *fully autonomous*.)
 - **Always escalate immediately** for high-risk or large-blast-radius merges, regardless of mode.
 - **Offer a handoff at natural stops.** At a sprint checkpoint, before a long pause, or when the
-  session's context is running long, offer `/pm-skill:handoff` — a committed `pm/HANDOFF.md` is
-  what lets the next session skip re-discovery. (A bundled SessionStart hook re-grounds new and
-  freshly-compacted sessions from `pm/` automatically.)
+  session's context is running long, offer `/pm-skill:handoff` — a committed
+  `pm/actors/<id>.HANDOFF.md` is what lets the next session skip re-discovery. (A bundled
+  SessionStart hook re-grounds new and freshly-compacted sessions from `pm/` automatically.)
 
 See `review-gates.md` for the severity model and the definition of done.

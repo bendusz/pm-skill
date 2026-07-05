@@ -18,13 +18,23 @@ Inspect (whichever apply):
 - **Setup steps:** any documented bootstrap (README/CONTRIBUTING) needed before the gates pass.
 - **PM state health** (when `pm/` exists — report `OK` / `DRIFT` per check):
   - `pm/pm-state.json` parses as JSON (`jq empty` or equivalent).
-  - `git check-ignore pm/pm-state.json pm/log.md` **fails** — check the state *files*, not the
-    directory (a `pm/*` ignore rule passes a directory check while still ignoring the files) —
-    and `tmp/` **is** ignored; `pm/` has no uncommitted changes older than the last work commit.
-  - The log's Current State block agrees with `pm-state.json` (story, sprint, sign-off status), and
-    `docs/plan.md`'s Sign-off line agrees with `signed_off`.
-  - `handoff_written` vs `updated`: flag a stale `pm/HANDOFF.md` (updated is newer) so resume
-    doesn't trust an outdated briefing.
+  - `git check-ignore pm/pm-state.json pm/log.md pm/actors/<you>.json` **fails** — check the state
+    *files*, not the directory (a `pm/*` ignore rule passes a directory check while still ignoring
+    the files) — and `tmp/` **is** ignored; `pm/` has no uncommitted changes older than the last
+    work commit; `.gitattributes` carries `pm/log.md merge=union`.
+  - **Team health:** every actor file's `current_story` agrees with `assignments` (flag a claim
+    conflict — an actor working a story the map assigns to someone else, or two actor files
+    sharing one **non-null** `current_story` — idle actors are all `null`, never a conflict; the
+    map itself can only show one claimant) and every assignment's
+    actor is actually on that story with a matching story branch (flag stale or half-made claims —
+    an assignment whose actor's file is idle or on a different story, or whose actor has no branch
+    or recent activity); every `pm/actors/*.json` parses and matches a recent git author (flag
+    orphans from a changed git identity); your own actor id is derivable (git `user.email` /
+    `user.name` set).
+  - `docs/plan.md`'s Sign-off line agrees with `signed_off` in `pm/pm-state.json` (the v0.9 log is
+    append-only and has no Current State block to cross-check).
+  - `handoff_written` vs `updated` in `pm/actors/<you>.json`: flag a stale
+    `pm/actors/<you>.HANDOFF.md` (updated is newer) so resume doesn't trust an outdated briefing.
 
 Stay read-only where you can and run only **non-mutating** probes. Do **not** install, upgrade, or
 write project files (delegate heavy reading to a read-only subagent if useful).

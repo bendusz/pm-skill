@@ -2,11 +2,11 @@
 # pm-skill SessionStart hook — inject a tiny resume pointer when the project is PM-managed.
 #
 # Fires on startup, resume, /clear, and post-compaction (SessionStart source=compact); stdout
-# becomes context for the new session. Emits a few short lines pointing at the pm/ state so a
-# fresh or freshly-compacted session re-grounds itself without re-discovery — and stays
-# completely SILENT (exit 0, no output) in any project that is not PM-managed.
+# becomes context for the new session. Multi-actor aware: prints the shared project position,
+# YOUR actor position (identity from git config), and teammates as read-only one-liners.
+# Stays completely SILENT (exit 0, no output) in any project that is not PM-managed.
 #
-# Fail-open: kill switch, missing state, or no jq all degrade gracefully.
+# Fail-open: kill switch, missing state, no jq, or no git all degrade gracefully.
 set -u
 
 [ "${PM_SKILL_NO_ENFORCE:-}" = "1" ] && exit 0
@@ -30,21 +30,60 @@ fi
 
 echo "pm-skill: this is a PM-managed project (pm/pm-state.json present)."
 
-if command -v jq >/dev/null 2>&1 && jq empty "$state" 2>/dev/null; then
-  # NB: signed_off is a boolean — jq's `//` treats false as empty, so use an explicit null check.
-  summary="$(jq -r '"phase=\(.phase // "?") story=\(.current_story // "-") status=\(.current_story_status // "-") signed_off=\(if .signed_off == null then "?" else .signed_off end) next=\(.next // "?")"' "$state" 2>/dev/null)"
-  [ -n "$summary" ] && echo "$summary"
-  # Handoff freshness: timestamps are "YYYY-MM-DD HH:MM", so string comparison is safe.
-  hw="$(jq -r '.handoff_written // empty' "$state" 2>/dev/null)"
-  up="$(jq -r '.updated // empty' "$state" 2>/dev/null)"
-  if [ -f "$cwd/pm/HANDOFF.md" ] && [ -n "$hw" ]; then
-    if [ -n "$up" ] && [ "$up" \> "$hw" ]; then
-      echo "pm/HANDOFF.md is STALE (state moved on after it was written) — trust pm/pm-state.json + pm/log.md."
-    else
-      echo "A current pm/HANDOFF.md briefing exists — read it first; it replaces re-discovery."
-    fi
+if ! command -v jq >/dev/null 2>&1 || ! jq empty "$state" 2>/dev/null; then
+  echo "To continue: run /pm-skill:resume (or read the pm/ files directly)."
+  exit 0
+fi
+
+# Shared project position. NB: signed_off is a boolean — jq's // treats false as empty.
+jq -r '"project: phase=\(.phase // "?") sprint=\(.current_sprint // "-")/\(.total_sprints // "-") signed_off=\(if .signed_off == null then "?" else .signed_off end)"' "$state" 2>/dev/null
+
+if [ ! -d "$cwd/pm/actors" ]; then
+  # Legacy flat 0.8 layout — one summary line, then the migration hint.
+  jq -r '"you: story=\(.current_story // "-") status=\(.current_story_status // "-") next=\(.next // "?")"' "$state" 2>/dev/null
+  echo "Layout is flat single-actor (pre-0.9) — /pm-skill:resume migrates it to pm/actors/."
+  echo "To continue: run /pm-skill:resume (or read the pm/ files directly). Before ending a long session, offer /pm-skill:handoff."
+  exit 0
+fi
+
+# Derive our actor id: email local part, else user.name, slugged.
+me=""
+if command -v git >/dev/null 2>&1; then
+  src="$(git -C "$cwd" config user.email 2>/dev/null | cut -d@ -f1)"
+  [ -n "$src" ] || src="$(git -C "$cwd" config user.name 2>/dev/null)"
+  if [ -n "$src" ]; then
+    me="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+//; s/-+$//')"
   fi
 fi
+# Documented last-resort fallback (see logging-and-state.md): no derivable identity
+# still gets a stable id, so pm/actors/unknown-actor.json is treated as OUR file.
+[ -n "$me" ] || me="unknown-actor"
+
+if [ -n "$me" ] && [ -f "$cwd/pm/actors/$me.json" ] && jq empty "$cwd/pm/actors/$me.json" 2>/dev/null; then
+  my="$cwd/pm/actors/$me.json"
+  jq -r '"you (\(.actor // "?")): story=\(.current_story // "-") status=\(.current_story_status // "-") branch=\(.branch // "-") next=\(.next // "?")"' "$my" 2>/dev/null
+  # Handoff freshness: timestamps are "YYYY-MM-DD HH:MM", so string comparison is safe.
+  hw="$(jq -r '.handoff_written // empty' "$my" 2>/dev/null)"
+  up="$(jq -r '.updated // empty' "$my" 2>/dev/null)"
+  if [ -f "$cwd/pm/actors/$me.HANDOFF.md" ] && [ -n "$hw" ]; then
+    if [ -n "$up" ] && [ "$up" \> "$hw" ]; then
+      echo "Your pm/actors/$me.HANDOFF.md is STALE (state moved on) — trust the state files + log."
+    else
+      echo "A current pm/actors/$me.HANDOFF.md briefing exists — read it first; it replaces re-discovery."
+    fi
+  fi
+elif [ -n "$me" ]; then
+  echo "No actor file for you ($me) yet — /pm-skill:resume creates pm/actors/$me.json."
+fi
+
+# Teammates, read-only one-liners.
+for f in "$cwd"/pm/actors/*.json; do
+  [ -f "$f" ] || continue
+  b="${f##*/}"; other="${b%.json}"
+  [ "$other" = "$me" ] && continue
+  jq empty "$f" 2>/dev/null || continue
+  jq -r '"teammate \(.actor // "'"$other"'"): story=\(.current_story // "-") status=\(.current_story_status // "-") branch=\(.branch // "-")"' "$f" 2>/dev/null
+done
 
 echo "To continue: run /pm-skill:resume (or read the pm/ files directly). Before ending a long session, offer /pm-skill:handoff."
 exit 0

@@ -11,7 +11,7 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
 
 ## Inputs (whichever exist)
 `docs/constitution.md`, `docs/spec.md`, `docs/plan.md`, `docs/stories/*.md`, `pm/pm-state.json`,
-`pm/log.md`. Note in the report any that are absent.
+`pm/actors/*.json`, `pm/log.md`. Note in the report any that are absent.
 
 ## What to detect
 - **Clarifications:** unresolved `[NEEDS CLARIFICATION]` markers in the spec or plan.
@@ -32,6 +32,14 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
 - **Terminology drift:** the same concept named differently across spec, plan, and stories.
 - **State sanity:** stale or contradictory `pm/pm-state.json` / `pm/log.md` vs the `docs/` artifacts;
   `pm/` state files matched by `.gitignore` or left uncommitted while `docs/` moved on.
+- **Team checks:** a **claim conflict** — an actor file whose `current_story` names a story that
+  `assignments` maps to a *different* actor, or two actor files sharing one **non-null**
+  `current_story` (idle/new actors all carry `current_story: null` — never flag those)
+  (`assignments` is a story→actor map, so it can only ever show one claimant — the race surfaces
+  in the actor files; compare them against the map); a **stale or half-made claim** — an
+  assignment whose actor's own file is *not* on that story (`current_story` null or different);
+  an assignment pointing at a nonexistent story or actor file; in-flight stories of **different
+  actors** whose `Touches` overlap (serialize or re-scope them).
 
 ## Severities
 - **CRITICAL** — blocks safe delivery, or violates the constitution or the sign-off rule.

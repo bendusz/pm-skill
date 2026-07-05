@@ -5,9 +5,10 @@
 - Never implement before the human approves the plan.
 - The PM orchestrates and does not write code — implementation is done by subagents.
 - Every story traces to requirement IDs (FR-/AC-); run `/pm-skill:analyze` before implementation on non-trivial projects.
-- Log progress to `pm/log.md` after every meaningful step. `pm/` is git-tracked — commit state
-  updates with the work they describe; never write secrets into it (`tmp/` is scratch and stays
-  gitignored).
+- Log progress to `pm/log.md` (append-only, author-prefixed entries) after every meaningful step.
+  `pm/` is git-tracked — commit state updates with the work they describe; your position lives in
+  `pm/actors/<your-id>.json` and you never edit another actor's file; never write secrets into
+  `pm/` (`tmp/` is scratch and stays gitignored).
 - The project's gates (test/lint/build) must pass, and `pm-verifier` must return PASS, before a story ships.
 - Never push to a remote without an explicit request.
 

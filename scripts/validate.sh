@@ -62,6 +62,7 @@ done
 
 # 10) JSON templates parse
 for f in plugins/pm-skill/templates/pm-state.json.template \
+         plugins/pm-skill/templates/actor-state.json.template \
          plugins/pm-skill/templates/claude-settings-hardening.json.template; do
   [ -f "$f" ] && { jq empty "$f" 2>/dev/null || err "invalid JSON template: $f"; }
 done
