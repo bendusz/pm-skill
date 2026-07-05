@@ -36,9 +36,10 @@ reading to a read-only `general-purpose`/`Explore` subagent and take back only t
   `assignments` maps to a *different* actor, or two actor files sharing one **non-null**
   `current_story` (idle/new actors all carry `current_story: null` — never flag those)
   (`assignments` is a story→actor map, so it can only ever show one claimant — the race surfaces
-  in the actor files; compare them against the map); an assignment pointing at a nonexistent
-  story or actor file; in-flight stories of **different actors** whose `Touches` overlap
-  (serialize or re-scope them).
+  in the actor files; compare them against the map); a **stale or half-made claim** — an
+  assignment whose actor's own file is *not* on that story (`current_story` null or different);
+  an assignment pointing at a nonexistent story or actor file; in-flight stories of **different
+  actors** whose `Touches` overlap (serialize or re-scope them).
 
 ## Severities
 - **CRITICAL** — blocks safe delivery, or violates the constitution or the sign-off rule.

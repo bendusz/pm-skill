@@ -55,6 +55,9 @@ if command -v git >/dev/null 2>&1; then
     me="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+//; s/-+$//')"
   fi
 fi
+# Documented last-resort fallback (see logging-and-state.md): no derivable identity
+# still gets a stable id, so pm/actors/unknown-actor.json is treated as OUR file.
+[ -n "$me" ] || me="unknown-actor"
 
 if [ -n "$me" ] && [ -f "$cwd/pm/actors/$me.json" ] && jq empty "$cwd/pm/actors/$me.json" 2>/dev/null; then
   my="$cwd/pm/actors/$me.json"

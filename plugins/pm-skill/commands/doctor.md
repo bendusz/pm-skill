@@ -26,7 +26,8 @@ Inspect (whichever apply):
     conflict — an actor working a story the map assigns to someone else, or two actor files
     sharing one **non-null** `current_story` — idle actors are all `null`, never a conflict; the
     map itself can only show one claimant) and every assignment's
-    actor has a matching story branch (flag stale claims — an assignment whose actor has no branch
+    actor is actually on that story with a matching story branch (flag stale or half-made claims —
+    an assignment whose actor's file is idle or on a different story, or whose actor has no branch
     or recent activity); every `pm/actors/*.json` parses and matches a recent git author (flag
     orphans from a changed git identity); your own actor id is derivable (git `user.email` /
     `user.name` set).

@@ -23,19 +23,21 @@ story is judged by the **same** deterministic gates and review panel below.
 0. **Ready & branch.** Confirm the story is **build-ready** (testable criteria + self-contained
    context + a verification command — see `decomposition.md`); if not, fix the story first. Ensure
    the working tree is **clean** (if it has unrelated changes, stop and ask — see Repository
-   safety). **Claim the story:** pull/rebase the integration branch first, confirm no other actor
-   holds it in `assignments` (if one does, pick another story or resolve with them), then — still
-   **on the integration branch** — set `assignments["<story-id>"] = <you>` in `pm/pm-state.json`
-   and commit the claim there (a claim committed only to a story branch is invisible to
-   teammates' pull-integration-and-check flow). Push it only under the user's standing push
-   permission — **never push without an explicit request** (hard rule); without pushes, tell the
-   user the claim stays local-only until pushed. Then create and check out the story branch
-   `pm/S<sprint>-<n>-<slug>`. All of this story's work happens on the story branch. **Record
-   your position** in `pm/actors/<you>.json` now: set `current_story`, `current_story_status`
-   (`building`), `branch`, `next`, and `updated`, and reset `current_story_rounds` and
-   `current_story_retries` to `0` — resume and the session hook read position from the actor
-   file (the shared state no longer carries it), and the loop bounds below are enforced from
-   these persisted counters, not from memory, so everything survives a session loss mid-story.
+   safety). **Claim the story — one commit on the integration branch:** pull/rebase it first,
+   confirm no other actor holds the story in `assignments` (if one does, pick another story or
+   resolve with them), then set `assignments["<story-id>"] = <you>` in `pm/pm-state.json` **and
+   record your position** in `pm/actors/<you>.json` — `current_story`, `current_story_status`
+   (`building`), `branch` (the planned story branch name), `next`, `updated`, and
+   `current_story_rounds`/`current_story_retries` reset to `0` — and commit **both files
+   together**. (A claim committed only to a story branch is invisible to teammates'
+   pull-integration-and-check flow, and an assignment without the matching actor position reads
+   as a stale claim to doctor/analyze.) Push it only under the user's standing push permission —
+   **never push without an explicit request** (hard rule); without pushes, tell the user the
+   claim stays local-only until pushed. Then create and check out the story branch
+   `pm/S<sprint>-<n>-<slug>` — all of this story's work happens there. Resume and the session
+   hook read position from the actor file (the shared state no longer carries it), and the loop
+   bounds below are enforced from the persisted counters, not from memory, so everything
+   survives a session loss mid-story.
 1. **Build.** *(Optional, for clear acceptance criteria: first dispatch `test-engineer` to write the
    acceptance tests — TDD red. Then tell the builder those tests already exist: it must make them
    pass and add only *further* coverage, not rewrite them.)* Dispatch `expert-builder`

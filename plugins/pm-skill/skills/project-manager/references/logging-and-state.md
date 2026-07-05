@@ -96,11 +96,14 @@ stale — trust state + log instead.
 ## Claim & sync discipline (team of any size)
 
 - **Pull/rebase before claiming** a story and **before shipping** one.
-- **Claim** = on the up-to-date **integration branch**, set `assignments[story] = you` in the
-  shared state and commit it there — a claim committed only to a story branch is invisible to
-  teammates' pull-and-check flow — then create the story branch. Push the claim only under the
-  user's standing push permission (the never-push-without-explicit-request rule always wins);
-  until pushed, it is visible only locally — say so.
+- **Claim** = one commit on the up-to-date **integration branch** that sets
+  `assignments[story] = you` in the shared state **and** records your position in
+  `pm/actors/<you>.json` (story, status, planned branch name, counters reset) — a claim committed
+  only to a story branch is invisible to teammates' pull-and-check flow, and an assignment
+  without the matching actor position reads as a stale claim — then create the story branch.
+  Push the claim only under the user's standing push permission (the
+  never-push-without-explicit-request rule always wins); until pushed, it is visible only
+  locally — say so.
 - If the integration tip moved after your gates ran, **re-gate on the merged result** before
   merging (the same semantic-conflict rule as the parallel path).
 - **Release** the claim in the ship commit (remove the assignment, append the log entry).
