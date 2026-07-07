@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## 0.9.2 — 2026-07-07
+
+Explicit model + effort pinning for every agent.
+
+- **All nine agents ship pinned** — no agent uses `model: inherit` anymore; behaviour no longer
+  depends on the session model. `expert-builder` is pinned to `fable` (top tier); the other eight
+  are pinned to `opus`.
+- **Reasoning effort set per agent** — new `effort:` frontmatter on every agent:
+  `security-auditor` and `debugger` run at `high`; all other agents at `medium`.
+- **Docs updated** — `references/model-tiering.md` rewritten around the new pinned mapping and the
+  `effort:` override; the SKILL.md tiering summary matches.
+
 ## 0.9.1 — 2026-07-05
 
 Agent-quality pass, driven by verified community/official best-practice research (Anthropic
