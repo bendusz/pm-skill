@@ -1,5 +1,8 @@
 # Project Manager Skill — Design Specification
 
+> **Update (2026-07-07, v0.9.3):** the project was relicensed from MIT to GPL-3.0-or-later.
+> References to MIT below reflect the license at the time this spec was written.
+
 - **Status:** Approved (2026-06-02)
 - **Type:** Public, generic Claude Code plugin
 - **Working names:** plugin `pm-skill` · skill `project-manager` · command `/pm-skill:pm` (namespaced; all adjustable)

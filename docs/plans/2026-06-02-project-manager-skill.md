@@ -1,5 +1,8 @@
 # Project Manager Skill — Implementation Plan
 
+> **Update (2026-07-07, v0.9.3):** the project was relicensed from MIT to GPL-3.0-or-later.
+> References to MIT below reflect the license at the time this plan was written.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build a generic, public, self-contained Claude Code plugin (`pm-skill`) whose `project-manager` skill makes Claude act as a Project/Product Manager that discovers, plans, gets sign-off, decomposes into stories, and orchestrates build/review/fix/ship via subagents — without writing code itself.

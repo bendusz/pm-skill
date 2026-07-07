@@ -6,8 +6,8 @@ All notable changes to this project are documented here.
 
 Relicense from MIT to GPL-3.0-or-later.
 
-- **License changed to GPLv3** — `LICENSE` now carries the canonical GNU GPL v3 text; derivative
-  works and redistributed copies must remain under the GPL with source available.
+- **License changed to GPLv3** — `LICENSE` now carries the canonical GNU GPL v3 text; copies and
+  modified versions that are distributed must remain under the GPL with source available.
 - **Metadata updated** — `plugin.json` `license` field is `GPL-3.0-or-later`; the README License
   section explains the copyleft terms.
 - Releases up to and including v0.9.2 remain available under their original MIT terms.
