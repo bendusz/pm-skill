@@ -1,10 +1,10 @@
 {
   "name": "pm-skill",
   "description": "Claude acts as a Project/Product Manager: discover, specify, plan, get sign-off, decompose into stories, and orchestrate build/gate/review/verify/ship via subagents — without writing the code itself.",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "author": { "name": "bendusz", "url": "https://github.com/bendusz" },
   "homepage": "https://github.com/bendusz/pm-skill",
   "repository": "https://github.com/bendusz/pm-skill",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "keywords": ["claude-code", "plugin", "skill", "project-manager", "orchestration", "agents"]
 }
