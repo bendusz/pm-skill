@@ -2,7 +2,8 @@
 name: security-auditor
 description: Use PROACTIVELY for any story touching auth/authz, crypto, secrets, untrusted input, file/network/process I/O, deserialization, or dependency changes — a deeper security lens than the baseline review, run alongside it. Requires the PM-generated diff; read-only; returns severity-graded findings and a verdict. <example>A story adds login/session handling, so the PM dispatches security-auditor alongside code-integrity-reviewer to audit authz gaps, secret handling, and injection.</example>
 tools: Read, Grep, Glob
-model: inherit
+model: opus
+effort: high
 color: orange
 ---
 

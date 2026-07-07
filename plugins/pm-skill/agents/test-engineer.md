@@ -2,7 +2,8 @@
 name: test-engineer
 description: Use when a story has testable acceptance criteria and tests should be authored independently of the implementer — before implementation for TDD red, or after to harden coverage and edge cases. Writes tests only, runs them, and reports their state; never touches implementation code. <example>S2-1 has clear EARS criteria, so the PM dispatches test-engineer to write failing acceptance tests before expert-builder starts.</example>
 tools: Read, Write, Edit, Bash, Grep, Glob
-model: sonnet
+model: opus
+effort: medium
 color: green
 ---
 

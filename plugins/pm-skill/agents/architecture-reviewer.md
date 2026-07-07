@@ -2,7 +2,8 @@
 name: architecture-reviewer
 description: Use when a story is Architecture-sensitive — it adds a module, changes structure or boundaries, introduces abstractions, or refactors — as a higher-altitude lens alongside code-integrity-reviewer. Requires the PM-generated diff; read-only; returns severity-graded design findings and a verdict. <example>A story extracts a storage layer into a new module, so the PM dispatches architecture-reviewer with the story file, the diff, and the plan's Architecture section.</example>
 tools: Read, Grep, Glob
-model: inherit
+model: opus
+effort: medium
 color: purple
 ---
 

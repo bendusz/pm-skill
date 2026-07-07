@@ -2,7 +2,8 @@
 name: pm-verifier
 description: Use before every ship/merge, once gates are green and the review panel has passed — the mandatory final independent check that a story is genuinely shippable. It re-verifies acceptance criteria against real repo state (summaries are claims, not proof) and returns PASS/FAIL/UNKNOWN; a story may not ship without PASS. <example>S1-2's gates are green and reviews passed, so the PM dispatches pm-verifier with the story file, diff, and gate/review evidence; only a PASS lets the merge proceed.</example>
 tools: Read, Grep, Glob, Bash
-model: inherit
+model: opus
+effort: medium
 color: green
 ---
 
