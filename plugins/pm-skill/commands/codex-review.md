@@ -50,15 +50,15 @@ Decide the directory now, but **defer creating it and editing `.gitignore` until
 (see "No worktree contamination" in step 4).
 
 - If `untracked/` exists → candidate. Else `codex/` → candidate.
-- In a git repo, the candidate must be genuinely ignored before use — a tracked directory must
-  never receive reports (the review is advertised read-only; don't dirty the tree or overwrite
-  project files):
-  - `git ls-files -- <dir>` must be empty (appending to `.gitignore` does NOT ignore
-    already-tracked files);
-  - then ensure `grep -qxF '<dir>/' .gitignore 2>/dev/null || echo '<dir>/' >> .gitignore` and
-    confirm with `git check-ignore -q <dir>`.
-  - `untracked/` failing these checks → fall back to `codex/`; `codex/` also failing → stop and
-    ask the user where reports should go.
+- In a git repo, a candidate is usable only if it holds **no tracked files**:
+  `git ls-files -- <dir>` must be empty — a tracked directory must never receive reports, and
+  appending to `.gitignore` does NOT ignore already-tracked files. `untracked/` unusable → fall
+  back to `codex/`; both unusable → stop and ask the user where reports should go.
+- Ignore status is finalized only **after** the run, when moving the reports in (step 4, "No
+  worktree contamination"): ensure
+  `grep -qxF '<dir>/' .gitignore 2>/dev/null || echo '<dir>/' >> .gitignore`, then confirm
+  `git check-ignore -q <dir>` — if it still fails (e.g. a negation rule), warn the user and ask
+  before leaving files there.
 
 Set `STAMP=$(date +%Y-%m-%d-%H%M)`. Report paths:
 - single review → `<dir>/<STAMP>-codex-review-<scope>.md`
