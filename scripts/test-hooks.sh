@@ -13,11 +13,12 @@ trap 'for d in "${cleanup_dirs[@]:-}"; do [ -n "$d" ] && rm -rf "$d"; done' EXIT
 
 # ---------- helpers ----------
 
+# NB: new_proj runs in a $(…) subshell, so it cannot register cleanup itself —
+# every caller must append its result to cleanup_dirs in the parent shell.
 new_proj() { # new_proj [signed_off] -> echoes project dir
   local signed="${1:-false}" d
   d="$(mktemp -d)"
   d="$(cd "$d" && pwd -P)"   # macOS mktemp returns /var/… symlinked via /private
-  cleanup_dirs+=("$d")
   mkdir -p "$d/pm/actors" "$d/src" "$d/docs" "$d/packages/foo"
   printf '{"signed_off":%s,"phase":"implementation"}\n' "$signed" > "$d/pm/pm-state.json"
   git -C "$d" init -q
@@ -68,7 +69,7 @@ t_out() { # t_out <name> <grep-pattern|-EMPTY-> <stdin> [VAR=val ...]
 
 # ---------- require-signoff.sh ----------
 
-P="$(new_proj false)"
+P="$(new_proj false)"; cleanup_dirs+=("$P")
 
 t "signoff: blocks implementation write pre-sign-off" 2 require-signoff.sh \
   "$(json_write "$P" "$P/src/app.py")"
@@ -87,7 +88,7 @@ t "signoff: allows when kill switch set" 0 require-signoff.sh \
 
 t "signoff: allows on malformed JSON (fail-open)" 0 require-signoff.sh "not json {"
 
-PS="$(new_proj true)"
+PS="$(new_proj true)"; cleanup_dirs+=("$PS")
 t "signoff: allows implementation write after sign-off" 0 require-signoff.sh \
   "$(json_write "$PS" "$PS/src/app.py")"
 
@@ -106,9 +107,16 @@ ln -s "$P/src" "$P/docs/impl-link"
 t "signoff: F2 symlink under docs/ escaping to src/ blocks" 2 require-signoff.sh \
   "$(json_write "$P" "$P/docs/impl-link/app.py")"
 
+# Final-symlink target (an existing docs/config -> src/config alias) must
+# classify as the REAL file, not the symlink's lexical location.
+touch "$P/src/config.py"
+ln -s "$P/src/config.py" "$P/docs/config.md"
+t "signoff: F2 final symlink to src/ file blocks" 2 require-signoff.sh \
+  "$(json_write "$P" "$P/docs/config.md")"
+
 # ---------- pm-secrets-guard.sh ----------
 
-G="$(new_proj false)"
+G="$(new_proj false)"; cleanup_dirs+=("$G")
 
 t "secrets: allows prose in pm/" 0 pm-secrets-guard.sh \
   "$(json_content "$G" "$G/pm/log.md" "rotate the API key on the box")"
@@ -148,9 +156,19 @@ t "secrets: ignores writes outside pm/" 0 pm-secrets-guard.sh \
 t "secrets: F2 docs/../pm traversal still guarded" 2 pm-secrets-guard.sh \
   "$(json_content "$G" "$G/docs/../pm/log.md" "API_KEY=abcdefghijklmno")"
 
+# Final symlink INTO pm/ must still be guarded
+touch "$G/pm/log.md"
+ln -s "$G/pm/log.md" "$G/docs/note.md"
+t "secrets: F2 final symlink into pm/ still guarded" 2 pm-secrets-guard.sh \
+  "$(json_content "$G" "$G/docs/note.md" "API_KEY=abcdefghijklmno")"
+
+# Quoted prose values (spaces) must NOT trip — tripwire, not a prose scanner
+t "secrets: quoted prose with spaces never trips" 0 pm-secrets-guard.sh \
+  "$(json_content "$G" "$G/pm/log.md" "Password: \"use a sentence here\"")"
+
 # ---------- actor-guard.sh ----------
 
-A="$(new_proj false)"   # git identity casey@example.com
+A="$(new_proj false)"; cleanup_dirs+=("$A")   # git identity casey@example.com
 
 t "actor: own state file allowed" 0 actor-guard.sh \
   "$(json_write "$A" "$A/pm/actors/casey-example-com.json")"
@@ -173,7 +191,7 @@ t "actor: F4 bare local-part id is no longer ours (pre-0.10.1 orphan)" 2 actor-g
 
 # ---------- session-context.sh ----------
 
-S="$(new_proj false)"
+S="$(new_proj false)"; cleanup_dirs+=("$S")
 printf '{"actor":"casey-example-com","current_story":"S1-1"}\n' > "$S/pm/actors/casey-example-com.json"
 
 t_out "session: emits pointer in PM project" "PM-managed" \

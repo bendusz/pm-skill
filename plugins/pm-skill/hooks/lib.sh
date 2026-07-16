@@ -26,12 +26,24 @@ pm_root() {
 # 'pm/../src/app.py' classifies as 'src/app.py' and a symlinked directory
 # cannot alias one prefix to another. No realpath -m (absent on macOS).
 pm_relpath() {
-  local root="$1" path="$2" dir rest="" parent full
+  local root="$1" path="$2" dir rest="" parent full link hops=0
   root="$(cd "$root" 2>/dev/null && pwd -P)" || return 1
   case "$path" in
     /*) ;;
     *) path="$root/$path" ;;
   esac
+  # Resolve a FINAL symlink (to a file, or dangling) — `-d` below would stop at
+  # its parent and classify the symlink's lexical location, letting e.g. an
+  # existing docs/config -> src/config alias bypass the allowlists. Directory
+  # symlinks are already resolved by the `pwd -P` canonicalization further down.
+  while [ -L "$path" ]; do
+    hops=$((hops+1)); [ "$hops" -gt 8 ] && return 1
+    link="$(readlink "$path")" || return 1
+    case "$link" in
+      /*) path="$link" ;;
+      *) path="${path%/*}/$link" ;;
+    esac
+  done
   dir="$path"
   while [ ! -d "$dir" ]; do
     rest="${dir##*/}${rest:+/$rest}"
@@ -91,7 +103,7 @@ pm_secret_scan() {
   # Credential assignments (case-insensitive; quoted then unquoted).
   # shellcheck disable=SC2016  # the '$' is a literal inside a character class, not an expansion
   if printf '%s' "$buf" | grep -qiE \
-    -e '(api[_-]?key|secret|token|passw(or)?d|credential)["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"'<>${}]{8,}["'"'"']' \
+    -e '(api[_-]?key|secret|token|passw(or)?d|credential)["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"'][A-Za-z0-9_/+=.-]{8,}["'"'"']' \
     -e '(api[_-]?key|secret|token|passw(or)?d|credential)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_/+=.-]{8,}'
   then
     echo "credential assignment with a real-looking value detected" >&2
