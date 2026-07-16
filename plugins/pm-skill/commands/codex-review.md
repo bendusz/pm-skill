@@ -72,8 +72,10 @@ they exist only on plain `codex exec`.
 - `worktree` → `codex exec review --uncommitted <tail>`
 - `codebase` → `codex exec --sandbox read-only --skip-git-repo-check <tail> "<codebase prompt>"`
 
-**With objectives** (one agent per objective; scope flags conflict with a custom prompt, so the
-prompt states the scope — *prompt-as-scope*):
+**With objectives** — one agent per objective. Prefer native target flags whenever no custom
+objective is required; prompt-as-scope below is a deliberate capability fallback, not an
+interchangeable style: the CLI forbids combining a custom prompt with a native scope flag, so the
+prompt must restate the target precisely:
 - `recent` → `codex exec review <tail> "Review the changes introduced by the last commit (HEAD). <objective clause>"`
 - `worktree` → `codex exec review <tail> "Review the uncommitted changes — staged, unstaged, and untracked. <objective clause>"`
 - `codebase` → `codex exec --sandbox read-only --skip-git-repo-check <tail> "<codebase prompt> <objective clause>"`
