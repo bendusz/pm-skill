@@ -5,7 +5,7 @@ All notable changes to this project are documented here.
 ## 0.10.1 — 2026-07-16
 
 Hook hardening — fixes the six findings from a whole-codebase codex review (gpt-5.6-sol). New
-shared `hooks/lib.sh`; behavioral hook tests (`scripts/test-hooks.sh`, 36 cases) now run in
+shared `hooks/lib.sh`; behavioral hook tests (`scripts/test-hooks.sh`, 42 cases) now run in
 `validate.sh`/CI.
 
 - **Project-root discovery**: hooks resolve `$CLAUDE_PROJECT_DIR` → git top level → cwd, so
