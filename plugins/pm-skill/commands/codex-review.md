@@ -55,10 +55,11 @@ Decide the directory now, but **defer creating it and editing `.gitignore` until
   appending to `.gitignore` does NOT ignore already-tracked files. `untracked/` unusable → fall
   back to `codex/`; both unusable → stop and ask the user where reports should go.
 - Ignore status is finalized only **after** the run, when moving the reports in (step 4, "No
-  worktree contamination"): ensure
-  `grep -qxF '<dir>/' .gitignore 2>/dev/null || echo '<dir>/' >> .gitignore`, then confirm
-  `git check-ignore -q <dir>` — if it still fails (e.g. a negation rule), warn the user and ask
-  before leaving files there.
+  worktree contamination") — and only **inside a git repo** (a non-git `codebase` run just moves
+  the reports; no `.gitignore`, no `git check-ignore`): if `git check-ignore -q <dir>` fails,
+  append the **root-anchored** rule `/<dir>/` (never bare `<dir>/`, which would hide same-named
+  nested directories like `src/codex/`), then re-confirm — if it still fails (e.g. a negation
+  rule), warn the user and ask before leaving files there.
 
 Set `STAMP=$(date +%Y-%m-%d-%H%M)`. Report paths:
 - single review → `<dir>/<STAMP>-codex-review-<scope>.md`
