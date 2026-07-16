@@ -36,8 +36,10 @@ for h in plugins/pm-skill/hooks/*.sh; do
   [ -x "$h" ] || err "hook not executable: $h"
 done
 
-# 6) the installed plugin must stay generic (no third-party plugin names)
-if grep -riE 'superpowers|skill-codex|\bcodex\b' plugins/pm-skill/ >/dev/null 2>&1; then
+# 6) the installed plugin must stay generic (no third-party *plugin* names).
+# The OpenAI Codex CLI is an intentional, documented external dependency of the
+# codex-review/codex-help commands, so bare 'codex' is allowed since v0.10.0.
+if grep -riE 'superpowers|skill-codex' plugins/pm-skill/ >/dev/null 2>&1; then
   err "third-party plugin name found under plugins/pm-skill/ (keep the artifact generic)"
 fi
 
