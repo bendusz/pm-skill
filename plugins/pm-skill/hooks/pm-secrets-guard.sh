@@ -18,14 +18,23 @@ set -u
 # Need jq to parse the hook JSON safely; without it, allow.
 command -v jq >/dev/null 2>&1 || exit 0
 
+# Shared helpers (root discovery, canonical paths, secret patterns); without them, allow.
+libdir="$(cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
+[ -f "$libdir/lib.sh" ] || exit 0
+# shellcheck source=lib.sh disable=SC1091
+. "$libdir/lib.sh"
+
 input="$(cat)"
 cwd="$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)"
 file="$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)"
 [ -n "$cwd" ] || cwd="$PWD"
+root="$(pm_root "$cwd")"
 
-# Only guard writes into the tracked pm/ state directory.
-case "$file" in
-  "$cwd"/pm/*) ;;
+# Only guard writes into the tracked pm/ state directory (canonical path, so
+# traversal like docs/../pm/ is still guarded).
+rel="$(pm_relpath "$root" "$file")" || exit 0
+case "$rel" in
+  pm/*) ;;
   *) exit 0 ;;
 esac
 
@@ -35,19 +44,10 @@ content="$(printf '%s' "$input" | jq -r \
    + [.tool_input.edits[]?.new_string // empty] | join("\n")' 2>/dev/null)"
 [ -n "$content" ] || exit 0
 
-# High-confidence secret shapes only (token formats + credential assignment with a real value).
-if printf '%s' "$content" | grep -qE \
-  -e 'AKIA[0-9A-Z]{16}' \
-  -e '-----BEGIN [A-Z ]*PRIVATE KEY' \
-  -e 'gh[pousr]_[A-Za-z0-9]{30,}' \
-  -e 'github_pat_[A-Za-z0-9_]{22,}' \
-  -e 'xox[baprs]-[A-Za-z0-9-]{10,}' \
-  -e 'sk-[A-Za-z0-9_-]{20,}' \
-  -e 'AIza[0-9A-Za-z_-]{35}' \
-  -e 'eyJ[A-Za-z0-9_-]{17,}\.eyJ[A-Za-z0-9_-]{10,}' \
-  -e '(api[_-]?key|secret|token|passw(or)?d)["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"'<>]{8,}["'"'"']'
+# High-confidence secret shapes only (token formats + credential assignments,
+# quoted or unquoted, case-insensitive) — patterns live in lib.sh (pm_secret_scan).
+if ! printf '%s' "$content" | pm_secret_scan 2>/dev/null
 then
-  rel="${file#"$cwd"/}"
   cat >&2 <<MSG
 pm-skill: blocked a write to $rel — the content contains a secret-shaped string.
 pm/ is git-tracked; secrets there enter history permanently. Reference the secret's

@@ -15,14 +15,22 @@ set -u
 # Need jq to parse the hook JSON safely; without it, allow.
 command -v jq >/dev/null 2>&1 || exit 0
 
+# Shared helpers (root discovery, canonical paths, actor identity); without them, allow.
+libdir="$(cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
+[ -f "$libdir/lib.sh" ] || exit 0
+# shellcheck source=lib.sh disable=SC1091
+. "$libdir/lib.sh"
+
 input="$(cat)"
 cwd="$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)"
 file="$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)"
 [ -n "$cwd" ] || cwd="$PWD"
+root="$(pm_root "$cwd")"
 
-# Only guard files directly under pm/actors/.
-case "$file" in
-  "$cwd"/pm/actors/*) ;;
+# Only guard files directly under pm/actors/ (canonical path).
+rel="$(pm_relpath "$root" "$file")" || exit 0
+case "$rel" in
+  pm/actors/*) ;;
   *) exit 0 ;;
 esac
 
@@ -34,12 +42,9 @@ case "$base" in
   *)            exit 0 ;;
 esac
 
-# Derive our own actor id: email local part, else user.name, slugged. No identity -> allow.
-command -v git >/dev/null 2>&1 || exit 0
-src="$(git -C "$cwd" config user.email 2>/dev/null | cut -d@ -f1)"
-[ -n "$src" ] || src="$(git -C "$cwd" config user.name 2>/dev/null)"
-[ -n "$src" ] || exit 0
-me="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+//; s/-+$//')"
+# Derive our own actor id: slug of the FULL git user.email (globally unique),
+# else user.name, via lib.sh. No derivable identity -> allow.
+me="$(pm_actor_id "$root")" || exit 0
 [ -n "$me" ] || exit 0
 
 [ "$target" = "$me" ] && exit 0

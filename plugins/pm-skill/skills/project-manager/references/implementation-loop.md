@@ -67,9 +67,11 @@ story is judged by the **same** deterministic gates and review panel below.
    in `pm/actors/<you>.json` as each round starts; the cap counts rounds already spent by a previous
    session — and if still failing, **escalate to the user**.
 5. **External review (optional).** Only if an external reviewer is **explicitly available**:
-   secret-scan the diff first — if no scanner exists, run
-   `git grep -nIE '(API|SECRET|TOKEN|PASSWORD|PRIVATE[_-]?KEY)'` over the changed files, and if it
-   trips do **not** send code out. Then an independent review → feed findings back → fix. If no
+   secret-scan the **exact outgoing diff** first — prefer a real scanner when one is installed
+   (`gitleaks`, `trufflehog`); otherwise pipe the diff through the bundled value patterns:
+   `git diff <range> | ${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh scan` (non-zero exit = secret-shaped
+   content). If it trips, do **not** send code out. (Scan values, not labels — a name like
+   `APIClient` is not a secret, and real credentials are often lowercase.) Then an independent review → feed findings back → fix. If no
    external reviewer is available, **log that it was skipped** — never silently.
 6. **Verify.** Before shipping, dispatch `pm-verifier` (read-only) to independently confirm the story
    is shippable — give it the story file, `docs/spec.md`/`docs/plan.md`, the diff text + changed paths,

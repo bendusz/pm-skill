@@ -18,6 +18,16 @@ if command -v jq >/dev/null 2>&1; then
   [ -n "$c" ] && cwd="$c"
 fi
 
+# Resolve the PROJECT root (CLAUDE_PROJECT_DIR → git top level → cwd) so a
+# session started in a subdirectory still finds pm/. Missing lib -> stay silent
+# on root discovery but keep the plain-cwd behavior.
+libdir="$(cd "$(dirname "$0")" 2>/dev/null && pwd)"
+if [ -n "$libdir" ] && [ -f "$libdir/lib.sh" ]; then
+  # shellcheck source=lib.sh disable=SC1091
+  . "$libdir/lib.sh"
+  cwd="$(pm_root "$cwd")"
+fi
+
 # PM-managed? Tracked pm/ first; legacy pre-0.8 tmp/ as fallback.
 state="$cwd/pm/pm-state.json"
 if [ ! -f "$state" ]; then
@@ -46,14 +56,11 @@ if [ ! -d "$cwd/pm/actors" ]; then
   exit 0
 fi
 
-# Derive our actor id: email local part, else user.name, slugged.
+# Derive our actor id: slug of the FULL git user.email (globally unique),
+# else user.name — shared derivation in lib.sh.
 me=""
-if command -v git >/dev/null 2>&1; then
-  src="$(git -C "$cwd" config user.email 2>/dev/null | cut -d@ -f1)"
-  [ -n "$src" ] || src="$(git -C "$cwd" config user.name 2>/dev/null)"
-  if [ -n "$src" ]; then
-    me="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+//; s/-+$//')"
-  fi
+if command -v pm_actor_id >/dev/null 2>&1; then
+  me="$(pm_actor_id "$cwd")" || me=""
 fi
 # Documented last-resort fallback (see logging-and-state.md): no derivable identity
 # still gets a stable id, so pm/actors/unknown-actor.json is treated as OUR file.
