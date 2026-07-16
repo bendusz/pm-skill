@@ -59,10 +59,12 @@ Decide the directory now, but **defer creating it and editing `.gitignore` until
   the reports; no `.gitignore`, no `git check-ignore`): if `git check-ignore -q <dir>` fails,
   append the **root-anchored** rule `/<dir>/` (never bare `<dir>/`, which would hide same-named
   nested directories like `src/codex/`), then re-confirm — if it still fails (e.g. a negation
-  rule), warn the user and ask before leaving files there. Append silently only for a `codex/`
-  directory this run created itself; for a **pre-existing** non-ignored directory (an existing
-  `untracked/` may hold user files that the rule would hide from `git status`), ask the user
-  before editing `.gitignore`.
+  rule), warn the user and ask before leaving files there. Because this edits a user-owned file after an
+  otherwise read-only review, **announce the plan when launching the run** ("reports will go to
+  `codex/`; I'll add `/codex/` to `.gitignore` afterwards") so the user can object before it
+  happens. For a `codex/` directory this run created itself, that announcement is sufficient;
+  for a **pre-existing** non-ignored directory (an existing `untracked/` may hold user files
+  that the rule would hide from `git status`), explicitly ask before editing `.gitignore`.
 
 Set `STAMP=$(date +%Y-%m-%d-%H%M)`. Report paths:
 - single review → `<dir>/<STAMP>-codex-review-<scope>.md`
