@@ -10,8 +10,12 @@ All notable changes to this project are documented here.
   `high`), parallel objective agents (presets `security`/`bugs`/`architecture`/`tests`/
   `performance`, `panel`, or free-form), timestamped reports in `untracked/` or a gitignored
   `codex/`, plus an index file for multi-objective runs.
+- **New command `/pm-skill:codex-help`** — ask Codex for advice / a second opinion on a
+  consequential decision (default `gpt-5.6-sol` @ `medium`, overridable); read-only, answer
+  relayed in chat with Claude's own take. Guardrail: reserved for real changes needing a second
+  pair of eyes.
 - Project-manager skill: notes `/pm-skill:codex-review` as an optional second-model reviewer
-  alongside the risk-selected panel.
+  alongside the risk-selected panel, and `/pm-skill:codex-help` for one-off second opinions.
 
 ## 0.9.3 — 2026-07-07
 

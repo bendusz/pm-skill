@@ -87,6 +87,7 @@ tiny work stays lightweight; regulated work makes every gate mandatory.
 | `/pm-skill:handoff` | End a session cleanly — write a token-efficient `pm/actors/<id>.HANDOFF.md` briefing for the next agent. |
 | `/pm-skill:resume` | Read saved state, handoff, and logbook — then continue where you left off. |
 | `/pm-skill:codex-review` | Spawn parallel OpenAI Codex CLI review agents (scope: `recent`/`worktree`/`codebase`; `model=`/`effort=`; objective presets or free-form) — reports land in `untracked/` or a gitignored `codex/`. Requires the `codex` CLI. |
+| `/pm-skill:codex-help` | Ask Codex for a second opinion on a consequential decision (`model=`/`effort=`, default `gpt-5.6-sol` @ `medium`). Answer relayed in chat. Requires the `codex` CLI. |
 
 ## Artifacts
 
