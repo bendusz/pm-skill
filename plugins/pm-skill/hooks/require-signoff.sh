@@ -25,6 +25,7 @@ libdir="$(cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
 input="$(cat)"
 cwd="$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)"
 file="$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)"
+[ -n "$file" ] || exit 0   # no target path in the payload -> nothing to classify, allow
 [ -n "$cwd" ] || cwd="$PWD"
 root="$(pm_root "$cwd")"
 

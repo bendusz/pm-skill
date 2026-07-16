@@ -88,6 +88,9 @@ t "signoff: allows when kill switch set" 0 require-signoff.sh \
 
 t "signoff: allows on malformed JSON (fail-open)" 0 require-signoff.sh "not json {"
 
+t "signoff: allows payload without file_path (fail-open)" 0 require-signoff.sh \
+  "$(jq -cn --arg cwd "$P" '{cwd:$cwd, tool_input:{command:"ls"}}')"
+
 PS="$(new_proj true)"; cleanup_dirs+=("$PS")
 t "signoff: allows implementation write after sign-off" 0 require-signoff.sh \
   "$(json_write "$PS" "$PS/src/app.py")"

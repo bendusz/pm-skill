@@ -27,6 +27,7 @@ pm_root() {
 # cannot alias one prefix to another. No realpath -m (absent on macOS).
 pm_relpath() {
   local root="$1" path="$2" dir rest="" parent full link hops=0
+  [ -n "$path" ] || return 1   # an empty path must fail, not resolve to the root
   root="$(cd "$root" 2>/dev/null && pwd -P)" || return 1
   case "$path" in
     /*) ;;
