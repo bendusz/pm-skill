@@ -86,6 +86,7 @@ tiny work stays lightweight; regulated work makes every gate mandatory.
 | `/pm-skill:correct-course` | Handle a mid-flight scope change — re-plan at the right altitude, re-sign-off if material. |
 | `/pm-skill:handoff` | End a session cleanly — write a token-efficient `pm/actors/<id>.HANDOFF.md` briefing for the next agent. |
 | `/pm-skill:resume` | Read saved state, handoff, and logbook — then continue where you left off. |
+| `/pm-skill:codex-review` | Spawn parallel OpenAI Codex CLI review agents (scope: `recent`/`worktree`/`codebase`; `model=`/`effort=`; objective presets or free-form) — reports land in `untracked/` or a gitignored `codex/`. Requires the `codex` CLI. |
 
 ## Artifacts
 
@@ -110,6 +111,7 @@ Committed under `pm/` (tracked session state — the project's resume point; sol
 Scratch under `tmp/` (gitignored, disposable — never load-bearing for resume):
 
 - `tmp/environment-check.md` — `/pm-skill:doctor`'s readiness report.
+- `untracked/` or `codex/` (gitignored) — `/pm-skill:codex-review` reports: `<stamp>-codex-review-<scope>[-<objective>].md` (+ an index file for multi-objective runs).
 - Worktrees, prompts, raw agent output, and other ephemera.
 
 ## Safety

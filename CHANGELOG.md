@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## 0.10.0 — 2026-07-16
+
+- **New command `/pm-skill:codex-review`** — runs the OpenAI Codex CLI (`codex exec review`) as an
+  independent reviewer: scopes `recent` (last commit) / `worktree` (uncommitted) / `codebase`
+  (read-only full audit), `model=`/`effort=`/`timeout=` overrides (default `gpt-5.6-terra` @
+  `high`), parallel objective agents (presets `security`/`bugs`/`architecture`/`tests`/
+  `performance`, `panel`, or free-form), timestamped reports in `untracked/` or a gitignored
+  `codex/`, plus an index file for multi-objective runs.
+- Project-manager skill: notes `/pm-skill:codex-review` as an optional second-model reviewer
+  alongside the risk-selected panel.
+
 ## 0.9.3 — 2026-07-07
 
 Relicense from MIT to GPL-3.0-or-later.
