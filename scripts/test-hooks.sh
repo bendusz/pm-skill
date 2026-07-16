@@ -174,13 +174,13 @@ t "secrets: quoted prose with spaces never trips" 0 pm-secrets-guard.sh \
 A="$(new_proj false)"; cleanup_dirs+=("$A")   # git identity casey@example.com
 
 t "actor: own state file allowed" 0 actor-guard.sh \
-  "$(json_write "$A" "$A/pm/actors/casey-example-com-8fa8.json")"
+  "$(json_write "$A" "$A/pm/actors/casey-example-com-589b8fa8ab93.json")"
 
 t "actor: other actor's file blocked" 2 actor-guard.sh \
-  "$(json_write "$A" "$A/pm/actors/jordan-example-com-0000.json")"
+  "$(json_write "$A" "$A/pm/actors/jordan-example-com-000000000000.json")"
 
 t "actor: other actor's HANDOFF blocked" 2 actor-guard.sh \
-  "$(json_write "$A" "$A/pm/actors/jordan-example-com-0000.HANDOFF.md")"
+  "$(json_write "$A" "$A/pm/actors/jordan-example-com-000000000000.HANDOFF.md")"
 
 t "actor: non-actor file in actors/ allowed" 0 actor-guard.sh \
   "$(json_write "$A" "$A/pm/actors/README.txt")"
@@ -193,11 +193,11 @@ t "actor: F4 bare local-part id is no longer ours (pre-0.10.1 orphan)" 2 actor-g
   "$(json_write "$A" "$A/pm/actors/casey.json")"
 
 # A symlink NAMED after us must not authorize a write to the file it points at
-printf '{}' > "$A/pm/actors/jordan-example-com-0000.json"
-ln -s "$A/pm/actors/jordan-example-com-0000.json" "$A/pm/actors/casey-example-com-8fa8.HANDOFF.md"
+printf '{}' > "$A/pm/actors/jordan-example-com-000000000000.json"
+ln -s "$A/pm/actors/jordan-example-com-000000000000.json" "$A/pm/actors/casey-example-com-589b8fa8ab93.HANDOFF.md"
 t "actor: symlink alias named after us still blocks" 2 actor-guard.sh \
-  "$(json_write "$A" "$A/pm/actors/casey-example-com-8fa8.HANDOFF.md")"
-rm -f "$A/pm/actors/casey-example-com-8fa8.HANDOFF.md" "$A/pm/actors/jordan-example-com-0000.json"
+  "$(json_write "$A" "$A/pm/actors/casey-example-com-589b8fa8ab93.HANDOFF.md")"
+rm -f "$A/pm/actors/casey-example-com-589b8fa8ab93.HANDOFF.md" "$A/pm/actors/jordan-example-com-000000000000.json"
 
 # Slug homographs (alex.foo@ vs alex-foo@) must derive DIFFERENT ids
 H1="$(new_proj false)"; cleanup_dirs+=("$H1"); git -C "$H1" config user.email "alex.foo@example.com"
@@ -213,7 +213,7 @@ fi
 # ---------- session-context.sh ----------
 
 S="$(new_proj false)"; cleanup_dirs+=("$S")
-printf '{"actor":"casey-example-com-8fa8","current_story":"S1-1"}\n' > "$S/pm/actors/casey-example-com-8fa8.json"
+printf '{"actor":"casey-example-com-589b8fa8ab93","current_story":"S1-1"}\n' > "$S/pm/actors/casey-example-com-589b8fa8ab93.json"
 
 t_out "session: emits pointer in PM project" "PM-managed" \
   "$(jq -cn --arg cwd "$S" '{cwd:$cwd, source:"startup"}')"
@@ -226,7 +226,7 @@ t_out "session: F1 subdir cwd + CLAUDE_PROJECT_DIR finds state" "PM-managed" \
   "$(jq -cn --arg cwd "$S/packages/foo" '{cwd:$cwd, source:"startup"}')" CLAUDE_PROJECT_DIR="$S"
 
 # F4 — the full-email id resolves to OUR actor file
-t_out "session: F4 full-email actor id is recognized as you" "you (casey-example-com-8fa8)" \
+t_out "session: F4 full-email actor id is recognized as you" "you (casey-example-com-589b8fa8ab93)" \
   "$(jq -cn --arg cwd "$S" '{cwd:$cwd, source:"startup"}')"
 
 N="$(mktemp -d)"; cleanup_dirs+=("$N")

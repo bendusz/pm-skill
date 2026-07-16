@@ -15,8 +15,8 @@ shared `hooks/lib.sh`; behavioral hook tests (`scripts/test-hooks.sh`, 36 cases)
 - **Secret tripwire**: credential assignments are matched case-insensitively, quoted or unquoted
   (`API_KEY=…`, `Password: …`); placeholders (`$ENV_REF`, `<rotate-me>`, `{{ templates }}`) no
   longer false-positive.
-- **Actor ids are globally unique**: slug of the full email + 4-hex checksum
-  (`v-bende-gmail-com-f22c`), so same local-part users on different domains — and slug
+- **Actor ids are globally unique**: slug of the full email + 12-hex digest
+  (`v-bende-gmail-com-0719f22c3305`), so same local-part users on different domains — and slug
   homographs like `alex.foo@` vs `alex-foo@` — stop conflating state. Pre-0.10.1 ids appear as
   orphans; `git mv` them to the new id on first resume (documented in logging-and-state.md).
 - **Outgoing-diff secret scan**: the external-review step scans the exact diff for secret

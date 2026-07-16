@@ -40,11 +40,11 @@ yours to hold.
 
 ## Actor identity (derived, never configured)
 
-Your actor id is the slug of your **full** git `user.email` plus a 4-hex checksum of the raw
+Your actor id is the slug of your **full** git `user.email` plus a 12-hex digest of the raw
 lowercased email (fallback source: `user.name`; last resort `unknown-actor`). Slug = lowercase,
-runs of non-alphanumerics → `-`, trimmed; checksum = `cksum` mod 65536 in hex —
-`v.bende@gmail.com` → `v-bende-gmail-com-f22c`. The full email separates domains
-(`alex@company-a.com` vs `alex@company-b.com`) and the checksum separates slug homographs
+runs of non-alphanumerics → `-`, trimmed; digest = two POSIX `cksum` values in hex, truncated to 12 —
+`v.bende@gmail.com` → `v-bende-gmail-com-0719f22c3305`. The full email separates domains
+(`alex@company-a.com` vs `alex@company-b.com`) and the digest separates slug homographs
 (`alex.foo@` vs `alex-foo@`). Derive it with `hooks/lib.sh`'s `pm_actor_id` (hooks source it;
 commands can run `bash -c '. "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"; pm_actor_id .'`) — never
 hand-compute it. Changing git identity mid-project creates a second actor file —

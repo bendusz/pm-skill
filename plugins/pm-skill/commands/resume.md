@@ -6,7 +6,7 @@ Use the `project-manager` skill to resume work on this project.
 
 First read the shared `pm/pm-state.json` (phase, sprint, sign-off status, `assignments`), then
 **your** `pm/actors/<actor-id>.json` (actor id per `references/logging-and-state.md`: full-email
-slug + checksum, e.g. `v-bende-gmail-com-f22c` — derive it with
+slug + digest, e.g. `v-bende-gmail-com-0719f22c3305` — derive it with
 `bash -c '. "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"; pm_actor_id .'`, never by hand) — your story,
 branch, loop counters
 (`current_story_rounds`/`current_story_retries`; the fix/retry caps count what earlier sessions
