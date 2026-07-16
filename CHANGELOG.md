@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented here.
 
+## 0.10.1 — 2026-07-16
+
+Hook hardening — fixes the six findings from a whole-codebase codex review (gpt-5.6-sol). New
+shared `hooks/lib.sh`; behavioral hook tests (`scripts/test-hooks.sh`, 42 cases) now run in
+`validate.sh`/CI.
+
+- **Project-root discovery**: hooks resolve `$CLAUDE_PROJECT_DIR` → git top level → cwd, so
+  sessions started in a subdirectory no longer silently disable sign-off enforcement or resume.
+- **Canonical path containment**: `pm/../src/…` traversal and symlinked-directory aliases now
+  classify by the real target instead of bypassing the allowlists.
+- **Secret tripwire**: credential assignments are matched case-insensitively, quoted or unquoted
+  (`API_KEY=…`, `Password: …`); placeholders (`$ENV_REF`, `<rotate-me>`, `{{ templates }}`) no
+  longer false-positive.
+- **Actor ids are globally unique**: slug of the full email + 12-hex digest
+  (`v-bende-gmail-com-0719f22c3305`), so same local-part users on different domains — and slug
+  homographs like `alex.foo@` vs `alex-foo@` — stop conflating state. Pre-0.10.1 ids appear as
+  orphans; `git mv` them to the new id on first resume (documented in logging-and-state.md).
+- **Outgoing-diff secret scan**: the external-review step scans the exact diff for secret
+  *values* (`hooks/lib.sh scan`, or gitleaks/trufflehog when installed) instead of grepping
+  uppercase labels — `APIClient` no longer blocks, lowercase real secrets no longer pass.
+
 ## 0.10.0 — 2026-07-16
 
 - **New command `/pm-skill:codex-review`** — runs the OpenAI Codex CLI (`codex exec review`) as an

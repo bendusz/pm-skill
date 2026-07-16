@@ -103,4 +103,10 @@ for md in plugins/pm-skill/agents/*.md plugins/pm-skill/skills/project-manager/S
   fi
 done
 
+# 12) behavioral hook tests (allow/block fixtures — needs jq + git, both required above)
+if ! bash "$(dirname "$0")/test-hooks.sh" >/dev/null 2>&1; then
+  bash "$(dirname "$0")/test-hooks.sh" || true
+  err "hook behavioral tests failed (scripts/test-hooks.sh)"
+fi
+
 if [ "$fail" -eq 0 ]; then echo "validate.sh: OK"; else echo "validate.sh: FAILED" >&2; exit 1; fi
