@@ -46,5 +46,6 @@ exit, report the stderr cause (auth, usage error) instead of an answer.
 
 Read the scratch file and present Codex's answer, clearly attributed ("Codex (gpt-…) recommends
 …"), followed by your own take — where you agree, where you differ, and why. You own the final
-recommendation; Codex is one input. If `pm/log.md` exists, append one line:
-`- <date> codex-help: <question gist> → <answer gist>`.
+recommendation; Codex is one input. If `pm/log.md` exists, append one entry in the shared-log schema (actor id derived from git
+identity as `references/logging-and-state.md` prescribes):
+`- <YYYY-MM-DD HH:MM> <actor-id> — codex-help: <question gist> → <answer gist>.`

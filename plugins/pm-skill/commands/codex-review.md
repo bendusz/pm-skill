@@ -59,7 +59,10 @@ Decide the directory now, but **defer creating it and editing `.gitignore` until
   the reports; no `.gitignore`, no `git check-ignore`): if `git check-ignore -q <dir>` fails,
   append the **root-anchored** rule `/<dir>/` (never bare `<dir>/`, which would hide same-named
   nested directories like `src/codex/`), then re-confirm — if it still fails (e.g. a negation
-  rule), warn the user and ask before leaving files there.
+  rule), warn the user and ask before leaving files there. Append silently only for a `codex/`
+  directory this run created itself; for a **pre-existing** non-ignored directory (an existing
+  `untracked/` may hold user files that the rule would hide from `git status`), ask the user
+  before editing `.gitignore`.
 
 Set `STAMP=$(date +%Y-%m-%d-%H%M)`. Report paths:
 - single review → `<dir>/<STAMP>-codex-review-<scope>.md`
@@ -129,8 +132,10 @@ One agent failing never discards the others — always collect partial results.
   path, and a one-line summary of its top finding. The per-objective reports are Codex's `-o`
   output, untouched.
 - **1 agent:** the `-o` file is the report; no index.
-- If `pm/log.md` exists, append one line:
-  `- <STAMP> codex-review <scope> [objectives] → <n> report(s) in <dir>/`.
+- If `pm/log.md` exists, append one entry in the shared-log schema
+  (`- <YYYY-MM-DD HH:MM> <actor-id> — …`, actor id derived from git identity exactly as
+  `references/logging-and-state.md` prescribes):
+  `- <YYYY-MM-DD HH:MM> <actor-id> — codex-review <scope> [objectives] → <n> report(s) in <dir>/.`
 
 Finish by telling the user: each report path, and the top findings per objective (read the
 report files — do not paraphrase from memory). If every agent failed, say exactly why (auth,
