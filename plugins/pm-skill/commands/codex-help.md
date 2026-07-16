@@ -19,8 +19,8 @@ Arguments: $ARGUMENTS
 
 1. `command -v codex` — if missing, stop: install with `npm install -g @openai/codex` or
    `brew install codex`.
-2. `codex login status` — non-zero exit → stop; tell the user to run `codex login` (or set
-   `CODEX_API_KEY`).
+2. `codex login status` — non-zero exit → stop; tell the user to run `codex login` (or
+   `printenv OPENAI_API_KEY | codex login --with-api-key`).
 
 ## 3. Compose the prompt
 

@@ -37,8 +37,8 @@ Preset focus lines (use verbatim in prompts):
 1. `command -v codex` — if missing, stop: install with `npm install -g @openai/codex` or
    `brew install codex`.
 2. `codex login status` — non-zero exit means logged out; stop and tell the user to run
-   `codex login` (or set `CODEX_API_KEY`). Never start an unauthenticated run — it burns ~20 s
-   in retries before failing.
+   `codex login` (or `printenv OPENAI_API_KEY | codex login --with-api-key`). Never start an
+   unauthenticated run — it burns ~20 s in retries before failing.
 3. `git rev-parse --show-toplevel` — `recent` and `worktree` scopes require a git repo; stop if
    absent. `codebase` works without one (add `--skip-git-repo-check` to its command).
 4. Scope sanity: `worktree` with a clean tree (`git status --porcelain` empty) or `recent` with
