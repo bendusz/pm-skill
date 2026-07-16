@@ -35,7 +35,9 @@ case "$rel" in
 esac
 
 # Only the two known per-actor file shapes; anything else in actors/ is allowed.
-base="${file##*/}"
+# Basename comes from the CANONICAL rel path — a symlink named after us must
+# not authorize a write to the actor file it actually points at.
+base="${rel##*/}"
 case "$base" in
   *.HANDOFF.md) target="${base%.HANDOFF.md}" ;;
   *.json)       target="${base%.json}" ;;

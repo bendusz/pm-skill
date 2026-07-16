@@ -40,12 +40,15 @@ yours to hold.
 
 ## Actor identity (derived, never configured)
 
-Your actor id is the slug of your **full** git `user.email` (fallback: slug of `user.name`;
-last resort `unknown-actor`). Slug = lowercase, runs of non-alphanumerics → `-`, trimmed —
-`v.bende@gmail.com` → `v-bende-gmail-com`. The full email keeps ids globally unique
-(`alex@company-a.com` and `alex@company-b.com` are different actors). Every command and hook
-derives it the same way (hooks via `hooks/lib.sh pm_actor_id`). Changing git identity
-mid-project creates a second actor file — `/pm-skill:doctor` flags orphans.
+Your actor id is the slug of your **full** git `user.email` plus a 4-hex checksum of the raw
+lowercased email (fallback source: `user.name`; last resort `unknown-actor`). Slug = lowercase,
+runs of non-alphanumerics → `-`, trimmed; checksum = `cksum` mod 65536 in hex —
+`v.bende@gmail.com` → `v-bende-gmail-com-f22c`. The full email separates domains
+(`alex@company-a.com` vs `alex@company-b.com`) and the checksum separates slug homographs
+(`alex.foo@` vs `alex-foo@`). Derive it with `hooks/lib.sh`'s `pm_actor_id` (hooks source it;
+commands can run `bash -c '. "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"; pm_actor_id .'`) — never
+hand-compute it. Changing git identity mid-project creates a second actor file —
+`/pm-skill:doctor` flags orphans.
 
 **Migration from pre-0.10.1 ids** (which used only the email local part): your old
 `pm/actors/<local-part>.json` / `.HANDOFF.md` will appear as an orphan. On first resume after

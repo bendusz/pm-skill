@@ -63,19 +63,23 @@ pm_relpath() {
 }
 
 # pm_actor_id <root> — globally unique actor id: slug of the FULL git
-# user.email (v.bende@gmail.com → v-bende-gmail-com); fallback slug of
-# user.name. Prints nothing and returns 1 when no identity is derivable —
-# callers choose their own fallback (allow, or 'unknown-actor').
+# user.email plus a 4-hex checksum of the raw identity (fallback source:
+# user.name). The suffix keeps slug homographs distinct — alex.foo@example.com
+# and alex-foo@example.com share a slug but not a checksum. Prints nothing and
+# returns 1 when no identity is derivable — callers choose their own fallback
+# (allow, or 'unknown-actor').
 pm_actor_id() {
-  local root="$1" src=""
+  local root="$1" src="" slug hash
   if command -v git >/dev/null 2>&1; then
     src="$(git -C "$root" config user.email 2>/dev/null)"
     [ -n "$src" ] || src="$(git -C "$root" config user.name 2>/dev/null)"
   fi
   [ -n "$src" ] || return 1
-  src="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+//; s/-+$//')"
-  [ -n "$src" ] || return 1
-  printf '%s' "$src"
+  src="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]')"
+  slug="$(printf '%s' "$src" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+//; s/-+$//')"
+  [ -n "$slug" ] || return 1
+  hash="$(printf '%s' "$src" | cksum | awk '{printf "%04x", $1 % 65536}')"
+  printf '%s-%s' "$slug" "$hash"
 }
 
 # pm_secret_scan — read stdin; return 1 if it contains secret-shaped content,

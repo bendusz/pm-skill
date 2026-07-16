@@ -5,8 +5,9 @@ description: Resume a PM-managed project — read the saved state and logbook, t
 Use the `project-manager` skill to resume work on this project.
 
 First read the shared `pm/pm-state.json` (phase, sprint, sign-off status, `assignments`), then
-**your** `pm/actors/<actor-id>.json` (actor id per `references/logging-and-state.md`: slug of your
-**full** git `user.email`, e.g. `v-bende-gmail-com`; fallback slug of `user.name`) — your story,
+**your** `pm/actors/<actor-id>.json` (actor id per `references/logging-and-state.md`: full-email
+slug + checksum, e.g. `v-bende-gmail-com-f22c` — derive it with
+`bash -c '. "${CLAUDE_PLUGIN_ROOT}/hooks/lib.sh"; pm_actor_id .'`, never by hand) — your story,
 branch, loop counters
 (`current_story_rounds`/`current_story_retries`; the fix/retry caps count what earlier sessions
 already spent), and `next`. On a v0.9 layout with no `pm/actors/<you>.json` yet (you are a new
