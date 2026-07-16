@@ -46,7 +46,10 @@ Preset focus lines (use verbatim in prompts):
 
 ## 3. Output directory (at the repo root, or CWD when not a repo)
 
-- If `untracked/` exists → candidate. Else `codex/` (create it) → candidate.
+Decide the directory now, but **defer creating it and editing `.gitignore` until after the run**
+(see "No worktree contamination" in step 4).
+
+- If `untracked/` exists → candidate. Else `codex/` → candidate.
 - In a git repo, the candidate must be genuinely ignored before use — a tracked directory must
   never receive reports (the review is advertised read-only; don't dirty the tree or overwrite
   project files):
@@ -63,9 +66,17 @@ Set `STAMP=$(date +%Y-%m-%d-%H%M)`. Report paths:
   (slug: lowercase, spaces→hyphens, alphanumerics/hyphens only, ≤40 chars)
 - index (only when ≥2 agents) → `<dir>/<STAMP>-codex-review-<scope>-index.md`
 
-Collision safety: **dedupe objectives first** (`panel bugs` = the five presets once, not `bugs`
-twice); if a report path already exists (rerun within the same minute), suffix `-2`, `-3`, … to
-the whole run's filenames rather than overwriting.
+Collision safety: dedupe objectives **by final slug**, not raw text (`panel bugs` = the five
+presets once; two free-form phrases truncating to one slug get `-2`, `-3`, …). The slug `index`
+is reserved for the index file — rename such an objective's slug to `index-objective`. If a
+report path already exists (rerun within the same minute), suffix `-2`, `-3`, … to the whole
+run's filenames rather than overwriting.
+
+**No worktree contamination:** the review must see the tree exactly as the user left it. Point
+every agent's `-o` (and stderr sidecar) at a fresh temp directory *outside* the repo
+(`mktemp -d`); only after all agents exit, move the reports into the output directory and apply
+the `.gitignore` change from step 3. Never modify `.gitignore` — or create files inside the
+repo — before or while a review runs.
 
 ## 4. Build each agent's command
 
