@@ -46,15 +46,26 @@ Preset focus lines (use verbatim in prompts):
 
 ## 3. Output directory (at the repo root, or CWD when not a repo)
 
-- If `untracked/` exists → use it.
-- Else use `codex/` (create it). If the repo is git-tracked, ensure it's ignored:
-  `grep -qxF 'codex/' .gitignore 2>/dev/null || echo 'codex/' >> .gitignore`.
+- If `untracked/` exists → candidate. Else `codex/` (create it) → candidate.
+- In a git repo, the candidate must be genuinely ignored before use — a tracked directory must
+  never receive reports (the review is advertised read-only; don't dirty the tree or overwrite
+  project files):
+  - `git ls-files -- <dir>` must be empty (appending to `.gitignore` does NOT ignore
+    already-tracked files);
+  - then ensure `grep -qxF '<dir>/' .gitignore 2>/dev/null || echo '<dir>/' >> .gitignore` and
+    confirm with `git check-ignore -q <dir>`.
+  - `untracked/` failing these checks → fall back to `codex/`; `codex/` also failing → stop and
+    ask the user where reports should go.
 
 Set `STAMP=$(date +%Y-%m-%d-%H%M)`. Report paths:
 - single review → `<dir>/<STAMP>-codex-review-<scope>.md`
 - per objective → `<dir>/<STAMP>-codex-review-<scope>-<objective-slug>.md`
   (slug: lowercase, spaces→hyphens, alphanumerics/hyphens only, ≤40 chars)
 - index (only when ≥2 agents) → `<dir>/<STAMP>-codex-review-<scope>-index.md`
+
+Collision safety: **dedupe objectives first** (`panel bugs` = the five presets once, not `bugs`
+twice); if a report path already exists (rerun within the same minute), suffix `-2`, `-3`, … to
+the whole run's filenames rather than overwriting.
 
 ## 4. Build each agent's command
 
